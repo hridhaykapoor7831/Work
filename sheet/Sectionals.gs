@@ -3,8 +3,8 @@
  *
  * Run sa63Install ONCE from the editor. It is safe to run again; it rewrites only its own cells.
  * 1. Daily Breakdown summary: adds accuracy columns X:AA (LOD 1 %, LOD 2 %, LOD 3 %, Overall %)
- *    next to the existing "SUMMARY — TOTAL DONE" counts in R:V.
- *    Accuracy = right ÷ (right + wrong), the same rule as Chapter Progress.
+ *    next to the existing "SUMMARY - TOTAL DONE" counts in R:V.
+ *    Accuracy = right / (right + wrong), the same rule as Chapter Progress.
  * 2. New "Sectionals" tab: live formulas over the Mocks tab (rows with Source = Sectional).
  *    Mocks keeps every paper; Sectionals shows only sectionals. Both update together, with no sync step.
  *
@@ -60,14 +60,14 @@ function sa63Accuracy_(ss) {
     out.push(f);
   }
 
-  sh.getRange('X3').setValue('ACCURACY  ·  right ÷ (right + wrong)').setFontWeight('bold');
+  sh.getRange('X3').setValue('ACCURACY - right / (right + wrong)').setFontWeight('bold');
   sh.getRange('S4:V4').copyFormatToRange(sh, 24, 27, 4, 4);
   sh.getRange('X4:AA4').setValues([['LOD 1 %', 'LOD 2 %', 'LOD 3 %', 'Overall %']]);
   var body = sh.getRange(5, 24, end - 4, 4);
   body.setFormulas(out).setNumberFormat('0%').setHorizontalAlignment('center');
   for (var c = 24; c <= 27; c++) sh.setColumnWidth(c, 80);
 
-  // colour: under 50% red, 50–69% amber, 70%+ green (same thresholds as the runner)
+  // colour: under 50% red, 50-69% amber, 70%+ green (same thresholds as the runner)
   var a1 = body.getA1Notation(), keep = sh.getConditionalFormatRules().filter(function (rule) {
     return !rule.getRanges().some(function (rg) { return rg.getA1Notation() === a1; });
   });
@@ -99,7 +99,7 @@ function sa63Sectionals_(ss) {
 
   var M = 'Mocks!', A = M + '$A$5:$A', B = M + '$B$5:$B', C = M + '$C$5:$C', Ir = M + '$I$5:$I', S = M + '$S$5:$S', T = M + '$T$5:$T', V = M + '$V$5:$V';
   sh.getRange('A1').setValue('SECTIONALS').setFontSize(14).setFontWeight('bold');
-  sh.getRange('A2').setValue('Live from the Mocks tab: every paper imported with Source = Sectional. Import on Mock Import as usual; it shows on Mocks and here at the same time. Score = CAT marking (+3, −1 MCQ, 0 TITA).');
+  sh.getRange('A2').setValue('Live from the Mocks tab: every paper imported with Source = Sectional. Import on Mock Import as usual; it shows on Mocks and here at the same time. Score = CAT marking (+3, -1 MCQ, 0 TITA).');
 
   // by section
   sh.getRange('A4').setValue('BY SECTION').setFontWeight('bold');
@@ -120,7 +120,7 @@ function sa63Sectionals_(ss) {
   sh.getRange('D6:D8').setNumberFormat('0%');
 
   // every sectional, newest first
-  sh.getRange('A10').setValue('EVERY SECTIONAL  ·  newest first').setFontWeight('bold');
+  sh.getRange('A10').setValue('EVERY SECTIONAL - newest first').setFontWeight('bold');
   sh.getRange('A11:J11').setValues([['Sectional', 'Date', 'Section', 'Attempted', 'Correct', 'Wrong', 'Skipped', 'Accuracy', 'Score', 'Time used (min)']]);
   sh.getRange('A12').setFormula(
     '=IFERROR(LET(m,' + A + ',v,' + V + ',n,UNIQUE(FILTER(m,v="Sectional",m<>"")),' +
@@ -144,3 +144,4 @@ function sa63Sectionals_(ss) {
   sh.setColumnWidth(1, 190); sh.setColumnWidth(12, 190); sh.setColumnWidth(16, 210); sh.setColumnWidth(11, 24);
   return 'Sectionals tab ready.';
 }
+// END OF FILE - if you can see this line, the whole file was pasted.
