@@ -1,13 +1,13 @@
 import json,sys,os,re
 from PIL import Image,ImageDraw,ImageFont
 S=sys.argv[1]; exec(open(S+'/common.py').read())
-O=json.load(open(S+'/complete.json')); EL=json.load(open(S+'/eligible.json'))
+O=json.load(open(S+'/complete.json')); EL=json.load(open(S+'/eligible.json')); LOC=json.load(open(S+'/locate.json'))
 try: F=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',26)
 except Exception: F=ImageFont.load_default()
 meta={}
 for u in EL:
     ch=u.split('-')[0]; St=stream(ch); pieces=[]
-    for q in sorted(O[u]['missing'],key=lambda z:z['n']):
+    for q in sorted(LOC[u]['qs'],key=lambda z:z['n']):
         groups=[]
         for k in q['lines']:
             L=St[k]; key=(L['page'],L['col'])
@@ -23,11 +23,11 @@ for u in EL:
     w=max(p.width for p in pieces); hdr=70
     canvas=Image.new('RGB',(w,hdr+sum(p.height+18 for p in pieces)),'white')
     d=ImageDraw.Draw(canvas); d.rectangle((0,0,w,hdr-12),fill=(255,243,205))
-    d.text((16,18),'Rest of this set (next book page)',font=F,fill=(90,60,0))
+    d.text((16,18),'Every question of this set, as printed in the book',font=F,fill=(90,60,0))
     y=hdr
     for p in pieces: canvas.paste(p,(0,y)); y+=p.height+18
     if canvas.width>900: canvas=canvas.resize((900,int(canvas.height*900/canvas.width)),Image.LANCZOS)
     fn=os.path.join(S,'img2',u+'-2.webp'); canvas.save(fn,'WEBP',quality=72)
-    meta[u]={'file':fn,'kb':os.path.getsize(fn)//1024,'nums':[q['n'] for q in O[u]['missing']],'pieces':len(pieces)}
+    meta[u]={'file':fn,'kb':os.path.getsize(fn)//1024,'nums':[q['n'] for q in LOC[u]['qs']],'pieces':len(pieces)}
 json.dump(meta,open(S+'/img2.json','w'),indent=0)
 print('images',len(meta),'total KB',sum(m['kb'] for m in meta.values()),'max KB',max(m['kb'] for m in meta.values()))

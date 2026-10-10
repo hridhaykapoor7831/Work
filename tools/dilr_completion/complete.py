@@ -59,8 +59,8 @@ for u,v in LOC.items():
     want=list(range(v['a'],v['b']+1))
     if v['found']!=want: rec['reasons'].append('numbers not all found on pages: found %s of %s'%(v['found'],want))
     # map present
-    bt=[norm(q.get('text','')) for q in x['qs']]
-    pairs=sorted(((SequenceMatcher(None,norm(q['text']),b_).ratio(),q['n'],bi) for q in v['qs'] for bi,b_ in enumerate(bt)),reverse=True)
+    bt=[norm(q.get('text','')+' '+' '.join(str((q.get('opts') or {}).get(k,'')) for k in 'ABCD')) for q in x['qs']]
+    pairs=sorted(((SequenceMatcher(None,norm(q['text']+' '+' '.join(q['opts'].get(k,'') for k in 'ABCD')),b_).ratio(),q['n'],bi) for q in v['qs'] for bi,b_ in enumerate(bt)),reverse=True)
     usedq=set();usedb=set();present={}
     for sc,n,bi in pairs:
         if sc<0.8 or n in usedq or bi in usedb: continue
