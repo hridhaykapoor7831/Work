@@ -1,0 +1,6956 @@
+{
+"C2-L1-Q1-5": {
+"status": "blocked",
+"reasons": [
+"Q4: no checked answer in your PDFs"
+],
+"present": [
+1,
+2,
+3,
+5
+],
+"missing": [
+{
+"n": 4,
+"text": "The picture of the pentagon is printed on which ball?",
+"opts": {
+"A": "S",
+"B": "T",
+"C": "U",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+106,
+107,
+108,
+109,
+110
+]
+}
+]
+},
+"C2-L1-Q6-7": {
+"status": "blocked",
+"reasons": [
+"Q8: no checked answer in your PDFs"
+],
+"present": [
+6,
+7
+],
+"missing": [
+{
+"n": 8,
+"text": "On which of the following days did the Sales Executive join?",
+"opts": {
+"A": "Thursday",
+"B": "Friday",
+"C": "Saturday",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+136,
+137,
+138,
+139,
+140
+]
+}
+]
+},
+"C2-L1-Q13-15": {
+"status": "blocked",
+"reasons": [
+"Q12: no checked answer in your PDFs"
+],
+"present": [
+13,
+14,
+15
+],
+"missing": [
+{
+"n": 12,
+"text": "Which pair of boys is standing at the ends of the row?",
+"opts": {
+"A": "Chandan & Devdas",
+"B": "Chandan & Bony",
+"C": "Devdas & Bony",
+"D": "Data inadequate"
+},
+"ans": null,
+"src": null,
+"lines": [
+173,
+174,
+175,
+176,
+177
+]
+}
+]
+},
+"C2-L1-Q17-19": {
+"status": "blocked",
+"reasons": [
+"Q16: no checked answer in your PDFs"
+],
+"present": [
+17,
+18,
+19
+],
+"missing": [
+{
+"n": 16,
+"text": "If E sits in his office and faces the corridor, whose office is to his left?",
+"opts": {
+"A": "A",
+"B": "B",
+"C": "C",
+"D": "D"
+},
+"ans": null,
+"src": null,
+"lines": [
+203,
+204,
+205,
+206,
+207
+]
+}
+]
+},
+"C2-L1-Q21-23": {
+"status": "blocked",
+"reasons": [
+"Q20: no checked answer in your PDFs",
+"Q24: no checked answer in your PDFs"
+],
+"present": [
+21,
+22,
+23
+],
+"missing": [
+{
+"n": 20,
+"text": "Who amongst the females arrived third?",
+"opts": {
+"A": "A",
+"B": "B",
+"C": "C",
+"D": "D"
+},
+"ans": null,
+"src": null,
+"lines": [
+237,
+238,
+239,
+240,
+241
+]
+},
+{
+"n": 24,
+"text": "Among the males, who arrived second?",
+"opts": {
+"A": "P",
+"B": "Q",
+"C": "R",
+"D": "S"
+},
+"ans": null,
+"src": null,
+"lines": [
+257,
+258,
+259,
+260
+]
+}
+]
+},
+"C2-L1-Q25-27": {
+"status": "blocked",
+"reasons": [
+"Q28: no checked answer in your PDFs"
+],
+"present": [
+25,
+26,
+27
+],
+"missing": [
+{
+"n": 28,
+"text": "What can be the position of C from the right side?",
+"opts": {
+"A": "Third",
+"B": "Seventh",
+"C": "Third or Seventh",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+605,
+606,
+607,
+608,
+609
+]
+}
+]
+},
+"C2-L1-Q29-33": {
+"status": "blocked",
+"reasons": [
+"Q32: no checked answer in your PDFs"
+],
+"present": [
+29,
+30,
+31,
+33
+],
+"missing": [
+{
+"n": 32,
+"text": "Who is at the left end?",
+"opts": {
+"A": "Ferguson",
+"B": "Alok",
+"C": "Bheem",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+631,
+632,
+633,
+634,
+635
+]
+}
+]
+},
+"C2-L1-Q34-37": {
+"status": "blocked",
+"reasons": [
+"Q36: no checked answer in your PDFs"
+],
+"present": [
+34,
+35,
+37
+],
+"missing": [
+{
+"n": 36,
+"text": "Which of the following combinations is incorrect?",
+"opts": {
+"A": "Bikki-Cricketer",
+"B": "Chris-Tennis player",
+"C": "Hetmayer-Racer",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+794,
+795,
+796,
+797,
+798
+]
+}
+]
+},
+"C2-L1-Q38-39": {
+"status": "blocked",
+"reasons": [
+"Q40: no checked answer in your PDFs"
+],
+"present": [
+38,
+39
+],
+"missing": [
+{
+"n": 40,
+"text": "Using information from the previous questions, find out how many players sit between Ashwin and Jadeja?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+822,
+823
+]
+}
+]
+},
+"C2-L1-Q41-42": {
+"status": "blocked",
+"reasons": [
+"Q43: no checked answer in your PDFs",
+"Q44: no checked answer in your PDFs"
+],
+"present": [
+41,
+42
+],
+"missing": [
+{
+"n": 43,
+"text": "On which floor does G live?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+837
+]
+},
+{
+"n": 44,
+"text": "What is the definite sum of floor numbers of A and D?",
+"opts": {
+"A": "13",
+"B": "8",
+"C": "11",
+"D": "12"
+},
+"ans": null,
+"src": null,
+"lines": [
+838,
+839,
+840,
+841,
+842
+]
+}
+]
+},
+"C2-L2-Q1-3": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [] of [1, 2, 3, 4]",
+"could only match 0 of 3 existing questions"
+],
+"present": [],
+"missing": []
+},
+"C2-L2-Q5-7": {
+"status": "blocked",
+"reasons": [
+"Q8: no checked answer in your PDFs"
+],
+"present": [
+5,
+6,
+7
+],
+"missing": [
+{
+"n": 8,
+"text": "On which cinema hall was CHAVVA shown immediately on the next day after it was shown on Naya ghar?",
+"opts": {
+"A": "Benett hall",
+"B": "Elvis hall",
+"C": "Chidiya ghar",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+340,
+341,
+342,
+343,
+344,
+345
+]
+}
+]
+},
+"C2-L2-Q9-11": {
+"status": "blocked",
+"reasons": [
+"Q12: no checked answer in your PDFs"
+],
+"present": [
+9,
+10,
+11
+],
+"missing": [
+{
+"n": 12,
+"text": "At least how many people definitely wear Black shoes?",
+"opts": {
+"A": "Two",
+"B": "One",
+"C": "Three",
+"D": "Four"
+},
+"ans": null,
+"src": null,
+"lines": [
+378,
+379,
+380,
+381,
+382
+]
+}
+]
+},
+"C2-L2-Q13-15": {
+"status": "blocked",
+"reasons": [
+"Q16: no checked answer in your PDFs"
+],
+"present": [
+13,
+14,
+15
+],
+"missing": [
+{
+"n": 16,
+"text": "If all the female members are made to face outside and all the male members face inside then which of the following is definitely false?",
+"opts": {
+"A": "Mrs. Khanna is third to the right of Mr. Khanna.",
+"B": "Mr. Gupta is second to the left of Mr. Patel.",
+"C": "Mrs. Shah is always to the right of Mr. Gupta.",
+"D": "Mrs. Khanna is to the immediate left of Mr. Gupta."
+},
+"ans": null,
+"src": null,
+"lines": [
+404,
+405,
+406,
+407,
+408,
+409
+]
+}
+]
+},
+"C2-L2-Q17-19": {
+"status": "blocked",
+"reasons": [
+"Q20: no checked answer in your PDFs"
+],
+"present": [
+17,
+18,
+19
+],
+"missing": [
+{
+"n": 20,
+"text": "Which letter is third to the right of \u2018L\u2019 in the new word?",
+"opts": {
+"A": "M",
+"B": "E",
+"C": "I",
+"D": "None of the above"
+},
+"ans": null,
+"src": null,
+"lines": [
+445,
+446,
+447,
+448,
+449
+]
+}
+]
+},
+"C2-L2-Q21-23": {
+"status": "blocked",
+"reasons": [
+"Q24: no checked answer in your PDFs"
+],
+"present": [
+21,
+22,
+23
+],
+"missing": [
+{
+"n": 24,
+"text": "Which of the following options is not possible?",
+"opts": {
+"A": "Barbara likes Maroon and Estaire likes Coral",
+"B": "Barbara likes Lavender and Claire likes Lilac",
+"C": "Donna likes Maroon and Fiona likes Lavender",
+"D": "Claire likes Lavender and Fiona likes Coral"
+},
+"ans": null,
+"src": null,
+"lines": [
+673,
+674,
+675,
+676,
+677
+]
+}
+]
+},
+"C2-L2-Q27-30": {
+"status": "blocked",
+"reasons": [
+"Q28: no checked answer in your PDFs"
+],
+"present": [
+27,
+29,
+30
+],
+"missing": [
+{
+"n": 28,
+"text": "At least how many people sit between G and C?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+853
+]
+}
+]
+},
+"C2-L2-Q31-34": {
+"status": "blocked",
+"reasons": [
+"Q32: no checked answer in your PDFs"
+],
+"present": [
+31,
+33,
+34
+],
+"missing": [
+{
+"n": 32,
+"text": "IfC sits opposite L, which of the following cannot be true?",
+"opts": {
+"A": "Fis wearing yellow",
+"B": "Fis wearing orange",
+"C": "Dis wearing yellow",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+878,
+879,
+880,
+881,
+882
+]
+}
+]
+},
+"C2-L2-Q35-39": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [37] of [35, 36, 37, 38, 39, 40]",
+"could only match 0 of 4 existing questions",
+"Q37: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 37,
+"text": "",
+"opts": {
+"A": " 41.8 42.9 43. 4\u00a2) floo"
+},
+"ans": null,
+"src": null,
+"lines": [
+925,
+926
+]
+}
+]
+},
+"C2-L2-Q41-43": {
+"status": "blocked",
+"reasons": [
+"Q44: no checked answer in your PDFs"
+],
+"present": [
+41,
+42,
+43
+],
+"missing": [
+{
+"n": 44,
+"text": "Ifthe number 1 is assigned to the person who left for office first, number 2 to the person who left for office 2nd and so on, for which of",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+1078,
+1079
+]
+}
+]
+},
+"C2-L2-Q45-46": {
+"status": "blocked",
+"reasons": [
+"Q47: no checked answer in your PDFs",
+"Q48: no checked answer in your PDFs"
+],
+"present": [
+45,
+46
+],
+"missing": [
+{
+"n": 47,
+"text": "Further information to question number 46 is given as: If B stands in 3d row, who is in the same row as E?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+24,
+25
+]
+},
+{
+"n": 48,
+"text": "Which of the following is correct?",
+"opts": {
+"A": "Astands in 3\u00b0 row and C stands in 4\"4 row,",
+"B": "Gcan only stand in 15t or 3\u201c row.",
+"C": "IfAstands in 3\" row and D may/may not stand in 1$ row.",
+"D": "Only if A stands in 3\u201c row, D can stand in 1\u2018 row."
+},
+"ans": null,
+"src": null,
+"lines": [
+26,
+27,
+28,
+29,
+30
+]
+}
+]
+},
+"C2-L2-Q49-53": {
+"status": "blocked",
+"reasons": [
+"Q52: no checked answer in your PDFs"
+],
+"present": [
+49,
+50,
+51,
+53
+],
+"missing": [
+{
+"n": 52,
+"text": "Which of the following pairs represents a pair sitting along one edge?",
+"opts": {
+"A": "and",
+"B": "",
+"C": "Both",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+55,
+56,
+57,
+58,
+59
+]
+}
+]
+},
+"C2-L2-Q54-58": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [] of [54, 55, 56, 57, 58]",
+"could only match 0 of 4 existing questions"
+],
+"present": [],
+"missing": []
+},
+"C2-L2-Q59-63": {
+"status": "blocked",
+"reasons": [
+"Q60: no checked answer in your PDFs"
+],
+"present": [
+59,
+61,
+62,
+63
+],
+"missing": [
+{
+"n": 60,
+"text": "Who works on floor-4?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+503
+]
+}
+]
+},
+"C2-L2-Q65-69": {
+"status": "blocked",
+"reasons": [
+"Q68: no checked answer in your PDFs"
+],
+"present": [
+65,
+66,
+67,
+69
+],
+"missing": [
+{
+"n": 68,
+"text": "Who was sitting to the left of Meenakshi when the last person was giving his speech?",
+"opts": {
+"A": "Arun Sharma",
+"B": "Saeed Khan",
+"C": "Arun Chaturvedi",
+"D": "Vinay Singh"
+},
+"ans": null,
+"src": null,
+"lines": [
+574,
+575,
+576,
+577,
+578,
+579
+]
+}
+]
+},
+"C2-L2-Q70-74": {
+"status": "blocked",
+"reasons": [
+"Q72: no checked answer in your PDFs"
+],
+"present": [
+70,
+71,
+73,
+74
+],
+"missing": [
+{
+"n": 72,
+"text": "What is the amount paid by B and G together for their seats?",
+"opts": {
+"A": "1500",
+"B": "2000",
+"C": "1800",
+"D": "800"
+},
+"ans": null,
+"src": null,
+"lines": [
+764,
+765,
+766,
+767,
+768
+]
+}
+]
+},
+"C3-L1-Q1-5": {
+"status": "blocked",
+"reasons": [
+"Q4: no checked answer in your PDFs"
+],
+"present": [
+1,
+2,
+5
+],
+"missing": [
+{
+"n": 3,
+"text": "What is the rank of Kiara in increasing order of qualification?",
+"opts": {
+"A": "2",
+"B": "3",
+"C": "5",
+"D": "4"
+},
+"ans": [
+"mcq",
+"B"
+],
+"src": "solutions (checked on 2)",
+"lines": [
+89,
+90,
+91,
+92,
+93
+]
+},
+{
+"n": 4,
+"text": "What is the rank of Kristy in increasing order of height?",
+"opts": {
+"A": "3",
+"B": "5",
+"C": "4",
+"D": "2"
+},
+"ans": null,
+"src": null,
+"lines": [
+94,
+95,
+96,
+97,
+98
+]
+}
+]
+},
+"C3-L1-Q14-17": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [] of [14, 15, 16, 17]",
+"could only match 0 of 2 existing questions"
+],
+"present": [],
+"missing": []
+},
+"C3-L1-Q18-22": {
+"status": "blocked",
+"reasons": [
+"Q19: no checked answer in your PDFs",
+"Q20: no checked answer in your PDFs"
+],
+"present": [
+18,
+21,
+22
+],
+"missing": [
+{
+"n": 19,
+"text": "Which subject\u2019s research associates joined the 4\" lecture?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+357
+]
+},
+{
+"n": 20,
+"text": "How many lectures were attended by the Biology research associate?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+358
+]
+}
+]
+},
+"C3-L1-Q25-26": {
+"status": "blocked",
+"reasons": [
+"Q23: no checked answer in your PDFs",
+"Q24: no checked answer in your PDFs",
+"Q27: no checked answer in your PDFs"
+],
+"present": [
+25,
+26
+],
+"missing": [
+{
+"n": 23,
+"text": "Whose rank can exactly be determined?",
+"opts": {
+"A": "Anil",
+"B": "Dhawan",
+"C": "Kriti",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+377,
+378,
+379,
+380,
+381
+]
+},
+{
+"n": 24,
+"text": "What is the sum of all the possible ranks of Dhawan?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+382
+]
+},
+{
+"n": 27,
+"text": "In the previous question, if it is also known that Dhawan was ranked in top 3, then who scored Rank 4?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+394,
+395
+]
+}
+]
+},
+"C3-L2-Q1-5": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [1] of [1, 2, 3, 4, 5]",
+"could only match 0 of 4 existing questions",
+"Q1: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 1,
+"text": "Who among the following ranked fifth? (v) Each time either C scores the highest and E gets the least, or alternatively, D scores the highest and F or B scores the least.",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+437,
+438,
+439
+]
+}
+]
+},
+"C3-L2-Q6-10": {
+"status": "blocked",
+"reasons": [
+"could only match 1 of 2 existing questions",
+"Q8: no checked answer in your PDFs"
+],
+"present": [
+10
+],
+"missing": [
+{
+"n": 6,
+"text": "The vest number of the sprinter coming first is:",
+"opts": {
+"A": "3",
+"B": "6",
+"C": "1",
+"D": "5"
+},
+"ans": [
+"mcq",
+"B"
+],
+"src": "key (checked on 1)",
+"lines": [
+553,
+554,
+555,
+556,
+557
+]
+},
+{
+"n": 7,
+"text": "The sprinter number finishing second is:",
+"opts": {
+"A": "7",
+"B": "6",
+"C": "4",
+"D": "3"
+},
+"ans": [
+"mcq",
+"D"
+],
+"src": "key (checked on 1)",
+"lines": [
+558,
+559,
+560,
+561,
+562
+]
+},
+{
+"n": 8,
+"text": "The sprinter number finishing third is:",
+"opts": {
+"A": "6",
+"B": "3",
+"C": "1",
+"D": "2"
+},
+"ans": null,
+"src": null,
+"lines": [
+563,
+564,
+565,
+566,
+567
+]
+},
+{
+"n": 9,
+"text": "The sprinter number finishing last is:",
+"opts": {
+"A": "7",
+"B": "2",
+"C": "5",
+"D": "1"
+},
+"ans": [
+"mcq",
+"B"
+],
+"src": "key (checked on 1)",
+"lines": [
+568,
+569,
+570,
+571,
+572
+]
+}
+]
+},
+"C3-L2-Q17-18": {
+"status": "blocked",
+"reasons": [
+"Q16: no checked answer in your PDFs"
+],
+"present": [
+17,
+18
+],
+"missing": [
+{
+"n": 16,
+"text": "Ifthe tournament started on Monday and there are no rest days, then it would be finished on which of the following day?",
+"opts": {
+"A": "Thursday",
+"B": "Friday",
+"C": "Saturday",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+166,
+167,
+168,
+169,
+170,
+171
+]
+},
+{
+"n": 19,
+"text": "If only two boxers R and S finished with the same number of points then find the maximum possible score obtained by the last ranked boxer in the championship?",
+"opts": {},
+"ans": [
+"tita",
+"11"
+],
+"src": "key (checked on 2)",
+"lines": [
+185,
+186,
+187
+]
+}
+]
+},
+"C3-L2-Q21-23": {
+"status": "blocked",
+"reasons": [
+"Q20: no checked answer in your PDFs"
+],
+"present": [
+21,
+22,
+23
+],
+"missing": [
+{
+"n": 20,
+"text": "Who won the least number of bouts after the 18\u2018 round?",
+"opts": {
+"A": "P",
+"B": "R",
+"C": "S",
+"D": "T"
+},
+"ans": null,
+"src": null,
+"lines": [
+202,
+203,
+204,
+205,
+206
+]
+}
+]
+},
+"C3-L2-Q25-27": {
+"status": "blocked",
+"reasons": [
+"Q24: no checked answer in your PDFs"
+],
+"present": [
+25,
+26,
+27
+],
+"missing": [
+{
+"n": 24,
+"text": "Which of the following can be the maximum possible score of the overall topper?",
+"opts": {
+"A": "134",
+"B": "142",
+"C": "144",
+"D": "143"
+},
+"ans": null,
+"src": null,
+"lines": [
+242,
+243,
+244,
+245,
+246,
+247
+]
+}
+]
+},
+"C3-L2-Q29-31": {
+"status": "blocked",
+"reasons": [
+"Q28: no checked answer in your PDFs"
+],
+"present": [
+29,
+30,
+31
+],
+"missing": [
+{
+"n": 28,
+"text": "If Pune Warriors reached semifinals, difference between the minimum and maximum possible points obtained by them at the end of group stage round would be:",
+"opts": {
+"A": "66",
+"B": "68",
+"C": "72",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+269,
+270,
+271,
+272,
+273,
+274,
+275
+]
+}
+]
+},
+"C3-L2-Q33-35": {
+"status": "blocked",
+"reasons": [
+"Q32: no checked answer in your PDFs",
+"Q36: no checked answer in your PDFs"
+],
+"present": [
+33,
+34,
+35
+],
+"missing": [
+{
+"n": 32,
+"text": "What is the rank of Raman?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+298
+]
+},
+{
+"n": 36,
+"text": "What is the sum of all possible ranks of Gabrial and David?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+310
+]
+}
+]
+},
+"C3-L2-Q41-43": {
+"status": "blocked",
+"reasons": [
+"Q40: no checked answer in your PDFs",
+"Q44: no checked answer in your PDFs"
+],
+"present": [
+41,
+42,
+43
+],
+"missing": [
+{
+"n": 40,
+"text": "Rohan predicted Rahi\u2019s rank to be",
+"opts": {
+"A": "2",
+"B": "3",
+"C": "4",
+"D": "5"
+},
+"ans": null,
+"src": null,
+"lines": [
+663,
+664,
+665,
+666,
+667
+]
+},
+{
+"n": 44,
+"text": "For which of the following persons is it possible that none of the persons predicted their rank to be two?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+675,
+676
+]
+}
+]
+},
+"C4-L1-Q1-2": {
+"status": "blocked",
+"reasons": [
+"Q3: no checked answer in your PDFs"
+],
+"present": [
+1,
+2
+],
+"missing": [
+{
+"n": 3,
+"text": "X will stay in which of the following rooms?",
+"opts": {
+"A": "C",
+"B": "F",
+"C": "B",
+"D": "Data inadequate"
+},
+"ans": null,
+"src": null,
+"lines": [
+335,
+336,
+337,
+338,
+339
+]
+}
+]
+},
+"C4-L1-Q5-6": {
+"status": "blocked",
+"reasons": [
+"Q4: no checked answer in your PDFs",
+"Q7: no checked answer in your PDFs",
+"Q8: no checked answer in your PDFs"
+],
+"present": [
+5,
+6
+],
+"missing": [
+{
+"n": 4,
+"text": "Which of the following groups of persons are females?",
+"opts": {
+"A": "SQT",
+"B": "QMT",
+"C": "QPT",
+"D": "Data inadequate"
+},
+"ans": null,
+"src": null,
+"lines": [
+351,
+352,
+353,
+354,
+355
+]
+},
+{
+"n": 7,
+"text": "Which of the following pairs work on the II\"4 floor?",
+"opts": {
+"A": "PT",
+"B": "SM",
+"C": "QN",
+"D": "NT"
+},
+"ans": null,
+"src": null,
+"lines": [
+366,
+367,
+368,
+369,
+370
+]
+},
+{
+"n": 8,
+"text": "IfT is transferred to Accounts and S is transferred to Administration, who is to be transferred to Personnel to maintain the original distribution of females on each floor?",
+"opts": {
+"A": "P",
+"B": "N",
+"C": "Q",
+"D": "Data inadequate"
+},
+"ans": null,
+"src": null,
+"lines": [
+371,
+372,
+373,
+374,
+375,
+376,
+377
+]
+}
+]
+},
+"C4-L1-Q9-13": {
+"status": "blocked",
+"reasons": [
+"Q11: no checked answer in your PDFs",
+"Q12: no checked answer in your PDFs"
+],
+"present": [
+9,
+10,
+13
+],
+"missing": [
+{
+"n": 11,
+"text": "Which of the following represents the three teachers?",
+"opts": {
+"A": "GEF",
+"B": "GEA",
+"C": "GBF",
+"D": "Data inadequate"
+},
+"ans": null,
+"src": null,
+"lines": [
+399,
+400,
+401,
+402,
+403
+]
+},
+{
+"n": 12,
+"text": "How many lady members are there among them?",
+"opts": {
+"A": "Three",
+"B": "Four",
+"C": "Three or four",
+"D": "Data inadequate"
+},
+"ans": null,
+"src": null,
+"lines": [
+404,
+405,
+406,
+407,
+408
+]
+}
+]
+},
+"C4-L1-Q14-18": {
+"status": "blocked",
+"reasons": [
+"Q15: no checked answer in your PDFs",
+"Q16: no checked answer in your PDFs",
+"Q19: no checked answer in your PDFs"
+],
+"present": [
+14,
+17,
+18
+],
+"missing": [
+{
+"n": 15,
+"text": "Of those listed, what is the largest possible number of students who could be table tennis players?",
+"opts": {
+"A": "6",
+"B": "7",
+"C": "9",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+426,
+427,
+428,
+429,
+430,
+431
+]
+},
+{
+"n": 16,
+"text": "If no other student except I is in the badminton team, which of the following students could be tennis players?",
+"opts": {
+"A": "DandH",
+"B": "FandE",
+"C": "EandG",
+"D": "GandH"
+},
+"ans": null,
+"src": null,
+"lines": [
+432,
+433,
+434,
+435,
+436,
+437
+]
+},
+{
+"n": 19,
+"text": "If A and G are the only badminton players, how many students must be in the table tennis team?",
+"opts": {
+"A": "2",
+"B": "3",
+"C": "5",
+"D": "6"
+},
+"ans": null,
+"src": null,
+"lines": [
+450,
+451,
+452,
+453,
+454,
+455
+]
+}
+]
+},
+"C4-L1-Q25-26": {
+"status": "blocked",
+"reasons": [
+"Q24: no checked answer in your PDFs"
+],
+"present": [
+25,
+26
+],
+"missing": [
+{
+"n": 24,
+"text": "What is Aishwarya\u2019s profession?",
+"opts": {
+"A": "Engineer",
+"B": "Teacher",
+"C": "Doctor",
+"D": "Data inadequate"
+},
+"ans": null,
+"src": null,
+"lines": [
+513,
+514,
+515,
+516,
+517
+]
+}
+]
+},
+"C4-L2-Q1-2": {
+"status": "blocked",
+"reasons": [
+"Q3: no checked answer in your PDFs"
+],
+"present": [
+1,
+2
+],
+"missing": [
+{
+"n": 3,
+"text": "Ina \u201ckeep-fit\u201d gymnasium class there are fifteen females enrolled in a weight-loss programme. They all have been grouped in any one of the five weight-groups\u2014W1, W2, W3, W4 or WS. One instructor is assigned to one weight-group only. Sonali, Shalini, Shubhra and Shahira belong to the same weight-group. Sonali and Rupa are in one weight-group. Rupali and Renuka are also in one weight-group. Rupa, Radha, Renuka, Ruchika and Ritu belong to different weight-groups. Somya cannot be with Ritu, and Tara cannot be with Radha. Komal cannot be with Radha, Somya or Ritu. Shahira is in W1 and Somya is in W4 with Ruchika. Sweta and Jyotika cannot be with Rupali, but are in a weight-group with total membership of four. No weight-group can have more than five or less than one member. Amita, Babita, Chandrika, Deepika and Elina are instructors of weight-groups with membership sizes 5, 4,3, 2 and 1, respectively. Who is the instructor of Radha?",
+"opts": {
+"A": "Babita",
+"B": "Elina",
+"C": "Chandrika",
+"D": "Deepika"
+},
+"ans": null,
+"src": null,
+"lines": [
+678,
+679,
+680,
+681,
+682,
+683,
+684,
+685,
+686,
+687,
+688,
+689,
+690,
+691,
+692,
+693,
+694,
+695,
+696
+]
+}
+]
+},
+"C4-L2-Q5-6": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [] of [4, 5, 6]",
+"could only match 0 of 2 existing questions"
+],
+"present": [],
+"missing": []
+},
+"C4-L2-Q10-13": {
+"status": "blocked",
+"reasons": [
+"could only match 1 of 2 existing questions",
+"Q11: no checked answer in your PDFs",
+"Q12: no checked answer in your PDFs"
+],
+"present": [
+10
+],
+"missing": [
+{
+"n": 11,
+"text": "For a given week, what is the minimum number of days the apartment will be left unguarded?",
+"opts": {
+"A": "0",
+"B": "1",
+"C": "2",
+"D": "3"
+},
+"ans": null,
+"src": null,
+"lines": [
+94,
+95,
+96,
+97,
+98,
+99
+]
+},
+{
+"n": 12,
+"text": "Of the following, which group of 3 guards cannot be formed to guard the apartment on any day of the week?",
+"opts": {
+"A": "Aman, Bimal, Famid",
+"B": "Aman, Ehsaan, Famid",
+"C": "Bimal, Charan, Famid",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+100,
+101,
+102,
+103,
+104,
+105
+]
+},
+{
+"n": 13,
+"text": "Ina particular week,",
+"opts": {
+"D": "None of these",
+"A": "Bimal-1",
+"B": "Charan-1",
+"C": "Deepak-2"
+},
+"ans": [
+"mcq",
+"D"
+],
+"src": "key (checked on 1)",
+"lines": [
+106,
+107,
+108,
+109,
+110,
+111,
+112,
+113,
+114
+]
+}
+]
+},
+"C4-L2-Q14-17": {
+"status": "blocked",
+"reasons": [
+"Q15: no checked answer in your PDFs",
+"Q16: no checked answer in your PDFs"
+],
+"present": [
+14,
+17
+],
+"missing": [
+{
+"n": 15,
+"text": "If A participated in Robotics, then which of the following is definitely true?",
+"opts": {
+"A": "Aalso participated in Dancing.",
+"B": "B participated in Singing.",
+"C": "C participated in Singing.",
+"D": "None of the above."
+},
+"ans": null,
+"src": null,
+"lines": [
+134,
+135,
+136,
+137,
+138,
+139
+]
+},
+{
+"n": 16,
+"text": "If A participated in exactly three events, then which of the following statements is definitely true?",
+"opts": {
+"A": "B participated in Painting.",
+"B": "D participated in Dancing.",
+"C": "B participated in exactly three events.",
+"D": "C participated in exactly one event."
+},
+"ans": null,
+"src": null,
+"lines": [
+140,
+141,
+142,
+143,
+144,
+145
+]
+}
+]
+},
+"C4-L2-Q18-22": {
+"status": "blocked",
+"reasons": [
+"Q19: no checked answer in your PDFs",
+"Q20: no checked answer in your PDFs",
+"Q23: no checked answer in your PDFs"
+],
+"present": [
+18,
+21,
+22
+],
+"missing": [
+{
+"n": 19,
+"text": "Who is a student of Bal Bharti school?",
+"opts": {
+"A": "Andrew",
+"B": "Ben",
+"C": "Chris",
+"D": "Dom"
+},
+"ans": null,
+"src": null,
+"lines": [
+185,
+186,
+187,
+188,
+189
+]
+},
+{
+"n": 20,
+"text": "What is the maximum possible sum of the scores of Chris and Dom?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+190
+]
+},
+{
+"n": 23,
+"text": "Which of the following combination of students represents correctly the decreasing order of the maximum marks in their respective schools?",
+"opts": {
+"A": "Ervin, Dom, Ben, Andrew, Chris",
+"B": "Ervin, Ben, Dom, Andrew, Chris",
+"C": "Ervin, Dom, Ben, Chris, Andrew",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+201,
+202,
+203,
+204,
+205,
+206,
+207
+]
+}
+]
+},
+"C4-L2-Q29-30": {
+"status": "blocked",
+"reasons": [
+"Q28: no checked answer in your PDFs",
+"Q31: no checked answer in your PDFs"
+],
+"present": [
+29,
+30
+],
+"missing": [
+{
+"n": 28,
+"text": "Who are the students from the institute Z?",
+"opts": {
+"A": "Adriana and Bandita",
+"B": "Bandita and Chitra",
+"C": "Chitra and Daisy",
+"D": "Adriana and Daisy"
+},
+"ans": null,
+"src": null,
+"lines": [
+259,
+260,
+261,
+262,
+263
+]
+},
+{
+"n": 31,
+"text": "If Chitra majors in Finance, which subject does Bandita major in?",
+"opts": {
+"A": "Finance",
+"B": "Marketing",
+"C": "Operations",
+"D": "Can\u2019t be determined uniquely from the given information \u2014\u00a9 ENIE3 o\u2014"
+},
+"ans": null,
+"src": null,
+"lines": [
+274,
+275,
+276,
+277,
+278,
+279
+]
+}
+]
+},
+"C5-L1-Q1-5": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [1] of [1, 2, 3, 4, 5]",
+"could only match 0 of 3 existing questions",
+"Q1: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 1,
+"text": "Who among the following must have two sources?",
+"opts": {
+"A": "P",
+"B": "Q",
+"C": "R d@ s"
+},
+"ans": null,
+"src": null,
+"lines": [
+538,
+539,
+540,
+541,
+542
+]
+}
+]
+},
+"C5-L1-Q6-10": {
+"status": "blocked",
+"reasons": [
+"Q7: no checked answer in your PDFs",
+"Q8: no checked answer in your PDFs"
+],
+"present": [
+6,
+9,
+10
+],
+"missing": [
+{
+"n": 7,
+"text": "How many laddoos in total did B eat?",
+"opts": {
+"A": "24",
+"B": "15",
+"C": "39",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1492,
+1493,
+1494,
+1495,
+1496
+]
+},
+{
+"n": 8,
+"text": "How many laddoos in total did A eat?",
+"opts": {
+"A": "56",
+"B": "68",
+"C": "71",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1497,
+1498,
+1499,
+1500,
+1501
+]
+}
+]
+},
+"C5-L1-Q13-14": {
+"status": "blocked",
+"reasons": [
+"Q11: no checked answer in your PDFs",
+"Q12: no checked answer in your PDFs"
+],
+"present": [
+13,
+14
+],
+"missing": [
+{
+"n": 11,
+"text": "How many rows of rose did he plant?",
+"opts": {
+"A": "Two",
+"B": "Five",
+"C": "Four",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+1522,
+1523,
+1524,
+1525,
+1526
+]
+},
+{
+"n": 12,
+"text": "Which of the above information is redundant and can be dispensed with?",
+"opts": {
+"A": "@",
+"B": "aii)",
+"C": "(i) and (iii) both",
+"D": "All are necessary"
+},
+"ans": null,
+"src": null,
+"lines": [
+1527,
+1528,
+1529,
+1530,
+1531
+]
+}
+]
+},
+"C5-L1-Q17-18": {
+"status": "blocked",
+"reasons": [
+"Q15: no checked answer in your PDFs",
+"Q16: no checked answer in your PDFs",
+"Q19: no checked answer in your PDFs",
+"Q20: no checked answer in your PDFs"
+],
+"present": [
+17,
+18
+],
+"missing": [
+{
+"n": 15,
+"text": "How many boys weigh 40 kg?",
+"opts": {
+"A": "22",
+"B": "24",
+"C": "28",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1548,
+1549,
+1550,
+1551,
+1552
+]
+},
+{
+"n": 16,
+"text": "How many girls weigh 44 kg?",
+"opts": {
+"A": "37",
+"B": "36",
+"C": "39",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1553,
+1554,
+1555,
+1556,
+1557
+]
+},
+{
+"n": 19,
+"text": "The number of girls weighing 40 kg is:",
+"opts": {
+"A": "16",
+"B": "18",
+"C": "22",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1568,
+1569,
+1570,
+1571,
+1572
+]
+},
+{
+"n": 20,
+"text": "The number of students weighing 50 kg is:",
+"opts": {
+"A": "96",
+"B": "42",
+"C": "201",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1573,
+1574,
+1575,
+1576,
+1577
+]
+}
+]
+},
+"C5-L1-Q21-26": {
+"status": "blocked",
+"reasons": [
+"Q23: no checked answer in your PDFs",
+"Q24: no checked answer in your PDFs"
+],
+"present": [
+21,
+22,
+25,
+26
+],
+"missing": [
+{
+"n": 23,
+"text": "The greatest number has the value:",
+"opts": {
+"A": "9",
+"B": "-5",
+"C": "3",
+"D": "7"
+},
+"ans": null,
+"src": null,
+"lines": [
+1592,
+1593,
+1594,
+1595,
+1596
+]
+},
+{
+"n": 24,
+"text": "The sum of the integers is:",
+"opts": {
+"A": "25",
+"B": "-6",
+"C": "-15",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1597,
+1598,
+1599,
+1600,
+1601
+]
+}
+]
+},
+"C5-L1-Q29-30": {
+"status": "blocked",
+"reasons": [
+"Q27: no checked answer in your PDFs",
+"Q28: no checked answer in your PDFs"
+],
+"present": [
+29,
+30
+],
+"missing": [
+{
+"n": 27,
+"text": "What is X\u2019s house number?",
+"opts": {
+"A": "64",
+"B": "81",
+"C": "49",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+1632,
+1633,
+1634,
+1635,
+1636
+]
+},
+{
+"n": 28,
+"text": "What is Y\u2019s house number?",
+"opts": {
+"A": "64",
+"B": "81",
+"C": "36",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+1637,
+1638,
+1639,
+1640,
+1641
+]
+}
+]
+},
+"C5-L1-Q33-34": {
+"status": "blocked",
+"reasons": [
+"Q31: no checked answer in your PDFs",
+"Q32: no checked answer in your PDFs"
+],
+"present": [
+33,
+34
+],
+"missing": [
+{
+"n": 31,
+"text": "How many rosogollas did Raj eat?",
+"opts": {
+"A": "18",
+"B": "24",
+"C": "16",
+"D": "27"
+},
+"ans": null,
+"src": null,
+"lines": [
+1659,
+1660,
+1661,
+1662,
+1663
+]
+},
+{
+"n": 32,
+"text": "Jugal and Dileep ate how many rosogollas in total?",
+"opts": {
+"A": "46",
+"B": "36",
+"C": "40",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1664,
+1665,
+1666,
+1667,
+1668
+]
+}
+]
+},
+"C5-L1-Q41-42": {
+"status": "blocked",
+"reasons": [
+"Q40: no checked answer in your PDFs",
+"Q43: no checked answer in your PDFs"
+],
+"present": [
+41,
+42
+],
+"missing": [
+{
+"n": 40,
+"text": "Who had the highest number of points among the seven persons?",
+"opts": {
+"A": "Alexander",
+"B": "Brian",
+"C": "Fred",
+"D": "Casey"
+},
+"ans": null,
+"src": null,
+"lines": [
+1739,
+1740,
+1741,
+1742,
+1743
+]
+},
+{
+"n": 43,
+"text": "How many persons are there in between Kian and Fred ?",
+"opts": {
+"A": "0",
+"B": "1",
+"C": "2",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+1755,
+1756,
+1757,
+1758,
+1759
+]
+}
+]
+},
+"C5-L1-Q45-46": {
+"status": "blocked",
+"reasons": [
+"Q44: no checked answer in your PDFs"
+],
+"present": [
+45,
+46
+],
+"missing": [
+{
+"n": 44,
+"text": "If Roopa leaves home with 30 flowers, the number of flowers she offers to each deity is",
+"opts": {
+"A": "30",
+"B": "31 (cy 32",
+"D": "33"
+},
+"ans": null,
+"src": null,
+"lines": [
+1773,
+1774,
+1775,
+1776,
+1777,
+1778
+]
+}
+]
+},
+"C5-L1-Q58-61": {
+"status": "blocked",
+"reasons": [
+"Q59: no checked answer in your PDFs",
+"Q60: no checked answer in your PDFs"
+],
+"present": [
+58,
+61
+],
+"missing": [
+{
+"n": 59,
+"text": "Shyama and Vyom walk up an escalator (moving stairway). The escalator moves at a constant speed. Shyama takes three steps for every two of Vyom\u2019s steps. Shyama gets to the top of the escalator after having taken 25 steps, while Vyom (because her slower pace lets the escalator do a little more of the work) takes only 20 steps to reach the top. If the escalator were turned of, how many steps would they have to take to walk up?",
+"opts": {
+"A": "40",
+"B": "50",
+"C": "60",
+"D": "80"
+},
+"ans": null,
+"src": null,
+"lines": [
+970,
+971,
+972,
+973,
+974,
+975,
+976,
+977,
+978,
+979,
+980
+]
+},
+{
+"n": 60,
+"text": "Ashish is given T 158 in one rupee denominations. He has been asked to allocate them into a number of bags such that any amount required between T 1 and T 158 can be given by handing out a certain number of bags without opening them. What is the minimum number of bags required?",
+"opts": {
+"A": "11",
+"B": "12",
+"C": "13",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+981,
+982,
+983,
+984,
+985,
+986,
+987,
+988,
+989
+]
+}
+]
+},
+"C5-L1-Q73-74": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [73, 74] of [73, 74, 75, 76]"
+],
+"present": [
+73,
+74
+],
+"missing": []
+},
+"C5-L2-Q1-5": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [1] of [1, 2, 3, 4, 5]",
+"could only match 1 of 4 existing questions"
+],
+"present": [
+1
+],
+"missing": []
+},
+"C5-L2-Q19-22": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [19, 20, 21] of [19, 20, 21, 22]"
+],
+"present": [
+19,
+20,
+21
+],
+"missing": []
+},
+"C5-L2-Q27-31": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [27, 28, 29] of [27, 28, 29, 30, 31, 32]",
+"could only match 2 of 4 existing questions",
+"Q28: no checked answer in your PDFs"
+],
+"present": [
+27,
+29
+],
+"missing": [
+{
+"n": 28,
+"text": "In the above question, who made the mistake in adding the sum of marks obtained by the students?",
+"opts": {
+"A": "C",
+"B": "F () E",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+1909,
+1910,
+1911,
+1912,
+1913,
+1914
+]
+}
+]
+},
+"C5-L2-Q33-35": {
+"status": "blocked",
+"reasons": [
+"Q36: no checked answer in your PDFs"
+],
+"present": [
+33,
+34,
+35
+],
+"missing": [
+{
+"n": 36,
+"text": "For how many years combined did he work in Prague and Istanbul?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+155
+]
+}
+]
+},
+"C5-L2-Q37-39": {
+"status": "blocked",
+"reasons": [
+"Q40: no checked answer in your PDFs"
+],
+"present": [
+37,
+38,
+39
+],
+"missing": [
+{
+"n": 40,
+"text": "What is the number of goals scored by DI Stefano against AC Milan?",
+"opts": {
+"A": "1",
+"B": "2",
+"C": "3",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+194,
+195,
+196,
+197,
+198
+]
+}
+]
+},
+"C5-L2-Q41-43": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [41, 42, 43] of [41, 42, 43, 44]"
+],
+"present": [
+41,
+42,
+43
+],
+"missing": []
+},
+"C5-L2-Q45-47": {
+"status": "blocked",
+"reasons": [
+"Q48: no checked answer in your PDFs"
+],
+"present": [
+45,
+46,
+47
+],
+"missing": [
+{
+"n": 48,
+"text": "The total number of wrong answers given by these five students altogether was same in which of the two subjects?",
+"opts": {
+"A": "Political Science and Geography.",
+"B": "History and Hindi.",
+"C": "Economics and Hindi.",
+"D": "Economics and History."
+},
+"ans": null,
+"src": null,
+"lines": [
+406,
+407,
+408,
+409,
+410,
+411
+]
+}
+]
+},
+"C5-L2-Q58-62": {
+"status": "blocked",
+"reasons": [
+"Q60: no checked answer in your PDFs"
+],
+"present": [
+58,
+59,
+61,
+62
+],
+"missing": [
+{
+"n": 60,
+"text": "What is the cost of the wallet?",
+"opts": {
+"A": "290",
+"B": "230",
+"C": "280",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+1262,
+1263,
+1264,
+1265,
+1266
+]
+}
+]
+},
+"C5-L2-Q63-65": {
+"status": "blocked",
+"reasons": [
+"Q64: no checked answer in your PDFs"
+],
+"present": [
+63,
+65
+],
+"missing": [
+{
+"n": 64,
+"text": "IfR gets at least two more coins than S, then which one of the following is necessarily true?",
+"opts": {
+"A": "Q gets at least two more coins than S.",
+"B": "Q gets more coins than P.",
+"C": "P gets more coins than S.",
+"D": "Pand Q together get at least five coins."
+},
+"ans": null,
+"src": null,
+"lines": [
+1285,
+1286,
+1287,
+1288,
+1289,
+1290
+]
+}
+]
+},
+"C5-L2-Q69-70": {
+"status": "blocked",
+"reasons": [
+"Q68: no checked answer in your PDFs"
+],
+"present": [
+69,
+70
+],
+"missing": [
+{
+"n": 68,
+"text": "All values in S; are changed in sign, while those in Sz remain unchanged. Which of the following statements is true?",
+"opts": {
+"A": "Every member of Sj is greater than or equal to every member of Sp.",
+"B": "Gis in S;",
+"C": "If all numbers originally in S; and S> had the same sign, then after the change of sign, the largest number of S and S> is in Sj.",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1944,
+1945,
+1946,
+1947,
+1948,
+1949,
+1950,
+1951,
+1952
+]
+}
+]
+},
+"C5-L2-Q75-77": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [] of [75, 76, 77]",
+"could only match 0 of 2 existing questions"
+],
+"present": [],
+"missing": []
+},
+"C5-L2-Q79-85": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [79, 80] of [79, 80, 81, 82, 83, 84, 85, 86, 87, 88]",
+"could only match 1 of 5 existing questions",
+"Q80: no checked answer in your PDFs"
+],
+"present": [
+79
+],
+"missing": [
+{
+"n": 80,
+"text": "Coach Pathak has one tennis scholarship left. He\u2019s just heard of a family with four boys who are all great tennis players. He\u2019s never seen them play, but his scouts assure him that all four play equally well. With no more knowledge available to him, he decides that he wants to give the scholarship to the tallest boy. But their parents do not want to show any favouritism.",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+1357,
+1358,
+1359,
+1360,
+1361,
+1362
+]
+}
+]
+},
+"C5-L2-Q86-87": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [79, 80] of [79, 80, 81, 82, 83, 84, 85, 86, 87, 88]",
+"could only match 0 of 2 existing questions",
+"Q79: no checked answer in your PDFs",
+"Q80: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 79,
+"text": "Early one morning, four snails, A, B, C and D, set of together down the garden path. A and B kept the same steady pace, slithering only 8 metres by the time C and D had already reached the azalea. C was wounded and had to stop for an hour to rest. Although D was tired, too, she pressed on, but reduced her pace to be at the same speed as A\u2019s and B\u2019s. C started of again just as A and B got even with her. She raced of at her original pace. A promptly sped up to the same speed as C and kept even with her. B just kept going at her original pace. When A reached the end of the path, she was 1 metre ahead of B, but she was a half hour later than D was. How many meters long was the path?",
+"opts": {
+"A": "10",
+"B": "15",
+"C": "8",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1341,
+1342,
+1343,
+1344,
+1345,
+1346,
+1347,
+1348,
+1349,
+1350,
+1351,
+1352,
+1353,
+1354,
+1355,
+1356
+]
+},
+{
+"n": 80,
+"text": "Coach Pathak has one tennis scholarship left. He\u2019s just heard of a family with four boys who are all great tennis players. He\u2019s never seen them play, but his scouts assure him that all four play equally well. With no more knowledge available to him, he decides that he wants to give the scholarship to the tallest boy. But their parents do not want to show any favouritism.",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+1357,
+1358,
+1359,
+1360,
+1361,
+1362
+]
+}
+]
+},
+"C6-L1-Q1-5": {
+"status": "blocked",
+"reasons": [
+"Q3: no checked answer in your PDFs",
+"Q4: no checked answer in your PDFs"
+],
+"present": [
+1,
+2,
+5
+],
+"missing": [
+{
+"n": 3,
+"text": "Which of the following is true?",
+"opts": {
+"A": "Falguni sponsors green shirts.",
+"B": "Shyam is working in Bennett",
+"C": "Tarun wears red shirt.",
+"D": "Red shirt is sponsored by Evergrande."
+},
+"ans": null,
+"src": null,
+"lines": [
+800,
+801,
+802,
+803,
+804
+]
+},
+{
+"n": 4,
+"text": "What is the sequence of companies representing Pawan, Qureshi , Raman, Shyam, Tarun and Unnat?",
+"opts": {
+"A": "Bennett, Deloitte, Adobe, Clarks, Evergrande, Falguni",
+"B": "Bennett, Evergrande, Adobe, Clarks, Falguni, Deloitte",
+"C": "Bennett, Adobe, Deloitte, Clarks, Evergrande, Falguni",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+805,
+806,
+807,
+808,
+809,
+810
+]
+}
+]
+},
+"C6-L1-Q9-14": {
+"status": "blocked",
+"reasons": [
+"Q11: no checked answer in your PDFs",
+"Q12: no checked answer in your PDFs"
+],
+"present": [
+9,
+10,
+13,
+14
+],
+"missing": [
+{
+"n": 11,
+"text": "Who is the owner of the book written by Aswath?",
+"opts": {
+"A": "Bhavya",
+"B": "Evaan",
+"C": "Arun",
+"D": "Dhritiman"
+},
+"ans": null,
+"src": null,
+"lines": [
+868,
+869,
+870,
+871,
+872
+]
+},
+{
+"n": 12,
+"text": "Persons X, Y, Z and Q live in red, green, yellow or blue coloured houses which are in a sequence on a street. Z lives in a yellow house. The green house is adjacent to the blue house. X does not live adjacent to Z. The yellow house is in between the green and red house. The colour of the house, X lives in is:",
+"opts": {
+"A": "Blue",
+"B": "Green",
+"C": "Red",
+"D": "Not possible to determine"
+},
+"ans": null,
+"src": null,
+"lines": [
+873,
+874,
+875,
+876,
+877,
+878,
+879,
+880,
+881
+]
+}
+]
+},
+"C6-L1-Q17-18": {
+"status": "blocked",
+"reasons": [
+"Q19: no checked answer in your PDFs"
+],
+"present": [
+17,
+18
+],
+"missing": [
+{
+"n": 19,
+"text": "What day does Umesh make his presentation on?",
+"opts": {
+"A": "Monday",
+"B": "Tuesday",
+"C": "Wednesday",
+"D": "Thursday"
+},
+"ans": null,
+"src": null,
+"lines": [
+964,
+965,
+966,
+967,
+968
+]
+}
+]
+},
+"C6-L1-Q21-22": {
+"status": "blocked",
+"reasons": [
+"Q20: no checked answer in your PDFs",
+"Q23: no checked answer in your PDFs",
+"Q24: no checked answer in your PDFs"
+],
+"present": [
+21,
+22
+],
+"missing": [
+{
+"n": 20,
+"text": "Who lives in Delhi?",
+"opts": {
+"A": "A",
+"B": "E",
+"C": "F",
+"D": "Can\u2019t be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+986,
+987,
+988,
+989,
+990
+]
+},
+{
+"n": 23,
+"text": "Which of the following combinations is not possible?",
+"opts": {
+"A": "E- Presidium- Chennai",
+"B": "G- Thapar college- Delhi",
+"C": "H- Nagarjuna- Patna",
+"D": "E- Presidium- Delhi"
+},
+"ans": null,
+"src": null,
+"lines": [
+1002,
+1003,
+1004,
+1005,
+1006
+]
+},
+{
+"n": 24,
+"text": "If additional information is given that Thapar College is in Delhi, which of the following is definitely false?",
+"opts": {
+"A": "E lives in Chennai.",
+"B": "Presidium is in Chennai.",
+"C": "G lives in Delhi.",
+"D": "G lives in Chennai."
+},
+"ans": null,
+"src": null,
+"lines": [
+1007,
+1008,
+1009,
+1010,
+1011,
+1012
+]
+}
+]
+},
+"C6-L1-Q25-26": {
+"status": "blocked",
+"reasons": [
+"Q27: no checked answer in your PDFs",
+"Q28: no checked answer in your PDFs"
+],
+"present": [
+25,
+26
+],
+"missing": [
+{
+"n": 27,
+"text": "How much does Ervin make (in dollars per annum)?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+1044
+]
+},
+{
+"n": 28,
+"text": "When did the engineer working in Samsung attend the summit?",
+"opts": {
+"A": "Monday",
+"B": "Tuesday",
+"C": "Wednesday",
+"D": "Friday"
+},
+"ans": null,
+"src": null,
+"lines": [
+1045,
+1046,
+1047,
+1048,
+1049
+]
+}
+]
+},
+"C6-L1-Q34-38": {
+"status": "blocked",
+"reasons": [
+"Q35: no checked answer in your PDFs",
+"Q36: no checked answer in your PDFs"
+],
+"present": [
+34,
+37,
+38
+],
+"missing": [
+{
+"n": 35,
+"text": "Who hosted Amritesh?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+1087
+]
+},
+{
+"n": 36,
+"text": "Who works in B?",
+"opts": {
+"A": "Amritesh",
+"B": "Bhanu",
+"C": "Edwin",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+1088,
+1089,
+1090,
+1091,
+1092
+]
+}
+]
+},
+"C6-L1-Q45-46": {
+"status": "blocked",
+"reasons": [
+"Q44: no checked answer in your PDFs"
+],
+"present": [
+45,
+46
+],
+"missing": [
+{
+"n": 44,
+"text": "Persons X, Y, Z and Q live in red, green, yellow or blue coloured houses placed in a sequence on a street. Z lives in a yellow house. The green house is adjacent to the blue house. X does not live adjacent to Z. The yellow house is in between the green and red houses. The colour of the house X lives in is",
+"opts": {
+"A": "blue",
+"B": "green",
+"C": "red",
+"D": "not possible to determine"
+},
+"ans": null,
+"src": null,
+"lines": [
+390,
+391,
+392,
+393,
+394,
+395,
+396,
+397,
+398
+]
+}
+]
+},
+"C6-L2-Q33-37": {
+"status": "blocked",
+"reasons": [
+"Q35: no checked answer in your PDFs",
+"Q36: no checked answer in your PDFs"
+],
+"present": [
+33,
+34,
+37
+],
+"missing": [
+{
+"n": 35,
+"text": "Which of the following books is liked by Daniel?",
+"opts": {
+"A": "Bl",
+"B": "B2",
+"C": "B3",
+"D": "B4"
+},
+"ans": null,
+"src": null,
+"lines": [
+274,
+275,
+276,
+277,
+278
+]
+},
+{
+"n": 36,
+"text": "Person who likes B4, also likes which author?",
+"opts": {
+"A": "Yoko han",
+"B": "Wren",
+"C": "Xavi",
+"D": "Zara"
+},
+"ans": null,
+"src": null,
+"lines": [
+279,
+280,
+281,
+282,
+283
+]
+}
+]
+},
+"C6-L2-Q38-42": {
+"status": "blocked",
+"reasons": [
+"Q39: no checked answer in your PDFs",
+"Q40: no checked answer in your PDFs"
+],
+"present": [
+38,
+41,
+42
+],
+"missing": [
+{
+"n": 39,
+"text": "Who works in Sarcos?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+306
+]
+},
+{
+"n": 40,
+"text": "Which of the following could be an employee of Qarcos?",
+"opts": {
+"A": "Carun",
+"B": "Barun",
+"C": "Darun",
+"D": "Earoon"
+},
+"ans": null,
+"src": null,
+"lines": [
+307,
+308,
+309,
+310,
+311
+]
+}
+]
+},
+"C6-L2-Q45-46": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [44, 45, 46] of [43, 44, 45, 46, 47]",
+"could only match 0 of 2 existing questions",
+"Q44: no checked answer in your PDFs",
+"Q45: no checked answer in your PDFs",
+"Q46: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 44,
+"text": "Persons X, Y, Z and Q live in red, green, yellow or blue coloured houses placed in a sequence on a street. Z lives in a yellow house. The green house is adjacent to the blue house. X does not live adjacent to Z. The yellow house is in between the green and red houses. The colour of the house X lives in is",
+"opts": {
+"A": "blue",
+"B": "green",
+"C": "red",
+"D": "not possible to determine"
+},
+"ans": null,
+"src": null,
+"lines": [
+390,
+391,
+392,
+393,
+394,
+395,
+396,
+397,
+398
+]
+},
+{
+"n": 45,
+"text": "Five persons with names P, M, U, T and X live separately in any one of the following: A palace, a hut, a fort, a house or a hotel. Each one likes two different colours from among the following blue, black, red, yellow and green. U likes red and blue. T likes black. The person living in a palace does not like black or blue. P likes blue and red. M likes yellow. X lives in a hotel. M lives in a",
+"opts": {
+"A": "hut",
+"B": "palace",
+"C": "fort",
+"D": "house"
+},
+"ans": null,
+"src": null,
+"lines": [
+399,
+400,
+401,
+402,
+403,
+404,
+405,
+406,
+407,
+408
+]
+},
+{
+"n": 46,
+"text": "There are ten animals\u2014two each of lion, panther, bison, bear, and deer, in a zoo. The enclosures in the zoo are named X, Y, Z, P and Q and each enclosure is allotted to one of the following attendants Jack, Mohan, Shalini, Suman and Rita. Two animals of different species are housed in each enclosure. A lion and a deer cannot be together. A panther cannot be with either a deer or a bison. Suman attends to animals from among bison, deer, bear and panther only. Mohan attends to a lion and a panther. Jack does not attend to deer, lion or bison. X, Y and Z are allotted to Mohan, Jack and Rita respectively. X and Q enclosures have one animal of the same species. Z and P have the same pair of animals. The animals attended by Shalini are",
+"opts": {
+"A": "Bear and bison",
+"B": "Bison and deer",
+"C": "Bear and lion",
+"D": "Bear and panther"
+},
+"ans": null,
+"src": null,
+"lines": [
+409,
+410,
+411,
+412,
+413,
+414,
+415,
+416,
+417,
+418,
+419,
+420,
+421,
+422,
+423
+]
+}
+]
+},
+"C6-L2-Q49-50": {
+"status": "blocked",
+"reasons": [
+"Q48: no checked answer in your PDFs",
+"Q51: no checked answer in your PDFs",
+"Q52: no checked answer in your PDFs"
+],
+"present": [
+49,
+50
+],
+"missing": [
+{
+"n": 48,
+"text": "What was the result of the match- India v/s Bangladesh?",
+"opts": {
+"A": "India won.",
+"B": "Bangladesh won.",
+"C": "India drew with Bangladesh.",
+"D": "Cannot be determined."
+},
+"ans": null,
+"src": null,
+"lines": [
+683,
+684,
+685,
+686,
+687
+]
+},
+{
+"n": 51,
+"text": "What is the total number goals scored by India against Sri Lanka?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+699
+]
+},
+{
+"n": 52,
+"text": "What is the total number goals scored by Bangladesh against Sri Lanka?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+700,
+701
+]
+}
+]
+},
+"C6-L2-Q53-57": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [] of [53, 54, 55, 56, 57]",
+"could only match 0 of 3 existing questions"
+],
+"present": [],
+"missing": []
+},
+"C6-L2-Q58-62": {
+"status": "blocked",
+"reasons": [
+"Q59: no checked answer in your PDFs",
+"Q60: no checked answer in your PDFs"
+],
+"present": [
+58,
+61,
+62
+],
+"missing": [
+{
+"n": 59,
+"text": "Who among the following lives on the floor immediately above the floor of Dev?",
+"opts": {
+"A": "Farhan",
+"B": "Chandni",
+"C": "Ekta",
+"D": "Gaurav"
+},
+"ans": null,
+"src": null,
+"lines": [
+1410,
+1411,
+1412,
+1413,
+1414,
+1415
+]
+},
+{
+"n": 60,
+"text": "Who among the following likes Bananas?",
+"opts": {
+"A": "Bheem",
+"B": "Anamika",
+"C": "Gaurav",
+"D": "Chandni"
+},
+"ans": null,
+"src": null,
+"lines": [
+1416,
+1417,
+1418,
+1419,
+1420
+]
+}
+]
+},
+"C6-L2-Q69-70": {
+"status": "blocked",
+"reasons": [
+"Q69: no checked answer in your PDFs"
+],
+"present": [
+70,
+71
+],
+"missing": [
+{
+"n": 69,
+"text": "Which of the following statements is true?",
+"opts": {
+"A": "Sandeep eats 2 vadas.",
+"B": "Mukesh eats 4 vadas.",
+"C": "Ignesh eats 6 vadas.",
+"D": "Bimal eats 4 vadas."
+},
+"ans": null,
+"src": null,
+"lines": [
+59,
+60,
+61,
+62,
+63
+]
+}
+]
+},
+"C6-L2-Q73-74": {
+"status": "blocked",
+"reasons": [
+"Q72: no checked answer in your PDFs"
+],
+"present": [
+73,
+74
+],
+"missing": [
+{
+"n": 72,
+"text": "How many strings of letters can possibly be formed using the above tules?",
+"opts": {
+"A": "40",
+"B": "45",
+"C": "30",
+"D": "35"
+},
+"ans": null,
+"src": null,
+"lines": [
+85,
+86,
+87,
+88,
+89,
+90
+]
+}
+]
+},
+"C6-L2-Q77-78": {
+"status": "blocked",
+"reasons": [
+"Q75: no checked answer in your PDFs",
+"Q76: no checked answer in your PDFs"
+],
+"present": [
+77,
+78
+],
+"missing": [
+{
+"n": 75,
+"text": "Which woman arrived third?",
+"opts": {
+"A": "Shanthi",
+"B": "Sridevi",
+"C": "Anita",
+"D": "Joya"
+},
+"ans": null,
+"src": null,
+"lines": [
+121,
+122,
+123,
+124,
+125
+]
+},
+{
+"n": 76,
+"text": "Name the correct pair of husband and wife?",
+"opts": {
+"A": "Raj and Shanthi",
+"B": "Sunil and Sridevi",
+"C": "Anil and Sridevi",
+"D": "Raj and Anita"
+},
+"ans": null,
+"src": null,
+"lines": [
+126,
+127,
+128,
+129,
+130
+]
+}
+]
+},
+"C6-L2-Q81-82": {
+"status": "blocked",
+"reasons": [
+"Q80: no checked answer in your PDFs"
+],
+"present": [
+81,
+82
+],
+"missing": [
+{
+"n": 80,
+"text": "Who is the worst player?",
+"opts": {
+"A": "Steffi",
+"B": "Daughter",
+"C": "Son",
+"D": "Data inadequate"
+},
+"ans": null,
+"src": null,
+"lines": [
+366,
+367,
+368,
+369,
+370
+]
+}
+]
+},
+"C7-L1-Q1-2": {
+"status": "blocked",
+"reasons": [
+"Q3: no checked answer in your PDFs"
+],
+"present": [
+1,
+2
+],
+"missing": [
+{
+"n": 3,
+"text": "How many nodes are at the 4th level?",
+"opts": {
+"A": "7",
+"B": "3 () 9",
+"D": "2"
+},
+"ans": null,
+"src": null,
+"lines": [
+505,
+506,
+507,
+508
+]
+}
+]
+},
+"C7-L1-Q5-6": {
+"status": "blocked",
+"reasons": [
+"Q4: no checked answer in your PDFs",
+"Q7: no checked answer in your PDFs",
+"Q8: no checked answer in your PDFs"
+],
+"present": [
+5,
+6
+],
+"missing": [
+{
+"n": 4,
+"text": "Ifthe government wants to ensure that all motorists travelling from S to T pay the same amount (fuel costs and toll combined), regardless of the route they choose and the street from B to C is under repairs (and hence unusable), then a feasible set of toll charged (in rupees) at junctions A, B, C, and D respectively to achieve this goal at the minimum cost would be: {a) 2,5,3,2",
+"opts": {
+"B": "0,5,3,1 fe) 1,5,5,0",
+"D": "2,3,5,1 \u00a9) 13,5, 1"
+},
+"ans": null,
+"src": null,
+"lines": [
+528,
+529,
+530,
+531,
+532,
+533,
+534,
+535,
+536,
+537,
+538
+]
+},
+{
+"n": 7,
+"text": "Ifthe government wants to ensure that the traffic at S gets evenly distributed along streets from S to A, from S to B, and from S to D, then a feasible set of toll charged (in rupees) at junctions A, B, C, and D respectively to achieve this goal is:",
+"opts": {
+"A": "0,5,4,1",
+"B": "0,5,2,2",
+"C": "1,3,4,3",
+"D": "1,5,3,2 (e) 0,4,3,2"
+},
+"ans": null,
+"src": null,
+"lines": [
+556,
+557,
+558,
+559,
+560,
+561,
+562,
+563,
+564
+]
+},
+{
+"n": 8,
+"text": "The government wants to devise a toll policy such that the total cost to the commuters per trip is minimized. The policy should also ensure that not more than 70 per cent of the total traffic passes through junction B. The cost incurred by the commuter travelling from point S to point T under this policy will be:",
+"opts": {
+"A": "&7",
+"B": "t9",
+"C": "10",
+"D": "\u20ac13 (e) 14"
+},
+"ans": null,
+"src": null,
+"lines": [
+565,
+566,
+567,
+568,
+569,
+570,
+571,
+572,
+573,
+574
+]
+}
+]
+},
+"C7-L1-Q13-14": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [13] of [11, 12, 13, 14]",
+"could only match 0 of 2 existing questions",
+"Q13: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 13,
+"text": "",
+"opts": {
+"D": ""
+},
+"ans": null,
+"src": null,
+"lines": [
+737
+]
+}
+]
+},
+"C7-L1-Q18-22": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [] of [18, 19, 20, 21, 22]",
+"could only match 0 of 3 existing questions"
+],
+"present": [],
+"missing": []
+},
+"C7-L1-Q25-26": {
+"status": "blocked",
+"reasons": [
+"could only match 1 of 2 existing questions",
+"Q23: no checked answer in your PDFs",
+"Q24: no checked answer in your PDFs",
+"Q27: no checked answer in your PDFs"
+],
+"present": [
+25
+],
+"missing": [
+{
+"n": 23,
+"text": "How much time duration is required for the completion of the task?",
+"opts": {
+"A": "42 days",
+"B": "43 days",
+"C": "42 days",
+"D": "45 days"
+},
+"ans": null,
+"src": null,
+"lines": [
+851,
+852,
+853,
+854,
+855
+]
+},
+{
+"n": 24,
+"text": "If ten labourers are required per day for undertaking any of the projects, how many labourers will be required, at the maximum, at any point of time?",
+"opts": {
+"A": "31",
+"B": "32",
+"C": "30",
+"D": "34"
+},
+"ans": null,
+"src": null,
+"lines": [
+856,
+857,
+858,
+859,
+860,
+861,
+862
+]
+},
+{
+"n": 26,
+"text": "Activities C and F are outsourced; so, any labour problem in the firm undertaking the task does not afect the task duration. If the labourers in the firm are on strike from 9\" to 1gth day (days are counted from the start of the project), what is the approximate percentage change in the task duration?",
+"opts": {
+"A": "0%",
+"B": "2.4%",
+"C": "11%",
+"D": "19%"
+},
+"ans": [
+"mcq",
+"B"
+],
+"src": "key (checked on 1)",
+"lines": [
+873,
+874,
+875,
+876,
+877,
+878,
+879,
+880,
+881
+]
+},
+{
+"n": 27,
+"text": "If projects 2-4 and 8-7 each take 5 days to complete, what will be the new time duration required for task completion ?",
+"opts": {
+"A": "38 days",
+"B": "42 days",
+"C": "46 days",
+"D": "63 days"
+},
+"ans": null,
+"src": null,
+"lines": [
+882,
+883,
+884,
+885,
+886,
+887
+]
+}
+]
+},
+"C7-L1-Q29-30": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [] of [28, 29, 30, 31]",
+"could only match 0 of 2 existing questions"
+],
+"present": [],
+"missing": []
+},
+"C7-L1-Q33-34": {
+"status": "blocked",
+"reasons": [
+"Q32: no checked answer in your PDFs"
+],
+"present": [
+33,
+34
+],
+"missing": [
+{
+"n": 32,
+"text": "What is the maximum slack (in liters) in the pipeline connecting tanks Aand C?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+248,
+249
+]
+}
+]
+},
+"C7-L1-Q41-42": {
+"status": "blocked",
+"reasons": [
+"Q40: no checked answer in your PDFs"
+],
+"present": [
+41,
+42
+],
+"missing": [
+{
+"n": 40,
+"text": "What is the minimum distance required to travel from A to H?",
+"opts": {
+"A": "45",
+"B": "40",
+"C": "35",
+"D": "30"
+},
+"ans": null,
+"src": null,
+"lines": [
+317,
+318,
+319,
+320,
+321
+]
+}
+]
+},
+"C7-L1-Q45-46": {
+"status": "blocked",
+"reasons": [
+"Q44: no checked answer in your PDFs",
+"Q47: no checked answer in your PDFs"
+],
+"present": [
+45,
+46
+],
+"missing": [
+{
+"n": 44,
+"text": "The total distance travelled by the motorist from the starting point till the last signal is:",
+"opts": {
+"A": "90km",
+"B": "100 km",
+"C": "120km",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+367,
+368,
+369,
+370,
+371,
+372
+]
+},
+{
+"n": 47,
+"text": "If at the starting point, the car was heading towards south, what would be the final position of the motorist?",
+"opts": {
+"A": "30 km to the east and 40 km to the south.",
+"B": "50 km to the east and 40 km to the south.",
+"C": "30 km to the west and 40 km to the south.",
+"D": "50 km to the west and 20 km to the north."
+},
+"ans": null,
+"src": null,
+"lines": [
+385,
+386,
+387,
+388,
+389,
+390
+]
+}
+]
+},
+"C7-L1-Q49-50": {
+"status": "blocked",
+"reasons": [
+"Q48: no checked answer in your PDFs",
+"Q51: no checked answer in your PDFs"
+],
+"present": [
+49,
+50
+],
+"missing": [
+{
+"n": 48,
+"text": "What is the minimum time taken for 3 crew members to reach from A to D?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+690,
+691
+]
+},
+{
+"n": 51,
+"text": "At the last moment, there was an inclusion of Tom Cruise himself as the 7' member. Then what would be the minimum time in which the all the 7 persons can reach D from A?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+696,
+697,
+698
+]
+}
+]
+},
+"C7-L1-Q53-57": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [53, 57] of [52, 53, 54, 55, 56, 57]",
+"could only match 0 of 3 existing questions",
+"Q53: no checked answer in your PDFs",
+"Q57: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 53,
+"text": "",
+"opts": {
+"B": "54. 19"
+},
+"ans": null,
+"src": null,
+"lines": [
+747
+]
+},
+{
+"n": 57,
+"text": "",
+"opts": {
+"B": "58.",
+"A": " 61.8 62. 76"
+},
+"ans": null,
+"src": null,
+"lines": [
+748,
+749
+]
+}
+]
+},
+"C7-L1-Q58-61": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [] of [58, 59, 60, 61]",
+"could only match 0 of 2 existing questions"
+],
+"present": [],
+"missing": []
+},
+"C7-L1-Q62-65": {
+"status": "blocked",
+"reasons": [
+"Q63: no checked answer in your PDFs",
+"Q64: no checked answer in your PDFs"
+],
+"present": [
+62,
+65
+],
+"missing": [
+{
+"n": 63,
+"text": "What is the chance that the total number of iPhones delivered in a day is 260 units and the route ends at Vasant Vihar?",
+"opts": {
+"A": "10.80%",
+"B": "33.33%",
+"C": "7.56%",
+"D": "17.64%"
+},
+"ans": null,
+"src": null,
+"lines": [
+71,
+72,
+73,
+74,
+75,
+76
+]
+},
+{
+"n": 64,
+"text": "If the first location visited from the Apple Store is Vasant Kunj, then what is the chance that the total distance covered in the route is 80 km?",
+"opts": {
+"A": "3.24%",
+"B": "30%",
+"C": "54%",
+"D": "18%"
+},
+"ans": null,
+"src": null,
+"lines": [
+77,
+78,
+79,
+80,
+81,
+82,
+83
+]
+}
+]
+},
+"C7-L1-Q66-69": {
+"status": "blocked",
+"reasons": [
+"Q67: no checked answer in your PDFs",
+"Q68: no checked answer in your PDFs"
+],
+"present": [
+66,
+69
+],
+"missing": [
+{
+"n": 67,
+"text": "Who can V see?",
+"opts": {
+"A": "Uand Z only",
+"B": "Zonly",
+"C": "Uonly",
+"D": "U, W and Z only"
+},
+"ans": null,
+"src": null,
+"lines": [
+119,
+120,
+121,
+122,
+123
+]
+},
+{
+"n": 68,
+"text": "What is the minimum number of street segments that X must cross to reach Y?",
+"opts": {
+"A": "1",
+"B": "2",
+"C": "3",
+"D": "4"
+},
+"ans": null,
+"src": null,
+"lines": [
+124,
+125,
+126,
+127,
+128,
+129
+]
+}
+]
+},
+"C7-L1-Q77-78": {
+"status": "blocked",
+"reasons": [
+"Q75: no checked answer in your PDFs",
+"Q76: no checked answer in your PDFs"
+],
+"present": [
+77,
+78
+],
+"missing": [
+{
+"n": 75,
+"text": "How many cars would be asked to take the route A-N-B, that is Akala- Nanur-Bakala route, by the police department?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+438,
+439
+]
+},
+{
+"n": 76,
+"text": "If all the cars follow the police order, what is the difference in travel time (in minutes) between a car which takes the route A-N-B and a car that takes the route A-M-B?",
+"opts": {
+"A": "1",
+"B": "0.1",
+"C": "0.2",
+"D": "0.9"
+},
+"ans": null,
+"src": null,
+"lines": [
+440,
+441,
+442,
+443,
+444,
+445,
+446
+]
+}
+]
+},
+"C8-L1-Q5-6": {
+"status": "blocked",
+"reasons": [
+"Q7: no checked answer in your PDFs",
+"Q8: no checked answer in your PDFs"
+],
+"present": [
+5,
+6
+],
+"missing": [
+{
+"n": 7,
+"text": "The percentage of passengers who like at least 2 of the 3 products is:",
+"opts": {
+"A": "40",
+"B": "45",
+"C": "50",
+"D": "60"
+},
+"ans": null,
+"src": null,
+"lines": [
+1204,
+1205,
+1206,
+1207,
+1208
+]
+},
+{
+"n": 8,
+"text": "Ifthe number of passengers is 180, then the number of passengers who like ice cream only is:",
+"opts": {
+"A": "10",
+"B": "18",
+"C": "27",
+"D": "36"
+},
+"ans": null,
+"src": null,
+"lines": [
+1209,
+1210,
+1211,
+1212,
+1213,
+1214
+]
+}
+]
+},
+"C8-L1-Q9-14": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [9, 16] of [9, 10, 11, 12, 13, 14, 15, 16]",
+"could only match 1 of 4 existing questions",
+"Q16: no checked answer in your PDFs"
+],
+"present": [
+9
+],
+"missing": [
+{
+"n": 16,
+"text": "30 monkeys went to a picnic. 25 monkeys chose to irritate cows while 20 chose to irritate buffaloes. How many chose to irritate both buffaloes and cows?",
+"opts": {
+"A": "10",
+"B": "15",
+"C": "5",
+"D": "20"
+},
+"ans": null,
+"src": null,
+"lines": [
+1265,
+1266,
+1267,
+1268,
+1269,
+1270,
+1271
+]
+}
+]
+},
+"C8-L1-Q17-18": {
+"status": "blocked",
+"reasons": [
+"Q19: no checked answer in your PDFs",
+"Q20: no checked answer in your PDFs"
+],
+"present": [
+17,
+18
+],
+"missing": [
+{
+"n": 19,
+"text": "Ifthe number of students in the class is 300, what will be the % change in the number of passes in only two subjects, if the original number of students is 200?",
+"opts": {
+"A": "More than 50%",
+"B": "Less than 50%",
+"C": "50%",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1288,
+1289,
+1290,
+1291,
+1292,
+1293,
+1294
+]
+},
+{
+"n": 20,
+"text": "What is the ratio of percentage of passes in Biology and Social Studies but not English in relation to the percentage of passes in Social Studies and English but not Biology?",
+"opts": {
+"A": "5:7",
+"B": "7:5",
+"C": "4:5",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1295,
+1296,
+1297,
+1298,
+1299,
+1300,
+1301
+]
+}
+]
+},
+"C8-L1-Q21-25": {
+"status": "blocked",
+"reasons": [
+"Q23: no checked answer in your PDFs",
+"Q24: no checked answer in your PDFs"
+],
+"present": [
+21,
+22,
+25
+],
+"missing": [
+{
+"n": 23,
+"text": "Number of participants who chose at least two areas is:",
+"opts": {
+"A": "112",
+"B": "24",
+"C": "136",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1319,
+1320,
+1321,
+1322,
+1323
+]
+},
+{
+"n": 24,
+"text": "Which of the following areas shows a ratio of 1:8?",
+"opts": {
+"A": "Mythology and Science but not Sports: Mythology only.",
+"B": "Mythology and Sports but not Science: Science only.",
+"C": "Science: Sports.",
+"D": "None of these."
+},
+"ans": null,
+"src": null,
+"lines": [
+1324,
+1325,
+1326,
+1327,
+1328
+]
+}
+]
+},
+"C8-L1-Q26-30": {
+"status": "blocked",
+"reasons": [
+"Q27: no checked answer in your PDFs",
+"Q28: no checked answer in your PDFs"
+],
+"present": [
+26,
+29,
+30
+],
+"missing": [
+{
+"n": 27,
+"text": "The average number of females in all the courses is (count people doing full-time MBA and CA as a separate course):",
+"opts": {
+"A": "Less than 12",
+"B": "Greater than 12",
+"C": "12",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1353,
+1354,
+1355,
+1356,
+1357,
+1358
+]
+},
+{
+"n": 28,
+"text": "The ratio of the number of girls to the number of boys is:",
+"opts": {
+"A": "5:36",
+"B": "1:9",
+"C": "1:7.2",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1359,
+1360,
+1361,
+1362,
+1363
+]
+}
+]
+},
+"C8-L3-Q1-2": {
+"status": "blocked",
+"reasons": [
+"Q3: no checked answer in your PDFs",
+"Q4: no checked answer in your PDFs"
+],
+"present": [
+1,
+2
+],
+"missing": [
+{
+"n": 3,
+"text": "If the number of candidates who are at or above the 90\" percentile overall and also at or above the 80\" percentile in all three sections in CAT is actually a multiple of 2, then how many candidates were shortlisted for the AAT for IIM L?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+376,
+377,
+378,
+379
+]
+},
+{
+"n": 4,
+"text": "If the number of candidates who are at or above the 90\u2018 percentile overall and also are at or above the 80\" percentile in QA in CAT, is more than 200, how many candidates had to sit for the separate test for IIM B?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+380,
+381,
+382,
+383
+]
+}
+]
+},
+"C8-L3-Q5-6": {
+"status": "blocked",
+"reasons": [
+"Q7: no checked answer in your PDFs"
+],
+"present": [
+5,
+6
+],
+"missing": [
+{
+"n": 7,
+"text": "Ifthe numbers of students enrolled in DI-LR and VA are in the ratio 19:24, then what is the number of students enrolled in VA?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+402,
+403
+]
+}
+]
+},
+"C8-L3-Q9-10": {
+"status": "blocked",
+"reasons": [
+"Q8: no checked answer in your PDFs",
+"Q11: no checked answer in your PDFs",
+"Q12: no checked answer in your PDFs"
+],
+"present": [
+9,
+10
+],
+"missing": [
+{
+"n": 8,
+"text": "What is the minimum possible number of persons who attended the festival?",
+"opts": {
+"A": "300",
+"B": "370",
+"C": "350",
+"D": "410"
+},
+"ans": null,
+"src": null,
+"lines": [
+424,
+425,
+426,
+427,
+428,
+429
+]
+},
+{
+"n": 11,
+"text": "The number of persons who watched all the four movies is at most:",
+"opts": {
+"A": "150",
+"B": "130",
+"C": "140",
+"D": "120"
+},
+"ans": null,
+"src": null,
+"lines": [
+442,
+443,
+444,
+445,
+446
+]
+},
+{
+"n": 12,
+"text": "The number of persons who watched exactly two of the four movies is at most:",
+"opts": {
+"A": "280",
+"B": "290",
+"C": "295",
+"D": "385"
+},
+"ans": null,
+"src": null,
+"lines": [
+447,
+448,
+449,
+450,
+451,
+452
+]
+}
+]
+},
+"C8-L3-Q13-18": {
+"status": "blocked",
+"reasons": [
+"Q15: no checked answer in your PDFs",
+"Q16: no checked answer in your PDFs"
+],
+"present": [
+13,
+14,
+17,
+18
+],
+"missing": [
+{
+"n": 15,
+"text": "How many trainees with experience in Testing had a good academic record and also are B.E candidates and are from a reputed college?",
+"opts": {
+"A": "5",
+"B": "7",
+"C": "12",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+489,
+490,
+491,
+492,
+493,
+494
+]
+},
+{
+"n": 16,
+"text": "How many M.Scs are from a reputed college but had neither a good academic record nor any experience in programming?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+495,
+496
+]
+}
+]
+},
+"C8-L3-Q21-22": {
+"status": "blocked",
+"reasons": [
+"could only match 0 of 2 existing questions",
+"Q19: no checked answer in your PDFs",
+"Q20: no checked answer in your PDFs",
+"Q21: no checked answer in your PDFs",
+"Q22: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 19,
+"text": "What was the total number of employees having exactly two of the four facilities?",
+"opts": {
+"A": "522",
+"B": "314",
+"C": "458",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+662,
+663,
+664,
+665,
+666,
+667
+]
+},
+{
+"n": 20,
+"text": "What was the number of employees having facilities P2 and P4?",
+"opts": {
+"A": "370",
+"B": "95",
+"C": "145",
+"D": "80"
+},
+"ans": null,
+"src": null,
+"lines": [
+668,
+669,
+670,
+671,
+672
+]
+},
+{
+"n": 21,
+"text": "What was the number of employees having three or more facilities?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+673
+]
+},
+{
+"n": 22,
+"text": "What was the number of employees having only facilities P1 and P4?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+674
+]
+}
+]
+},
+"C8-L3-Q25-26": {
+"status": "blocked",
+"reasons": [
+"Q23: no checked answer in your PDFs",
+"Q24: no checked answer in your PDFs",
+"Q27: no checked answer in your PDFs",
+"Q28: no checked answer in your PDFs"
+],
+"present": [
+25,
+26
+],
+"missing": [
+{
+"n": 23,
+"text": "What can be the minimum number of hostelers?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+798
+]
+},
+{
+"n": 24,
+"text": "If the total number of hostelers who visited the mess was 250, then what could be the minimum number of guests who did not eat any of the 3 food items?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+799,
+800,
+801
+]
+},
+{
+"n": 27,
+"text": "Which of the following is not a possible value for the number of hostelers who ate exactly 2 of the 3 types of food items?",
+"opts": {
+"A": "99",
+"B": "100",
+"C": "106",
+"D": "113"
+},
+"ans": null,
+"src": null,
+"lines": [
+814,
+815,
+816,
+817,
+818,
+819
+]
+},
+{
+"n": 28,
+"text": "If Vishal observed that there were a total of 71 people who ate ex: two kinds of food items, then what is the number of people who at (ii) Among the 200 students who preferred Sunita as student union president, 80% supported proposal A. (iii) Among those who preferred Ragini, 30% supported proposal A. (iv) 20% of those who supported proposal B, preferred Sunita. (v) 40% of those who did not support proposal B, preferred Ragini. (vi) Every student who preferred Sunita and supported proposal B, also supported proposal A. (vii) Among those who preferred Ragini, 20% did not support any of the proposals.",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+820,
+821,
+822,
+823,
+824,
+825,
+826,
+827,
+828,
+829,
+830
+]
+}
+]
+},
+"C8-L3-Q29-30": {
+"status": "blocked",
+"reasons": [
+"Q31: no checked answer in your PDFs",
+"Q32: no checked answer in your PDFs"
+],
+"present": [
+29,
+30
+],
+"missing": [
+{
+"n": 31,
+"text": "Find the number of students who specialised in Consulting but not in Operations, Advertising or Corporate Strategy.",
+"opts": {
+"A": "30",
+"B": "35",
+"C": "40",
+"D": "5"
+},
+"ans": null,
+"src": null,
+"lines": [
+1065,
+1066,
+1067,
+1068,
+1069,
+1070
+]
+},
+{
+"n": 32,
+"text": "If each specialisation means an attendance of exactly 200 hours of classroom contact, then find the total classroom hours spent by the group who was required to spend, the minimum amount of time in the classroom.",
+"opts": {
+"A": "37000",
+"B": "25000",
+"C": "42000",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1071,
+1072,
+1073,
+1074,
+1075,
+1076,
+1077,
+1078
+]
+}
+]
+},
+"C8-L3-Q33-37": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [33, 37] of [33, 34, 35, 36, 37]",
+"could only match 0 of 3 existing questions",
+"Q33: no checked answer in your PDFs",
+"Q37: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 33,
+"text": "",
+"opts": {
+"B": "34.",
+"D": ""
+},
+"ans": null,
+"src": null,
+"lines": [
+1126
+]
+},
+{
+"n": 37,
+"text": "",
+"opts": {
+"A": "38.",
+"B": ""
+},
+"ans": null,
+"src": null,
+"lines": [
+1127
+]
+}
+]
+},
+"C8-L3-Q38-42": {
+"status": "blocked",
+"reasons": [
+"Q39: no checked answer in your PDFs",
+"Q40: no checked answer in your PDFs",
+"Q43: no checked answer in your PDFs"
+],
+"present": [
+38,
+41,
+42
+],
+"missing": [
+{
+"n": 39,
+"text": "What is the minimum number of people who play all the 3 games?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+81
+]
+},
+{
+"n": 40,
+"text": "What is the maximum number of people who play exactly 2 game:",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+82
+]
+},
+{
+"n": 43,
+"text": "What is the minimum number of people who play all exactly 1 g:",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+85
+]
+}
+]
+},
+"C8-L3-Q45-46": {
+"status": "blocked",
+"reasons": [
+"Q44: no checked answer in your PDFs",
+"Q47: no checked answer in your PDFs",
+"Q48: no checked answer in your PDFs"
+],
+"present": [
+45,
+46
+],
+"missing": [
+{
+"n": 44,
+"text": "In AP, the number of families who had at least two of the five characteristics, is at least:",
+"opts": {
+"A": "12",
+"B": "15",
+"C": "18",
+"D": "16"
+},
+"ans": null,
+"src": null,
+"lines": [
+106,
+107,
+108,
+109,
+110,
+111
+]
+},
+{
+"n": 47,
+"text": "In UP, what is the maximum number of families who could have shown at most 2 characteristics?",
+"opts": {
+"A": "19",
+"B": "21",
+"C": "22",
+"D": "26"
+},
+"ans": null,
+"src": null,
+"lines": [
+125,
+126,
+127,
+128,
+129,
+130
+]
+},
+{
+"n": 48,
+"text": "Find the minimum number of families in Haryana, who exhibit exactly 2 characteristics.",
+"opts": {
+"A": "12",
+"B": "8",
+"C": "10",
+"D": "0"
+},
+"ans": null,
+"src": null,
+"lines": [
+131,
+132,
+133,
+134,
+135,
+136
+]
+}
+]
+},
+"C8-L3-Q49-54": {
+"status": "blocked",
+"reasons": [
+"Q51: no checked answer in your PDFs",
+"Q52: no checked answer in your PDFs"
+],
+"present": [
+49,
+50,
+53,
+54
+],
+"missing": [
+{
+"n": 51,
+"text": "How many trainees failed in at most 1 trial?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+158
+]
+},
+{
+"n": 52,
+"text": "In which sport did the minimum number of trainees pass?",
+"opts": {
+"A": "Cricket",
+"B": "Hockey",
+"C": "Tennis",
+"D": "Badminton"
+},
+"ans": null,
+"src": null,
+"lines": [
+159,
+160,
+161,
+162,
+163
+]
+}
+]
+},
+"C8-L3-Q57-58": {
+"status": "blocked",
+"reasons": [
+"Q55: no checked answer in your PDFs",
+"Q56: no checked answer in your PDFs",
+"Q59: no checked answer in your PDFs"
+],
+"present": [
+57,
+58
+],
+"missing": [
+{
+"n": 55,
+"text": "Ifthe number of events in which only Pallav participated is at least 30 more than that in which only Shaurya participated, in how many events did Ritika participate?",
+"opts": {
+"A": "42",
+"B": "36",
+"C": "32",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+188,
+189,
+190,
+191,
+192,
+193,
+194
+]
+},
+{
+"n": 56,
+"text": "What is the maximum number of events in which only Anshuman participated?",
+"opts": {
+"A": "10",
+"B": "14 {e) IZ",
+"D": "16"
+},
+"ans": null,
+"src": null,
+"lines": [
+195,
+196,
+197,
+198,
+199,
+200
+]
+},
+{
+"n": 59,
+"text": "In each of the 100 events, one of the four players was the winner of the event and Pallav was the winner of the event in exactly 38 events. If Ritika was the winner in at least 20 events, what is the maximum number of events in which Shaurya would have been the winner?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+211,
+212,
+213,
+214
+]
+}
+]
+},
+"C8-L3-Q61-62": {
+"status": "blocked",
+"reasons": [
+"Q60: no checked answer in your PDFs",
+"Q63: no checked answer in your PDFs",
+"Q64: no checked answer in your PDFs"
+],
+"present": [
+61,
+62
+],
+"missing": [
+{
+"n": 60,
+"text": "How many vehicles have owners who own all four types of vehicles?",
+"opts": {
+"A": "13",
+"B": "14",
+"C": "15",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+235,
+236,
+237,
+238,
+239
+]
+},
+{
+"n": 63,
+"text": "Ifthe total number of Sports Vehicles is 24, what is the minimum number of families who own at most one Sedan?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+248,
+249
+]
+},
+{
+"n": 64,
+"text": "The number of SUVs in the colony is three more than the number of Sedans and the number of Hatchbacks is the same as the number of Sports Vehicles. If the number of SUVs cannot be more than 16, what is the difference between the number of Sedans and the number of Hatchbacks?",
+"opts": {
+"A": "4",
+"B": "3",
+"C": "7",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+250,
+251,
+252,
+253,
+254,
+255,
+256,
+257,
+258
+]
+}
+]
+},
+"C8-L3-Q65-66": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [] of [65, 66, 67, 68]",
+"could only match 0 of 2 existing questions"
+],
+"present": [],
+"missing": []
+},
+"C8-L3-Q69-70": {
+"status": "blocked",
+"reasons": [
+"Q71: no checked answer in your PDFs",
+"Q72: no checked answer in your PDFs"
+],
+"present": [
+69,
+70
+],
+"missing": [
+{
+"n": 71,
+"text": "If at least 100 of the 1600 satellites were serving O, what can be said about the number of satellites serving S?",
+"opts": {
+"A": "Exactly 475",
+"B": "At most 475",
+"C": "At least 475",
+"D": "No conclusion is possible based on the given information"
+},
+"ans": null,
+"src": null,
+"lines": [
+873,
+874,
+875,
+876,
+877,
+878
+]
+},
+{
+"n": 72,
+"text": "Ifthe number of satellites serving at least two among B,C, and S 1200, which of the following MUST be FALSE?",
+"opts": {
+"A": "All 1600 satellites serve B or C or S",
+"B": "The number of satellites serving B is more than 1000",
+"C": "The number of satellites serving C cannot be uniquely determined",
+"D": "The number of satellites serving B exclusively is exactly 250"
+},
+"ans": null,
+"src": null,
+"lines": [
+879,
+880,
+881,
+882,
+883,
+884,
+885
+]
+}
+]
+},
+"C8-L3-Q73-74": {
+"status": "blocked",
+"reasons": [
+"Q75: no checked answer in your PDFs",
+"Q76: no checked answer in your PDFs"
+],
+"present": [
+73,
+74
+],
+"missing": [
+{
+"n": 75,
+"text": "Due to academic pressure, students who were enrolled in all three sports were asked to withdraw from one of the three sports. After the withdrawal, the number of students enrolled in G was six less than the number of students enrolled in L, while the number of students enrolled in K went down by one. After the withdrawal, how many students were enrolled in both G and K?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+1100,
+1101,
+1102,
+1103,
+1104,
+1105
+]
+},
+{
+"n": 76,
+"text": "Due to academic pressure, students who were enrolled in all three sports were asked to withdraw from one of the three sports. After the withdrawal, the number of students enrolled in G was six less than the number of students enrolled in L, while the number of students enrolled in K went down by one. After the withdrawal, how many students were enrolled in both G and L?",
+"opts": {
+"A": "7",
+"B": "5",
+"C": "8",
+"D": "6 \u2014\u00a9 CNEIS3o\u2014"
+},
+"ans": null,
+"src": null,
+"lines": [
+1106,
+1107,
+1108,
+1109,
+1110,
+1111,
+1112,
+1113,
+1114,
+1115,
+1116
+]
+}
+]
+},
+"C9-L1-Q25-26": {
+"status": "blocked",
+"reasons": [
+"Q23: no checked answer in your PDFs",
+"Q24: no checked answer in your PDFs"
+],
+"present": [
+25,
+26
+],
+"missing": [
+{
+"n": 23,
+"text": "What are the dimensions of the bigger cube?",
+"opts": {
+"A": "3x3x3",
+"B": "7x7x7",
+"C": "9x9x9",
+"D": "11x 11x11"
+},
+"ans": null,
+"src": null,
+"lines": [
+169,
+170,
+171,
+172,
+173
+]
+},
+{
+"n": 24,
+"text": "Find the number of blocks that will have 3 sides painted with 3 different colours?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+174,
+175
+]
+}
+]
+},
+"C9-L1-Q30-34": {
+"status": "blocked",
+"reasons": [
+"Q31: no checked answer in your PDFs",
+"Q32: no checked answer in your PDFs",
+"Q35: no checked answer in your PDFs"
+],
+"present": [
+30,
+33,
+34
+],
+"missing": [
+{
+"n": 31,
+"text": "For the above question, what is the minimum number of | unit cubes that he used?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+203,
+204
+]
+},
+{
+"n": 32,
+"text": "If Akash made a cube of side n units using exactly one 3-unit cube, such that all the visible faces of the cube of side n units are completely Black, what is the minimum number of cubes that he would have used?",
+"opts": {
+"A": "27",
+"B": "75",
+"C": "128",
+"D": "94"
+},
+"ans": null,
+"src": null,
+"lines": [
+205,
+206,
+207,
+208,
+209,
+210,
+211,
+212
+]
+},
+{
+"n": 35,
+"text": "Akash formed a cube of side n units such that one of its visible faces is completely black and another one of its faces is completely blue. What is the minimum number of cubes that he could have used to form the cube of side n units? \u2014\u00a9 CIs o\u2014 1.",
+"opts": {
+"C": " 17.",
+"A": " 33.",
+"D": "34.6",
+"B": " 21.4 22. 24 25. 125 26. 40 29.1 30."
+},
+"ans": null,
+"src": null,
+"lines": [
+225,
+226,
+227,
+228,
+229,
+230,
+231,
+232,
+233,
+234,
+235,
+236,
+237,
+238
+]
+}
+]
+},
+"C10-L1-Q1-2": {
+"status": "blocked",
+"reasons": [
+"Q3: no checked answer in your PDFs",
+"Q4: no checked answer in your PDFs"
+],
+"present": [
+1,
+2
+],
+"missing": [
+{
+"n": 3,
+"text": "Who won the most number of matches after 15t round?",
+"opts": {
+"A": "Q",
+"B": "U",
+"C": "W",
+"D": "V"
+},
+"ans": null,
+"src": null,
+"lines": [
+900,
+901,
+902,
+903,
+904
+]
+},
+{
+"n": 4,
+"text": "Which of the following player lost at least one match against P in the 18t round?",
+"opts": {
+"A": "Q",
+"B": "S",
+"C": "U",
+"D": "V"
+},
+"ans": null,
+"src": null,
+"lines": [
+905,
+906,
+907,
+908,
+909,
+910
+]
+}
+]
+},
+"C10-L1-Q5-6": {
+"status": "blocked",
+"reasons": [
+"Q7: no checked answer in your PDFs",
+"Q8: no checked answer in your PDFs"
+],
+"present": [
+5,
+6
+],
+"missing": [
+{
+"n": 7,
+"text": "The team(s) with the most wins in the event is/are:",
+"opts": {
+"A": "A",
+"B": "AandC",
+"C": "F",
+"D": "BandE"
+},
+"ans": null,
+"src": null,
+"lines": [
+940,
+941,
+942,
+943,
+944
+]
+},
+{
+"n": 8,
+"text": "The two teams that defeated the leader of stage 1 are:",
+"opts": {
+"A": "FandD",
+"B": "EandF",
+"C": "BandD",
+"D": "EandD"
+},
+"ans": null,
+"src": null,
+"lines": [
+945,
+946,
+947,
+948,
+949
+]
+}
+]
+},
+"C10-L1-Q9-10": {
+"status": "blocked",
+"reasons": [
+"Q11: no checked answer in your PDFs",
+"Q12: no checked answer in your PDFs"
+],
+"present": [
+9,
+10
+],
+"missing": [
+{
+"n": 11,
+"text": "What was the percentage contribution to the second highest partnership of the batsman, to be dismissed first in that partnership?",
+"opts": {
+"A": "33.33%",
+"B": "61.53%",
+"C": "71.43%",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1000,
+1001,
+1002,
+1003,
+1004,
+1005
+]
+},
+{
+"n": 12,
+"text": "If India\u2019s total comprised only \u2018Singles\u2019 and \u2018Fours\u2019. The number of Fours scored cannot exceed:",
+"opts": {
+"A": "27",
+"B": "24",
+"C": "21",
+"D": "20"
+},
+"ans": null,
+"src": null,
+"lines": [
+1006,
+1007,
+1008,
+1009,
+1010,
+1011
+]
+}
+]
+},
+"C10-L1-Q13-14": {
+"status": "blocked",
+"reasons": [
+"Q15: no checked answer in your PDFs"
+],
+"present": [
+13,
+14
+],
+"missing": [
+{
+"n": 15,
+"text": "If it is known that the game was completed in 12 moves, what is the maximum possible value for N?",
+"opts": {
+"A": "51",
+"B": "53",
+"C": "54",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+1035,
+1036,
+1037,
+1038,
+1039,
+1040
+]
+}
+]
+},
+"C10-L1-Q26-29": {
+"status": "blocked",
+"reasons": [
+"Q27: no checked answer in your PDFs",
+"Q28: no checked answer in your PDFs"
+],
+"present": [
+26,
+29
+],
+"missing": [
+{
+"n": 27,
+"text": "What could be the minimum difference between the total points scored by A and C?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+1129,
+1130
+]
+},
+{
+"n": 28,
+"text": "If team B drew with team D, what was the result of the match between team A and C?",
+"opts": {
+"A": "Team A won.",
+"B": "Team C won.",
+"C": "The match was a draw.",
+"D": "Cannot be determined."
+},
+"ans": null,
+"src": null,
+"lines": [
+1131,
+1132,
+1133,
+1134,
+1135,
+1136
+]
+}
+]
+},
+"C10-L1-Q30-33": {
+"status": "blocked",
+"reasons": [
+"Q31: no checked answer in your PDFs",
+"Q32: no checked answer in your PDFs"
+],
+"present": [
+30,
+33
+],
+"missing": [
+{
+"n": 31,
+"text": "If in round 1 and round 2, all even numbered matches result in upsets, odd numbered matches do not result in upset and no upset happens in the further round, then what is the rank of the player who plays against the 27\") seed in the quarter finals (the round before semi final)?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+1165,
+1166,
+1167,
+1168
+]
+},
+{
+"n": 32,
+"text": "If there are 11 upsets in the 1S round and no upsets in the other rounds, then which seed could be the lowest possible seed who can win the tournament?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+1169,
+1170,
+1171
+]
+}
+]
+},
+"C10-L1-Q34-38": {
+"status": "blocked",
+"reasons": [
+"Q35: no checked answer in your PDFs",
+"Q36: no checked answer in your PDFs"
+],
+"present": [
+34,
+37,
+38
+],
+"missing": [
+{
+"n": 35,
+"text": "How many matches did Rod Laver play in the tournament?",
+"opts": {
+"A": "2",
+"B": "1",
+"C": "Either lor 2",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+1369,
+1370,
+1371,
+1372,
+1373
+]
+},
+{
+"n": 36,
+"text": "Who were the players against whom Vijay Amritraj played in the semi finals?",
+"opts": {
+"A": "Cedric Pioline and Gael Monfils",
+"B": "Gael Monfils and Yannick Noah",
+"C": "Cedric Pioline and Yannick Noah",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+1374,
+1375,
+1376,
+1377,
+1378,
+1379
+]
+}
+]
+},
+"C10-L2-Q1-2": {
+"status": "blocked",
+"reasons": [
+"Q3: no checked answer in your PDFs",
+"Q4: no checked answer in your PDFs"
+],
+"present": [
+1,
+2
+],
+"missing": [
+{
+"n": 3,
+"text": "Ifp=15 and s = 20, which two teams did not qualify for the final?",
+"opts": {
+"A": "Sri Lanka and Bangladesh",
+"B": "Bangladesh and Pakistan",
+"C": "India and Bangladesh",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+479,
+480,
+481,
+482,
+483
+]
+},
+{
+"n": 4,
+"text": "Ifp=q=r=s=15, then which team was at the gnd position at the end of the round?",
+"opts": {
+"A": "Sri Lanka",
+"B": "India",
+"C": "Bangladesh",
+"D": "Pakistan"
+},
+"ans": null,
+"src": null,
+"lines": [
+484,
+485,
+486,
+487,
+488,
+489
+]
+}
+]
+},
+"C10-L2-Q5-6": {
+"status": "blocked",
+"reasons": [
+"Q7: no checked answer in your PDFs",
+"Q8: no checked answer in your PDFs"
+],
+"present": [
+5,
+6
+],
+"missing": [
+{
+"n": 7,
+"text": "How many players definitely would not earn more aggregate points than Saurav?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+513,
+514
+]
+},
+{
+"n": 8,
+"text": "If Mohit scored the maximum possible points then what would be the maximum possible points earned by Rahul?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+515,
+516
+]
+}
+]
+},
+"C10-L2-Q9-13": {
+"status": "blocked",
+"reasons": [
+"Q11: no checked answer in your PDFs",
+"Q12: no checked answer in your PDFs"
+],
+"present": [
+9,
+10,
+13
+],
+"missing": [
+{
+"n": 11,
+"text": "If the absolute difference between the total runs scored by A and C in the four matches is minimum possible, then what is the sum of total tuns scored by A and C in the four matches.",
+"opts": {
+"A": "284",
+"B": "376",
+"C": "363",
+"D": "472"
+},
+"ans": null,
+"src": null,
+"lines": [
+548,
+549,
+550,
+551,
+552,
+553,
+554
+]
+},
+{
+"n": 12,
+"text": "If the absolute difference between the total runs scored by A and C in the four matches is minimum possible, then what is the absolute difference between total runs scored by B and E in the four matches?",
+"opts": {
+"A": "32",
+"B": "37",
+"C": "35",
+"D": "27"
+},
+"ans": null,
+"src": null,
+"lines": [
+555,
+556,
+557,
+558,
+559,
+560,
+561
+]
+}
+]
+},
+"C10-L2-Q14-18": {
+"status": "blocked",
+"reasons": [
+"Q15: no checked answer in your PDFs",
+"Q16: no checked answer in your PDFs"
+],
+"present": [
+14,
+17,
+18
+],
+"missing": [
+{
+"n": 15,
+"text": "Which horse came second?",
+"opts": {
+"A": "H2",
+"B": "H7",
+"C": "H6",
+"D": "H3"
+},
+"ans": null,
+"src": null,
+"lines": [
+604,
+605,
+606,
+607,
+608
+]
+},
+{
+"n": 16,
+"text": "Which horse finished fifth?",
+"opts": {
+"A": "H2",
+"B": "HS",
+"C": "H7",
+"D": "H4"
+},
+"ans": null,
+"src": null,
+"lines": [
+609,
+610,
+611,
+612,
+613
+]
+}
+]
+},
+"C10-L2-Q21-22": {
+"status": "blocked",
+"reasons": [
+"Q19: no checked answer in your PDFs",
+"Q20: no checked answer in your PDFs"
+],
+"present": [
+21,
+22
+],
+"missing": [
+{
+"n": 19,
+"text": "Among the players mentioned, who can have the lowest R-index from the tournament?",
+"opts": {
+"A": "Only Kaif, Rahul or Yuvraj",
+"B": "Only Kaif or Rahul",
+"C": "Only Kaif or Yuvraj",
+"D": "Only Kaif"
+},
+"ans": null,
+"src": null,
+"lines": [
+643,
+644,
+645,
+646,
+647,
+648
+]
+},
+{
+"n": 20,
+"text": "How many players among those listed definitely scored less than Yuvraj in the tournament?",
+"opts": {
+"A": "0",
+"B": "1",
+"C": "2",
+"D": "More than 2"
+},
+"ans": null,
+"src": null,
+"lines": [
+649,
+650,
+651,
+652,
+653,
+654
+]
+}
+]
+},
+"C10-L2-Q25-26": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [23, 24] of [23, 24, 25, 26]",
+"could only match 0 of 2 existing questions",
+"Q23: no checked answer in your PDFs",
+"Q24: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 23,
+"text": "Which one of the following statements is true about the matches played in the first two rounds?",
+"opts": {
+"A": "Pakistan beat South Africa by 2 goals to 1.",
+"B": "Argentina beat Pakistan by 1 goal to 0.",
+"C": "Germany beat Pakistan by 2 goals to 1.",
+"D": "Germany beat Spain by 2 goals to 1."
+},
+"ans": null,
+"src": null,
+"lines": [
+695,
+696,
+697,
+698,
+699,
+700
+]
+},
+{
+"n": 24,
+"text": "Which one of the following statements is true about matches play the first two rounds?",
+"opts": {
+"A": "Germany beat New Zealand by 1 goal to 0."
+},
+"ans": null,
+"src": null,
+"lines": [
+701,
+702,
+703
+]
+}
+]
+},
+"C10-L2-Q30-33": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [33] of [30, 31, 32, 33]",
+"could only match 1 of 2 existing questions"
+],
+"present": [
+33
+],
+"missing": []
+},
+"C10-L2-Q34-38": {
+"status": "blocked",
+"reasons": [
+"Q35: no checked answer in your PDFs",
+"Q36: no checked answer in your PDFs"
+],
+"present": [
+34,
+37,
+38
+],
+"missing": [
+{
+"n": 35,
+"text": "The minimum number of wins needed for a team in the first stage to guarantee its advancement to the next stage is:",
+"opts": {
+"A": "5",
+"B": "6",
+"C": "7",
+"D": "4"
+},
+"ans": null,
+"src": null,
+"lines": [
+733,
+734,
+735,
+736,
+737,
+738
+]
+},
+{
+"n": 36,
+"text": "What is the highest number of wins for a team in the first stage in spite of which it would be eliminated at the end of first stage?",
+"opts": {
+"A": "1",
+"B": "2",
+"C": "3",
+"D": "4"
+},
+"ans": null,
+"src": null,
+"lines": [
+739,
+740,
+741,
+742,
+743,
+744
+]
+}
+]
+},
+"C10-L3-Q1-3": {
+"status": "blocked",
+"reasons": [
+"could only match 0 of 3 existing questions",
+"Q1: no checked answer in your PDFs",
+"Q2: no checked answer in your PDFs",
+"Q3: no checked answer in your PDFs",
+"Q4: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 1,
+"text": "Who won the least number of matches after 1S round?",
+"opts": {
+"A": "P",
+"B": "R",
+"C": "S",
+"D": "T"
+},
+"ans": null,
+"src": null,
+"lines": [
+890,
+891,
+892,
+893,
+894
+]
+},
+{
+"n": 2,
+"text": "What was the total number of wins of P after the first round?",
+"opts": {
+"A": "1",
+"B": "2",
+"C": "3",
+"D": "4"
+},
+"ans": null,
+"src": null,
+"lines": [
+895,
+896,
+897,
+898,
+899
+]
+},
+{
+"n": 3,
+"text": "Who won the most number of matches after 15t round?",
+"opts": {
+"A": "Q",
+"B": "U",
+"C": "W",
+"D": "V"
+},
+"ans": null,
+"src": null,
+"lines": [
+900,
+901,
+902,
+903,
+904
+]
+},
+{
+"n": 4,
+"text": "Which of the following player lost at least one match against P in the 18t round?",
+"opts": {
+"A": "Q",
+"B": "S",
+"C": "U",
+"D": "V"
+},
+"ans": null,
+"src": null,
+"lines": [
+905,
+906,
+907,
+908,
+909,
+910
+]
+}
+]
+},
+"C10-L3-Q5-9": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [] of [5, 6, 7, 8, 9]",
+"could only match 0 of 4 existing questions"
+],
+"present": [],
+"missing": []
+},
+"C10-L3-Q10-14": {
+"status": "blocked",
+"reasons": [
+"Q12: no checked answer in your PDFs"
+],
+"present": [
+10,
+11,
+14
+],
+"missing": [
+{
+"n": 12,
+"text": "If R2 finished ahead of R3 in 62 rounds exactly, then what is the final score of R3?",
+"opts": {
+"A": "222",
+"B": "248",
+"C": "216",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+197,
+198,
+199,
+200,
+201,
+202
+]
+},
+{
+"n": 13,
+"text": "For the above question, what is the total number of rounds that have two rats tied for any of the places?",
+"opts": {},
+"ans": [
+"tita",
+"44"
+],
+"src": "key (checked on 3)",
+"lines": [
+203,
+204
+]
+}
+]
+},
+"C10-L3-Q15-19": {
+"status": "blocked",
+"reasons": [
+"Q16: no checked answer in your PDFs",
+"Q20: no checked answer in your PDFs"
+],
+"present": [
+15,
+17,
+18,
+19
+],
+"missing": [
+{
+"n": 16,
+"text": "How many matches did Germany lose before it played its match against India?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+234,
+235
+]
+},
+{
+"n": 20,
+"text": "Which of the following correctly represents the list of teams that Germany beat?",
+"opts": {
+"A": "Spain and India",
+"B": "China and India",
+"C": "China and Denmark",
+"D": "Spain and Denmark"
+},
+"ans": null,
+"src": null,
+"lines": [
+256,
+257,
+258,
+259,
+260,
+261
+]
+}
+]
+},
+"C10-L3-Q21-23": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [21, 25] of [21, 22, 23, 24, 25]",
+"could only match 0 of 3 existing questions",
+"Q21: no checked answer in your PDFs",
+"Q25: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 21,
+"text": "Seed 12 or 117 22.",
+"opts": {
+"D": ""
+},
+"ans": null,
+"src": null,
+"lines": [
+309
+]
+},
+{
+"n": 25,
+"text": "",
+"opts": {
+"C": "26. 11"
+},
+"ans": null,
+"src": null,
+"lines": [
+310
+]
+}
+]
+},
+"C10-L3-Q26-30": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [29] of [26, 27, 28, 29, 30]",
+"could only match 0 of 4 existing questions",
+"Q29: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 29,
+"text": "",
+"opts": {
+"A": "30.",
+"D": ""
+},
+"ans": null,
+"src": null,
+"lines": [
+829
+]
+}
+]
+},
+"C10-L3-Q31-35": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [34, 35] of [31, 32, 33, 34, 35]",
+"could only match 0 of 4 existing questions",
+"Q34: no checked answer in your PDFs",
+"Q35: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 34,
+"text": "India\u2019s doubles players in their match against Australia were:",
+"opts": {
+"A": "or",
+"B": "",
+"C": "Leander Paes & Ramanathan Krishnan",
+"D": "Either"
+},
+"ans": null,
+"src": null,
+"lines": [
+1364,
+1365,
+1366,
+1367,
+1368
+]
+},
+{
+"n": 35,
+"text": "How many matches did Rod Laver play in the tournament?",
+"opts": {
+"A": "2",
+"B": "1",
+"C": "Either lor 2",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+1369,
+1370,
+1371,
+1372,
+1373
+]
+}
+]
+},
+"C10-L3-Q37-39": {
+"status": "blocked",
+"reasons": [
+"Q36: no checked answer in your PDFs",
+"Q40: no checked answer in your PDFs"
+],
+"present": [
+37,
+38,
+39
+],
+"missing": [
+{
+"n": 36,
+"text": "Which bookie had the most successful return after retirement in terms of the number of bets?",
+"opts": {
+"A": "Akshat",
+"B": "Brij",
+"C": "Charu",
+"D": "Eshwar"
+},
+"ans": null,
+"src": null,
+"lines": [
+65,
+66,
+67,
+68,
+69,
+70
+]
+},
+{
+"n": 40,
+"text": "Who was definitely supporting the team that won the finals?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+74
+]
+}
+]
+},
+"C10-L3-Q41-45": {
+"status": "blocked",
+"reasons": [
+"Q44: no checked answer in your PDFs"
+],
+"present": [
+41,
+42,
+43,
+45
+],
+"missing": [
+{
+"n": 44,
+"text": "If the winner of the tournament played exactly one match in each round of the tournament, what is the lowest possible seed of this player?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+107,
+108,
+109
+]
+}
+]
+},
+"C10-L3-Q46-49": {
+"status": "blocked",
+"reasons": [
+"Q48: no checked answer in your PDFs"
+],
+"present": [
+46,
+47,
+49
+],
+"missing": [
+{
+"n": 48,
+"text": "Who scored the second highest number of runs in the tournament?",
+"opts": {
+"A": "Either Palash or Shashank",
+"B": "Either Pallav or Shashank",
+"C": "Shaurya",
+"D": "Either Palash or Shaurya"
+},
+"ans": null,
+"src": null,
+"lines": [
+290,
+291,
+292,
+293,
+294
+]
+}
+]
+},
+"C11-L1-Q21-22": {
+"status": "blocked",
+"reasons": [
+"Q20: no checked answer in your PDFs",
+"Q23: no checked answer in your PDFs"
+],
+"present": [
+21,
+22
+],
+"missing": [
+{
+"n": 20,
+"text": "Which of the following combinations of the destination and the year of holidays is not correct?",
+"opts": {
+"A": "Chakrata - 2018",
+"B": "Guwahati - 2017",
+"C": "Manali - 2014",
+"D": "None of these"
+},
+"ans": null,
+"src": null,
+"lines": [
+340,
+341,
+342,
+343,
+344,
+345
+]
+},
+{
+"n": 23,
+"text": "Find the sum of number of days Ajeet spent on his holidays in Manali and Nainital.",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+354,
+355
+]
+}
+]
+},
+"C11-L1-Q25-26": {
+"status": "blocked",
+"reasons": [
+"Q24: no checked answer in your PDFs",
+"Q27: no checked answer in your PDFs"
+],
+"present": [
+25,
+26
+],
+"missing": [
+{
+"n": 24,
+"text": "On how many days both shows of Movie \u2018B\u2019 were played after 3:00 pm?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+376,
+377
+]
+},
+{
+"n": 27,
+"text": "Which movie was played on 4:30 - 5:50 pm slot on Thursday?",
+"opts": {},
+"ans": null,
+"src": null,
+"lines": [
+381
+]
+}
+]
+},
+"C11-L1-Q29-30": {
+"status": "blocked",
+"reasons": [
+"Q28: no checked answer in your PDFs",
+"Q31: no checked answer in your PDFs"
+],
+"present": [
+29,
+30
+],
+"missing": [
+{
+"n": 28,
+"text": "What is the maximum number of patients that the clinic can cater to on any single day?",
+"opts": {
+"A": "12",
+"B": "30",
+"C": "15",
+"D": "31"
+},
+"ans": null,
+"src": null,
+"lines": [
+405,
+406,
+407,
+408,
+409,
+410
+]
+},
+{
+"n": 31,
+"text": "Ona slow Thursday, only two patients are waiting at 9 a.m. After that, two patients keep arriving at exact 15 minute intervals, starting at 9:15 a.m.\u2014i.e., at 9:15 a.m., 9:30 a.m., 9:45 a.m. etc. Then, what is the total duration in minutes when all three doctors are simultaneously free?",
+"opts": {
+"A": "30",
+"B": "10",
+"C": "0",
+"D": "15"
+},
+"ans": null,
+"src": null,
+"lines": [
+426,
+427,
+428,
+429,
+430,
+431,
+432,
+433
+]
+}
+]
+},
+"C11-L1-Q33-34": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [32] of [32, 33, 34, 35]",
+"could only match 0 of 2 existing questions",
+"Q32: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 32,
+"text": "What best can be said about the room to which Divya was allotted?",
+"opts": {
+"A": "Definitely Room 101",
+"B": "Definitely Room 102",
+"C": "Definitely Room 103"
+},
+"ans": null,
+"src": null,
+"lines": [
+456,
+457,
+458,
+459
+]
+}
+]
+},
+"C11-L1-Q37-38": {
+"status": "blocked",
+"reasons": [
+"Q36: no checked answer in your PDFs",
+"Q39: no checked answer in your PDFs"
+],
+"present": [
+37,
+38
+],
+"missing": [
+{
+"n": 36,
+"text": "The number of times in which the composition of team T2 and the number of times in which composition of team T4 remained unchanged in two successive months are:",
+"opts": {
+"A": "(2,1)",
+"B": "(1,0)",
+"C": "(0,0)",
+"D": "(1,1)"
+},
+"ans": null,
+"src": null,
+"lines": [
+40,
+41,
+42,
+43,
+44,
+45,
+46
+]
+},
+{
+"n": 39,
+"text": "One of the employees named Aneek scored 185 points. Which of the following CANNOT be true?",
+"opts": {
+"A": "1",
+"B": "2",
+"C": "3",
+"D": "More than 3"
+},
+"ans": null,
+"src": null,
+"lines": [
+58,
+59,
+60,
+61,
+62,
+63,
+64,
+65,
+66,
+67,
+68,
+69,
+70,
+71,
+72,
+73,
+74,
+75,
+76,
+77,
+78,
+79,
+80,
+81,
+82,
+83,
+84,
+85,
+86,
+87,
+88,
+89,
+90,
+91,
+92,
+93,
+94,
+95,
+96,
+97,
+98,
+99,
+100,
+101,
+102,
+103,
+104,
+105,
+106,
+107,
+108,
+109,
+110,
+111,
+112,
+113,
+114,
+115,
+116,
+117,
+118,
+119,
+120,
+121,
+122,
+123,
+124,
+125,
+126,
+127,
+128,
+129
+]
+}
+]
+},
+"D3-L1-Q1-4": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [1, 2] of [1, 2, 3, 4]",
+"could only match 0 of 2 existing questions",
+"Q1: no checked answer in your PDFs",
+"Q2: no checked answer in your PDFs"
+],
+"present": [],
+"missing": [
+{
+"n": 1,
+"text": "What was the percentage of students who cleared CAT in 2010?",
+"opts": {
+"A": "19.56%",
+"B": "12.65%",
+"C": "14.28%",
+"D": "11.76%"
+},
+"ans": null,
+"src": null,
+"lines": [
+253,
+254,
+255,
+256,
+257,
+258
+]
+},
+{
+"n": 2,
+"text": "What was the percentage of students who succeeded in at least one of the three exams in 2010?",
+"opts": {
+"A": "82.4%",
+"B": "82.8%",
+"C": "82.35%",
+"D": "83.3% 2 : o = oO 140 120 HH None 00 |) Demat 8 OO XAT 6! O cat"
+},
+"ans": null,
+"src": null,
+"lines": [
+259,
+260,
+261,
+262,
+263,
+264,
+265,
+266,
+267,
+268,
+269,
+270,
+271
+]
+}
+]
+},
+"D3-L1-Q15-19": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [16, 17, 18, 19] of [15, 16, 17, 18, 19]"
+],
+"present": [
+16,
+17,
+18,
+19
+],
+"missing": []
+},
+"D3-L2-Q1-5": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [2, 3, 4, 5] of [1, 2, 3, 4, 5]"
+],
+"present": [
+2,
+3,
+4,
+5
+],
+"missing": []
+},
+"D3-L2-Q6-9": {
+"status": "blocked",
+"reasons": [
+"Q6: no checked answer in your PDFs"
+],
+"present": [
+7,
+8,
+9
+],
+"missing": [
+{
+"n": 6,
+"text": "Which country had the highest cash deficit in the year 2004?",
+"opts": {
+"A": "Spain",
+"B": "Egypt",
+"C": "Poland",
+"D": "Cannot be determined"
+},
+"ans": null,
+"src": null,
+"lines": [
+131,
+132,
+133,
+134,
+135
+]
+}
+]
+},
+"D3-L2-Q14-19": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [14, 15] of [14, 15, 16, 17, 18, 19]",
+"could only match 1 of 5 existing questions"
+],
+"present": [
+14
+],
+"missing": [
+{
+"n": 15,
+"text": "Assuming whatever is not sold domestically was exported, then which year has registered the highest growth in exports of automobiles?",
+"opts": {
+"A": "2005",
+"B": "2006",
+"C": "2007",
+"D": "2008 Such a use of bar charts is quite convenient for comparing two or more sets of data. Figure 3.5 shows the break-up of the various sources of revenues for the Government of India over a two-year period. Sm \u201ci \u2014 \u201c4 =. 50 WW N Service Tax A Income Tax ZA A Year 1 Year 2 FIGURE 3.5 Representing Percentage on a Stacked Bar Chart We now move on to give you a feel of the kinds of questions that can be created on bar graphs."
+},
+"ans": [
+"mcq",
+"B"
+],
+"src": "key (checked on 1)",
+"lines": [
+224,
+225,
+226,
+227,
+228,
+229,
+230,
+231,
+232,
+233,
+234,
+235,
+236,
+237,
+238,
+239,
+240,
+241,
+242,
+243,
+244,
+245,
+246
+]
+}
+]
+},
+"D4-L2-Q3-5": {
+"status": "blocked",
+"reasons": [
+"Q3: no checked answer in your PDFs"
+],
+"present": [
+4,
+5
+],
+"missing": [
+{
+"n": 3,
+"text": "In which month did the company earn maximum profits?",
+"opts": {
+"A": "5",
+"B": "4",
+"C": "3",
+"D": "1"
+},
+"ans": null,
+"src": null,
+"lines": [
+27,
+28,
+29,
+30,
+31
+]
+}
+]
+},
+"D5-L2-Q5-8": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [] of [5, 6, 7, 8]",
+"could only match 0 of 3 existing questions"
+],
+"present": [],
+"missing": []
+},
+"D5-L2-Q9-12": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [9, 10, 11] of [9, 10, 11, 12]"
+],
+"present": [
+9,
+10,
+11
+],
+"missing": []
+},
+"D2-L1-Q27-31": {
+"status": "blocked",
+"reasons": [
+"numbers not all found on pages: found [28, 29, 30, 31] of [27, 28, 29, 30, 31]",
+"Q30: no checked answer in your PDFs"
+],
+"present": [
+28,
+29,
+31
+],
+"missing": [
+{
+"n": 30,
+"text": "In the year 2027, which country had the highest population density?",
+"opts": {
+"A": "B",
+"D": "C",
+"C": "DMA"
+},
+"ans": null,
+"src": null,
+"lines": [
+181,
+182,
+183,
+184
+]
+}
+]
+},
+"D2-L2-Q9-13": {
+"status": "blocked",
+"reasons": [
+"Q13: no checked answer in your PDFs"
+],
+"present": [
+9,
+10,
+11,
+12
+],
+"missing": [
+{
+"n": 13,
+"text": "Which of the following statements is false?",
+"opts": {
+"A": "The growth rate of FDI projects outflow from the developed countries during 2004-05 has been lower than"
+},
+"ans": null,
+"src": null,
+"lines": [
+92,
+93,
+94
+]
+}
+]
+}
+}
