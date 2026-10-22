@@ -1,0 +1,66 @@
+name: Notice scan
+
+# Every 2 hours from about 6 am to 10 pm IST: look in the Drive inbox; scan anything new.
+# An empty inbox ends the run in under a minute, before any OCR is installed.
+# "Run workflow" on the Actions tab scans straight away.
+on:
+  schedule:
+    - cron: "37 0-16/2 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: notice-scan
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      NOTICE_REMOTE: ${{ vars.NOTICE_REMOTE || 'gdrive:NoticeScanner' }}
+      RCLONE_CONFIG: ${{ github.workspace }}/../rclone.conf
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Connect to Drive
+        id: drive
+        env:
+          RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
+        run: |
+          if [ -z "$RCLONE_CONF" ]; then
+            # not set up yet: scheduled runs stay quiet (no failure emails); a manual run says why
+            msg="Drive not connected yet: run newspaper-ocr/setup_drive.sh (README, 'Daily automatic scans')"
+            if [ "$GITHUB_EVENT_NAME" = "schedule" ]; then echo "::notice::$msg"; exit 0; fi
+            echo "::error::$msg"; exit 1
+          fi
+          printf '%s\n' "$RCLONE_CONF" > "$RCLONE_CONFIG"
+          sudo apt-get install -y -qq rclone > /dev/null
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Check inbox
+        id: inbox
+        if: steps.drive.outputs.ready == 'true'
+        run: |
+          n=$(rclone lsf "$NOTICE_REMOTE/Inbox" --files-only --include '*.{pdf,PDF,jpg,JPG,jpeg,JPEG,png,PNG}' | wc -l)
+          echo "files=$n" >> "$GITHUB_OUTPUT"
+          echo "$n file(s) waiting"
+
+      - name: Install OCR
+        if: steps.drive.outputs.ready == 'true' && steps.inbox.outputs.files != '0'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-eng > /dev/null
+          pip install -q -r newspaper-ocr/requirements.txt
+
+      - name: Scan
+        if: steps.drive.outputs.ready == 'true' && steps.inbox.outputs.files != '0'
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
+        run: bash newspaper-ocr/run_inbox.sh
