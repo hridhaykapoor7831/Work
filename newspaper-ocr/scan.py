@@ -371,7 +371,9 @@ def match_block(words, page_no, pass_name, T, page_area):
             tier, area, note = "REVIEW", "Border: " + T.border_pins[pin], (note + "; border pincode").strip("; ")
         else:
             close = [p for p in T.target_pins if sum(a != b for a, b in zip(p, pin)) == 1]
-            if close and pin not in T.known_pins:
+            # only the Mumbai city range can be a misread target; 4006xx (Thane), 4007xx (Navi
+            # Mumbai) etc. are real pincodes elsewhere
+            if close and pin[:4] == "4000" and pin not in T.known_pins:
                 tier, area = "REVIEW", f"not a known Mumbai pincode – possible misread of {'/'.join(close)}"
             else:
                 tier, area = None, T.known_pins.get(pin, "")
@@ -481,6 +483,35 @@ def write_pdf(path, pages, flagged, summary_lines):
             r = fitz.Rect(*(v * scale for v in hit.boxes[0]))
             page.insert_text((r.x0, max(r.y0 - 6, 8)), f"{hit.tier}: {hit.term}", fontsize=9, color=TIER_RGB[hit.tier])
     doc.save(path, garbage=3, deflate=True)
+
+
+def _label(h):
+    """'400001 (Fort)', 'Radio Club (Colaba)', or just 'Colaba' when the name is the area."""
+    area = h.area.split(" / ")[0].replace("Border: ", "")
+    if h.kind == "name" and h.area.lower() in h.term.lower():
+        return h.term
+    return f"{h.term} ({area})" if area else h.term
+
+
+def plain_summary(src_name, groups, page_info):
+    """Page number + what was found, nothing else. Groups arrive sorted by certainty."""
+    sure = [g for g in groups if min(TIERS.index(h.tier) for h in g) == 0]
+    check = [g for g in groups if g not in sure]
+    lines = [f"{src_name}: {len(sure)} notice(s) in your areas, {len(check)} to double-check"]
+    for title, gs, keep in (("IN YOUR AREAS", sure, ("HIGH", "MEDIUM")),
+                            ("DOUBLE-CHECK (weaker matches: read the notice to confirm)", check, TIERS)):
+        if not gs:
+            continue
+        lines += ["", title]
+        for g in sorted(gs, key=lambda g: g[0].page):
+            found = dict.fromkeys(_label(h) for h in sorted(g, key=lambda h: TIERS.index(h.tier)) if h.tier in keep)
+            lines.append(f"  Page {g[0].page}: {', '.join(found)}")
+    if not groups:
+        lines += ["", "Nothing found in your areas."]
+    low = [i for i, info in enumerate(page_info, 1) if info[3] < 70]
+    if low:
+        lines += ["", f"Could not read clearly, look yourself: page(s) {', '.join(map(str, low))}"]
+    return lines
 
 
 def _readers(h):
@@ -602,7 +633,9 @@ def process_page(task):
     region = page_area_fn(img.width, img.height)
     passes = ocr_passes(img, fast=fast, text_h=text_h)
     hits = [h for name, blocks in passes for words in blocks for h in match_block(words, pno, name, T, region)]
-    base_words = [w for words in passes[0][1] for w in words]
+    # one pass can read nothing on an odd page while others read it fine; report the fullest one
+    best = max(passes, key=lambda p: sum(len(words) for words in p[1]))[1]
+    base_words = [w for words in best for w in words]
     confs = [w.conf for w in base_words if w.conf >= 0]
     vision_notices, claude_error = [], ""
     if use_claude:
@@ -616,9 +649,9 @@ def process_page(task):
     print(f"page {pno}: turned {rot}°, {len(base_words)} words, {time.time() - t0:.0f}s", file=sys.stderr)
     return dict(hits=hits, image=image, words=base_words, vision_notices=vision_notices, claude_error=claude_error,
                 # notice outlines for grouping/cropping: paragraph blocks from the plain layout pass
-                layout=[region(words) for words in passes[0][1]],
+                layout=[region(words) for words in best],
                 info=(rot, how, len(base_words), sum(confs) / len(confs) if confs else 0),
-                text="\n\n".join(" ".join(w.text for w in words) for words in passes[0][1]))
+                text="\n\n".join(" ".join(w.text for w in words) for words in best))
 
 
 
@@ -700,26 +733,16 @@ def main():
                              _readers(h), *(int(v) for v in h.box)])
     (out / f"{stem}_ocr.txt").write_text("\n\n".join(f"===== PAGE {i} =====\n{t}" for i, t in enumerate(ocr_text, 1)))
 
-    summary = [(f"Notice scan: {src.name}", 16, (0, 0, 0)),
-               (f"{len(groups)} notice(s) with a hit · " + " · ".join(
-                   f"{t} {sum(1 for h in flagged if h.tier == t)}" for t in TIERS), 11, (0, 0, 0)), ("", 8, (0, 0, 0))]
-    for gi, g in enumerate(groups, 1):
-        for h in sorted(g, key=lambda h: TIERS.index(h.tier)):
-            summary.append((f"Notice {gi} · p{h.page} · {h.tier} · {h.term} ({h.area}) · read as '{h.seen}'"
-                            f"{' · signature' if h.signatory else ''}", 9, TIER_RGB[h.tier]))
-    if not groups:
-        summary.append(("No hits on target areas. See the HTML report for every pincode read.", 11, (0, 0, 0)))
+    summary = []
+    for i, line in enumerate(plain_summary(src.name, groups, page_info)):
+        heading = i == 0 or not line.startswith(" ")
+        colour = TIER_RGB["HIGH"] if line.startswith("IN YOUR") else \
+            TIER_RGB["REVIEW"] if line.startswith("DOUBLE") else (0, 0, 0)
+        summary.append((line.strip(), 13 if i == 0 else 11 if heading else 10, colour))
     write_pdf(out / f"{stem}_highlighted.pdf", pages_for_pdf, flagged, summary)
     write_html(out / f"{stem}_report.html", src.name, groups, all_pins, page_info, ocr_text, imgs,
                claude_status, vision_notices)
-    lines = [f"{src.name}: {n_pages} page(s), {len(groups)} notice(s) with a hit "
-             f"(HIGH {sum(1 for g in groups if min(TIERS.index(h.tier) for h in g) == 0)})"]
-    for gi, g in enumerate(groups, 1):
-        terms = ", ".join(dict.fromkeys(f"{h.term} [{h.tier}]" for h in sorted(g, key=lambda h: TIERS.index(h.tier))))
-        lines.append(f"  Notice {gi} (page {g[0].page}): {terms}")
-    low = [i for i, info in enumerate(page_info, 1) if info[3] < 70]
-    if low:
-        lines.append(f"  Hard to read, check by eye: page(s) {', '.join(map(str, low))}")
+    lines = plain_summary(src.name, groups, page_info)
     (out / f"{stem}_summary.txt").write_text("\n".join(lines) + "\n")
     shutil.rmtree(work, ignore_errors=True)
 
