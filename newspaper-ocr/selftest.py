@@ -84,7 +84,7 @@ def run_scan(pdf, out, claude):
     import scan
     import vision
     vision.read_page = fake_claude
-    sys.argv = ["scan.py", str(pdf), "-o", str(out), "--claude", "on" if claude else "off"]
+    sys.argv = ["scan.py", str(pdf), "-o", str(out), "--jobs", "1", "--claude", "on" if claude else "off"]
     scan.main()
     return list(csv.DictReader(open(Path(out) / "sample_hits.csv")))
 

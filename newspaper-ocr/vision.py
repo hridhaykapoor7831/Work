@@ -7,10 +7,11 @@ Tesseract garbled can still be caught. Hits found only here are boxed by tile, n
 import base64
 import io
 import json
+import os
 
 import anthropic
 
-MODEL = "claude-opus-5-5"
+MODEL = os.environ.get("CLAUDE_MODEL") or "claude-opus-5-5"
 TILE_GRID = (2, 2)   # columns, rows
 OVERLAP = 0.12       # fraction of tile size shared with neighbours, so no line is cut in every tile
 

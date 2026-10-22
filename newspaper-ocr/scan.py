@@ -10,6 +10,7 @@ Outputs:
     <name>_report.html      one card per notice with a cropped picture and the matched words
     <name>_hits.csv         one row per hit
     <name>_ocr.txt          full OCR text, for Ctrl+F
+    <name>_summary.txt      a few lines: how many notices hit, which terms (used for the daily email)
 
 What is matched is controlled by targets.json next to this script.
 """
@@ -19,10 +20,14 @@ import csv
 import html
 import io
 import json
+import multiprocessing
 import re
+import shutil
 import sys
+import tempfile
 import os
 import time
+from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -129,14 +134,20 @@ class Targets:
 
 # ---------------------------------------------------------------- page images
 
-def page_images(pdf_path):
-    doc = fitz.open(pdf_path)
-    for page in doc:
+def page_count(path):
+    with fitz.open(path) as doc:
+        return doc.page_count
+
+
+def render_page(path, index):
+    """One page as an RGB image at the photo's own resolution (PDF pages or a plain JPG/PNG)."""
+    with fitz.open(path) as doc:
+        page = doc[index]
         native = max((info[2] for info in page.get_images(full=True)), default=0)
         zoom = max(native / page.rect.width if native else 0, 300 / 72)
         zoom = min(zoom, MAX_SIDE / max(page.rect.width, page.rect.height))
         pix = page.get_pixmap(matrix=fitz.Matrix(zoom, zoom), colorspace=fitz.csRGB, alpha=False)
-        yield Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
+        return Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
 
 
 def _normalise(gray):
@@ -434,14 +445,15 @@ def write_pdf(path, pages, flagged, summary_lines):
                 y = 50
             sp.insert_text((40, y), chunk, fontsize=size, color=rgb)
             y += size + 5
-    for pno, (img, words) in enumerate(pages, 1):
+    for pno, (img_path, words) in enumerate(pages, 1):
+        img = Image.open(img_path)
         scale = 72 / 150  # 150 dpi page size
         w, h = img.width * scale, img.height * scale
         page = doc.new_page(width=w, height=h)
         small = img.copy()
-        small.thumbnail((3200, 3200))
+        small.thumbnail((2600, 2600))  # keeps a 40-page edition's PDF around 25 MB
         buf = io.BytesIO()
-        small.save(buf, "JPEG", quality=82)
+        small.save(buf, "JPEG", quality=78)
         page.insert_image(page.rect, stream=buf.getvalue())
         # invisible OCR text so the PDF is searchable
         for wd in words:
@@ -472,7 +484,7 @@ def write_html(path, src_name, groups, all_pins, page_info, ocr_text, imgs, clau
     for gi, g in enumerate(groups, 1):
         best = min((h.tier for h in g), key=TIERS.index)
         r = _union([h.region for h in g] + [b for h in g for b in h.boxes])
-        im = imgs[g[0].page - 1]
+        im = Image.open(imgs[g[0].page - 1])
         region = (max(0, r[0] - 120), max(0, r[1] - 160), min(im.width, r[2] + 120), min(im.height, r[3] + 160))
         rows = "".join(
             f"<tr><td><span class=chip style='background:{TIER_HEX[h.tier]}'>{h.tier}</span></td>"
@@ -486,7 +498,7 @@ def write_html(path, src_name, groups, all_pins, page_info, ocr_text, imgs, clau
 <section class=card id=n{gi}>
   <h3><span class=chip style='background:{TIER_HEX[best]}'>{best}</span> Notice {gi} · page {g[0].page}</h3>
   <table class=hits>{rows}</table>
-  <details open><summary>Picture</summary><img src="data:image/jpeg;base64,{_crop(imgs[g[0].page - 1], region, g)}"></details>
+  <details open><summary>Picture</summary><img src="data:image/jpeg;base64,{_crop(im, region, g)}"></details>
   <details><summary>OCR text around the hit</summary><p class=ctx>{ctx}</p></details>
 </section>""")
     pin_rows = "".join(
@@ -560,6 +572,36 @@ def read_with_claude(img, pno, T, page_area, vision_notices):
 
 # ---------------------------------------------------------------- main
 
+def process_page(task):
+    """OCR + match one page. Runs in a worker process; the upright image goes to disk, not memory."""
+    path, index, targets_path, fast, use_claude, work = task
+    t0 = time.time()
+    pno = index + 1
+    T = Targets(targets_path)
+    img, rot, how = upright(render_page(path, index))
+    region = page_area_fn(img.width, img.height)
+    passes = ocr_passes(img, fast=fast)
+    hits = [h for name, blocks in passes for words in blocks for h in match_block(words, pno, name, T, region)]
+    base_words = [w for words in passes[0][1] for w in words]
+    confs = [w.conf for w in base_words if w.conf >= 0]
+    vision_notices, claude_error = [], ""
+    if use_claude:
+        try:
+            hits += read_with_claude(img, pno, T, region, vision_notices)
+        except Exception as e:  # keep the OCR result even if the API is unreachable
+            claude_error = f"failed on page {pno}: {type(e).__name__}: {e}"
+            print(f"Claude second reader {claude_error} – OCR result kept", file=sys.stderr)
+    image = str(Path(work) / f"page{pno:04d}.jpg")
+    img.save(image, "JPEG", quality=90)
+    print(f"page {pno}: turned {rot}°, {len(base_words)} words, {time.time() - t0:.0f}s", file=sys.stderr)
+    return dict(hits=hits, image=image, words=base_words, vision_notices=vision_notices, claude_error=claude_error,
+                # notice outlines for grouping/cropping: paragraph blocks from the plain layout pass
+                layout=[region(words) for words in passes[0][1]],
+                info=(rot, how, len(base_words), sum(confs) / len(confs) if confs else 0),
+                text="\n\n".join(" ".join(w.text for w in words) for words in passes[0][1]))
+
+
+
 def page_area_fn(img_w, img_h):
     def region(words):
         b = _union(w.box for w in words)
@@ -579,6 +621,7 @@ def main():
     ap.add_argument("-o", "--out", help="output folder (default: <pdf name>_scan next to the PDF)")
     ap.add_argument("--targets", default=str(HERE / "targets.json"))
     ap.add_argument("--fast", action="store_true", help="2 OCR passes instead of 7")
+    ap.add_argument("--jobs", type=int, default=0, help="pages processed at once (default: one per CPU)")
     ap.add_argument("--claude", choices=["auto", "on", "off"], default="auto",
                     help="second reader via the Claude API (auto = on when ANTHROPIC_API_KEY is set)")
     args = ap.parse_args()
@@ -590,32 +633,30 @@ def main():
     src = Path(args.pdf)
     out = Path(args.out) if args.out else src.with_name(src.stem + "_scan")
     out.mkdir(parents=True, exist_ok=True)
-    T = Targets(args.targets)
+    work = Path(tempfile.mkdtemp(prefix="pages_", dir=out))
+    n_pages = page_count(src)
+    jobs = max(1, min(args.jobs or os.cpu_count() or 1, n_pages))
+    if jobs > 1:
+        os.environ.setdefault("OMP_THREAD_LIMIT", "1")  # one Tesseract thread per page worker
+    tasks = [(str(src), i, args.targets, args.fast, bool(use_claude), str(work)) for i in range(n_pages)]
+    print(f"{src.name}: {n_pages} page(s), {jobs} at a time", file=sys.stderr)
+    if jobs == 1:
+        results = [process_page(t) for t in tasks]
+    else:
+        with ProcessPoolExecutor(jobs, mp_context=multiprocessing.get_context("fork")) as pool:
+            results = list(pool.map(process_page, tasks))
 
     all_hits, pages_for_pdf, page_info, ocr_text, imgs, layouts = [], [], [], [], [], []
-    for pno, raw in enumerate(page_images(src), 1):
-        t0 = time.time()
-        img, rot, how = upright(raw)
-        imgs.append(img)
-        region = page_area_fn(img.width, img.height)
-        passes = ocr_passes(img, fast=args.fast)
-        for pname, blocks in passes:
-            for words in blocks:
-                all_hits += match_block(words, pno, pname, T, region)
-        # notice outlines for grouping/cropping: paragraph blocks from the plain layout pass
-        layouts.append([region(words) for words in passes[0][1]])
-        base_words = [w for words in passes[0][1] for w in words]
-        confs = [w.conf for w in base_words if w.conf >= 0]
-        page_info.append((rot, how, len(base_words), sum(confs) / len(confs) if confs else 0))
-        pages_for_pdf.append((img, base_words))
-        ocr_text.append("\n\n".join(" ".join(w.text for w in words) for words in passes[0][1]))
-        if use_claude:
-            try:
-                all_hits += read_with_claude(img, pno, T, region, vision_notices)
-            except Exception as e:  # keep the OCR result even if the API is unreachable
-                use_claude, claude_status = False, f"failed on page {pno}: {type(e).__name__}: {e}"
-                print(f"Claude second reader {claude_status} – continuing with OCR only", file=sys.stderr)
-        print(f"page {pno}: turned {rot}°, {len(base_words)} words, {time.time() - t0:.0f}s", file=sys.stderr)
+    for r in results:
+        all_hits += r["hits"]
+        layouts.append(r["layout"])
+        page_info.append(r["info"])
+        pages_for_pdf.append((r["image"], r["words"]))
+        ocr_text.append(r["text"])
+        imgs.append(r["image"])
+        vision_notices += r["vision_notices"]
+        if r["claude_error"]:
+            claude_status = r["claude_error"]
 
     hits = merge(all_hits)
     for h in hits:
@@ -651,6 +692,16 @@ def main():
     write_pdf(out / f"{stem}_highlighted.pdf", pages_for_pdf, flagged, summary)
     write_html(out / f"{stem}_report.html", src.name, groups, all_pins, page_info, ocr_text, imgs,
                claude_status, vision_notices)
+    lines = [f"{src.name}: {n_pages} page(s), {len(groups)} notice(s) with a hit "
+             f"(HIGH {sum(1 for g in groups if min(TIERS.index(h.tier) for h in g) == 0)})"]
+    for gi, g in enumerate(groups, 1):
+        terms = ", ".join(dict.fromkeys(f"{h.term} [{h.tier}]" for h in sorted(g, key=lambda h: TIERS.index(h.tier))))
+        lines.append(f"  Notice {gi} (page {g[0].page}): {terms}")
+    low = [i for i, info in enumerate(page_info, 1) if info[3] < 70]
+    if low:
+        lines.append(f"  Hard to read, check by eye: page(s) {', '.join(map(str, low))}")
+    (out / f"{stem}_summary.txt").write_text("\n".join(lines) + "\n")
+    shutil.rmtree(work, ignore_errors=True)
 
     print(f"\n{len(groups)} notice(s) with a hit → {out}/")
     for gi, g in enumerate(groups, 1):
