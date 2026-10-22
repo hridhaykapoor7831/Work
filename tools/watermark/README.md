@@ -31,6 +31,8 @@ python unmark.py scans/ --color 195,195,195 --tol 15 --doc --out cleaned/
 - **Watermark left behind:** raise `--grow` or `--tol`, or lower `--thresh`.
 - **Real detail removed:** lower `--tol`, raise `--thresh` or `--despeckle`, or make the box tighter.
 - **Thick watermark strokes not fully caught:** raise `--stroke` above the stroke width in px.
+- **Small, thin watermark text** (1–2 px strokes, e.g. on a phone-sized listing photo): `--despeckle 0 --stroke 7 --grow 1 --radius 3`. The default despeckle would erase the mask itself.
+- **Watermark crosses a thin bright edge** (a sill or frame line): the edge gets caught in the mask and comes out softened. Raise `--thresh` until the preview mostly shows only the letters.
 
 Results go to `<name>_clean.<ext>` next to the input, or into `--out`.
 
