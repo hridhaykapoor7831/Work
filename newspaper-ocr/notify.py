@@ -7,6 +7,7 @@ Needs SMTP_USER, SMTP_PASSWORD and MAIL_TO (comma-separated). For Gmail, SMTP_PA
 App Password (Google Account → Security → App passwords). Does nothing if they aren't set.
 """
 import os
+import re
 import smtplib
 import sys
 from email.message import EmailMessage
@@ -22,10 +23,15 @@ def main():
         print("email not configured (SMTP_USER / SMTP_PASSWORD / MAIL_TO)")
         return
     summary = next(folder.glob("*_summary.txt")).read_text()
-    first = summary.splitlines()[0]
-    hits = " 0 notice(s)" not in first
+    notices, high = map(int, re.search(r"(\d+) notice\(s\) with a hit \(HIGH (\d+)\)", summary).groups())
+    if high:
+        subject = f"⚠ {high} notice(s) in target areas"
+    elif notices:
+        subject = f"{notices} notice(s) to check (no certain match)"
+    else:
+        subject = "No target notices"
     msg = EmailMessage()
-    msg["Subject"] = f"{'⚠ Target notices found' if hits else 'No target notices'}: {name}"
+    msg["Subject"] = f"{subject}: {name}"
     msg["From"], msg["To"] = user, to
     msg.set_content(summary + "\nFull report and highlighted PDF are in the Results folder on Drive.\n")
     used = 0

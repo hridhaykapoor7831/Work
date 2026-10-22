@@ -572,6 +572,15 @@ def read_with_claude(img, pno, T, page_area, vision_notices):
 
 # ---------------------------------------------------------------- main
 
+def _default_jobs():
+    """One page per CPU, but never more than memory allows (a page worker peaks near 1 GB)."""
+    try:
+        free_gb = os.sysconf("SC_AVPHYS_PAGES") * os.sysconf("SC_PAGE_SIZE") / 2**30
+    except (ValueError, OSError, AttributeError):
+        free_gb = 4
+    return max(1, min(os.cpu_count() or 1, int(free_gb // 1.2)))
+
+
 def process_page(task):
     """OCR + match one page. Runs in a worker process; the upright image goes to disk, not memory."""
     path, index, targets_path, fast, use_claude, work = task
@@ -635,7 +644,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     work = Path(tempfile.mkdtemp(prefix="pages_", dir=out))
     n_pages = page_count(src)
-    jobs = max(1, min(args.jobs or os.cpu_count() or 1, n_pages))
+    jobs = max(1, min(args.jobs or _default_jobs(), n_pages))
     if jobs > 1:
         os.environ.setdefault("OMP_THREAD_LIMIT", "1")  # one Tesseract thread per page worker
     tasks = [(str(src), i, args.targets, args.fast, bool(use_claude), str(work)) for i in range(n_pages)]
