@@ -46,8 +46,9 @@ One-time setup (about 10 minutes):
    App Password: Google Account → Security → 2-Step Verification → App passwords), `MAIL_TO`.
 5. **Test.** Put a PDF in `Inbox`, then Actions tab → "Notice scan" → Run workflow.
 
-After that it checks the inbox every hour, about 6 am to 10 pm IST. To change the hours, edit the
-`cron` line in `.github/workflows/notice-scan.yml` (times are UTC).
+After that it checks the inbox every 2 hours, about 6 am to 10 pm IST (or press "Run workflow"
+to scan at once). To change the hours, edit the `cron` line in `.github/workflows/notice-scan.yml`
+(times are UTC).
 
 Optional Claude second reader: add secret `ANTHROPIC_API_KEY`. It is billed per page by the
 Claude API, so it is off unless that secret exists. Pick the model with repository variable

@@ -43,7 +43,7 @@ TIERS = ["HIGH", "MEDIUM", "REVIEW"]
 VISION = "claude-vision"
 TIER_RGB = {"HIGH": (0.86, 0.08, 0.08), "MEDIUM": (0.95, 0.5, 0.0), "REVIEW": (0.1, 0.45, 0.9)}
 TIER_HEX = {"HIGH": "#d91414", "MEDIUM": "#f28000", "REVIEW": "#1a73e6"}
-MAX_SIDE = 5000  # px; long side of the page image handed to OCR
+MAX_SIDE = 9000  # px; long side of a rendered page (bounds memory for very large scans)
 
 
 # ---------------------------------------------------------------- data types
@@ -144,7 +144,8 @@ def render_page(path, index):
     with fitz.open(path) as doc:
         page = doc[index]
         native = max((info[2] for info in page.get_images(full=True)), default=0)
-        zoom = max(native / page.rect.width if native else 0, 300 / 72)
+        # photo pages: the photo's own pixels, no resampling; text-only pages: 300 dpi
+        zoom = native / page.rect.width if native else 300 / 72
         zoom = min(zoom, MAX_SIDE / max(page.rect.width, page.rect.height))
         pix = page.get_pixmap(matrix=fitz.Matrix(zoom, zoom), colorspace=fitz.csRGB, alpha=False)
         return Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
@@ -160,7 +161,8 @@ def _quick_score(img):
     # itself, which makes 90° and 180° score the same and hides the true orientation
     arr = _normalise(cv2.cvtColor(np.array(img), cv2.COLOR_RGB2GRAY))
     d = pytesseract.image_to_data(Image.fromarray(arr), config="--oem 1 --psm 6", output_type=pytesseract.Output.DICT)
-    return sum(1 for c, t in zip(d["conf"], d["text"]) if len(t.strip()) >= 4 and float(c) > 80)
+    good = [h for h, c, t in zip(d["height"], d["conf"], d["text"]) if len(t.strip()) >= 4 and float(c) > 80]
+    return len(good), good
 
 
 def upright(img):
@@ -171,39 +173,48 @@ def upright(img):
     """
     small = img.copy()
     small.thumbnail((2000, 2000))
-    scores = {r: _quick_score(small.rotate(-r, expand=True)) for r in (0, 90, 180, 270)}
-    rot = max(scores, key=scores.get)
-    runner_up = sorted(scores.values())[-2]
-    method = f"best of 4 rotations ({scores[rot]} confident words vs {runner_up})"
-    return img.rotate(-rot, expand=True), rot, method
+    reads = {r: _quick_score(small.rotate(-r, expand=True)) for r in (0, 90, 180, 270)}
+    rot = max(reads, key=lambda r: reads[r][0])
+    runner_up = sorted(n for n, _ in reads.values())[-2]
+    method = f"best of 4 rotations ({reads[rot][0]} confident words vs {runner_up})"
+    heights = reads[rot][1]
+    text_h = float(np.median(heights)) * img.width / small.width if heights else None
+    return img.rotate(-rot, expand=True), rot, method, text_h
 
 
 # ---------------------------------------------------------------- OCR passes
 
 # Measured on phone photos of newsprint: no single preparation reads everything, but the union of
 # these passes recovered 58 of 59 probe words across the test pages (best single pass: 49).
+# Passes are defined by the text height (px) each one resizes the page to, so a close-up photo and
+# a full-page scan get the same treatment. REF_TEXT_H is the height measured on the test photos
+# whose passes were tuned at 1x, 1.5x and 2x.
+REF_TEXT_H = 67.0
 PASSES = [("norm", 1.0, 3), ("norm", 1.5, 3), ("norm", 2.0, 3), ("norm", 2.0, 4), ("norm", 2.0, 11),
           ("otsu", 2.0, 3), ("otsu", 2.0, 4)]
 FAST_PASSES = [("norm", 1.0, 3), ("norm", 2.0, 3)]
+MAX_OCR_SIDE = 12000  # px; an upscaled pass never exceeds this
 
 
-def ocr_passes(img, fast=False):
+def ocr_passes(img, fast=False, text_h=None):
     """Run several OCR passes on differently prepared copies; each pass returns blocks of Words.
 
     Boxes are always mapped back to the coordinates of `img` so passes can be merged.
     """
     gray = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2GRAY)
     norm = _normalise(gray)
+    base = REF_TEXT_H / text_h if text_h else 1.0
     scaled = {}
     out = []
-    for kind, scale, psm in (FAST_PASSES if fast else PASSES):
+    for kind, rel, psm in (FAST_PASSES if fast else PASSES):
+        scale = round(min(max(base * rel, 0.3), 2.5, MAX_OCR_SIDE / max(img.size)), 2)
         if scale not in scaled:
             scaled[scale] = norm if scale == 1 else cv2.resize(norm, None, fx=scale, fy=scale,
                                                               interpolation=cv2.INTER_CUBIC)
         arr = scaled[scale]
         if kind == "otsu":
             arr = cv2.threshold(arr, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-        out.append((f"{kind}x{scale:g}/psm{psm}", _ocr(arr, psm, scale=scale)))
+        out.append((f"{kind}x{rel:g}/psm{psm}", _ocr(arr, psm, scale=scale)))
     return out
 
 
@@ -587,9 +598,9 @@ def process_page(task):
     t0 = time.time()
     pno = index + 1
     T = Targets(targets_path)
-    img, rot, how = upright(render_page(path, index))
+    img, rot, how, text_h = upright(render_page(path, index))
     region = page_area_fn(img.width, img.height)
-    passes = ocr_passes(img, fast=fast)
+    passes = ocr_passes(img, fast=fast, text_h=text_h)
     hits = [h for name, blocks in passes for words in blocks for h in match_block(words, pno, name, T, region)]
     base_words = [w for words in passes[0][1] for w in words]
     confs = [w.conf for w in base_words if w.conf >= 0]
