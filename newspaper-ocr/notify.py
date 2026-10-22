@@ -23,13 +23,13 @@ def main():
         print("email not configured (SMTP_USER / SMTP_PASSWORD / MAIL_TO)")
         return
     summary = next(folder.glob("*_summary.txt")).read_text()
-    notices, high = map(int, re.search(r"(\d+) notice\(s\) with a hit \(HIGH (\d+)\)", summary).groups())
+    high, check = map(int, re.search(r"(\d+) notice\(s\) in your areas, (\d+) to double-check", summary).groups())
     if high:
-        subject = f"⚠ {high} notice(s) in target areas"
-    elif notices:
-        subject = f"{notices} notice(s) to check (no certain match)"
+        subject = f"⚠ {high} notice(s) in your areas"
+    elif check:
+        subject = f"{check} notice(s) to double-check"
     else:
-        subject = "No target notices"
+        subject = "Nothing in your areas"
     msg = EmailMessage()
     msg["Subject"] = f"{subject}: {name}"
     msg["From"], msg["To"] = user, to
