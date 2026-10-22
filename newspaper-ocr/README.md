@@ -35,13 +35,19 @@ NoticeScanner/
 One-time setup (about 10 minutes):
 
 1. **Drive folder.** In Google Drive create `NoticeScanner`, and inside it `Inbox`.
-2. **Drive key for the job.** On any computer: install rclone (`brew install rclone` on a Mac,
-   or https://rclone.org/downloads/), run `rclone config`, then: `n` (new) → name `gdrive` →
-   storage `drive` → leave client id/secret blank → scope `1` → accept defaults → "Use web browser" `y`
-   → sign in to your Google account → shared drive `n` → `y` to keep. Then print the file with
-   `rclone config show` (or open `~/.config/rclone/rclone.conf`) and copy the whole `[gdrive]` section.
-3. **Give it to GitHub.** Repo → Settings → Secrets and variables → Actions → New repository secret:
-   `RCLONE_CONF` = the text from step 2.
+2. **Connect Drive (one command).** On your Mac open Terminal (Cmd+Space, type Terminal, Enter),
+   paste this line and press Enter:
+
+   ```
+   curl -fsSL https://raw.githubusercontent.com/hridhaykapoor7831/Work/HEAD/newspaper-ocr/setup_drive.sh | bash
+   ```
+
+   A browser tab opens: sign in to the Google account that has `NoticeScanner`, click Allow.
+   The script checks it can see `NoticeScanner/Inbox`, copies the Drive key to your clipboard and
+   opens the GitHub page for step 3. (It downloads rclone into `~/.notice-scanner`; nothing is
+   installed system-wide and no password is asked.)
+3. **Give the key to GitHub.** On the page that opened: Name `RCLONE_CONF`, Secret: Cmd+V,
+   click "Add secret". Until this exists, scheduled runs skip quietly.
 4. **Email (optional).** Add secrets `SMTP_USER` (your Gmail address), `SMTP_PASSWORD` (a Gmail
    App Password: Google Account → Security → 2-Step Verification → App passwords), `MAIL_TO`.
 5. **Test.** Put a PDF in `Inbox`, then Actions tab → "Notice scan" → Run workflow.
