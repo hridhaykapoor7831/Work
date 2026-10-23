@@ -284,10 +284,13 @@ def _context(words, i, j, span=25):
 # whoever placed it (bank, tribunal, lawyer, company). Compared as lower-case letters only.
 PROPERTY_CUES = set("""flat shop unit gala premises property properties situated situate lying bearing cs cts
 survey plot admeasuring sq sqft carpet builtup schedule wing chs society land hissa village apartment
-bungalow godown garage parking tenement room""".split())
+bungalow godown garage parking tenement room shares certificate""".split())
+# a person's own address ("residing at Flat No. ...") is not the property either
 OFFICE_CUES = set("""tribunal drt court bank branch zone zonal regd registered corporate add address advocate
 advocates solicitor solicitors sd authorised authorized officer ltd limited llp cin email tel phone ph mob
-mobile website ministry govt fax gstin contact""".split())
+mobile website ministry govt fax gstin contact residing resident resides ro""".split())
+STRONG_OFFICE_CUES = {"residing", "resident", "resides", "ro", "advocate", "advocates", "solicitor", "solicitors",
+                      "tribunal", "address"}
 
 
 def _role(words, i, j, T, term=""):
@@ -304,13 +307,14 @@ def _role(words, i, j, T, term=""):
             continue
         weight = (1.0 if k < i else 0.5) / (1 + (i - k if k < i else k - j))
         cue = plain[k]
-        if cue == "office":  # "Office No. 41" is a unit; "Regd. Office" is an address
+        if cue == "office":  # "Regd. Office" is an address; "Office No. 606" can be either, so no vote
             nxt = plain[k + 1] if k + 1 < len(plain) else ""
-            cue = "unit" if nxt in ("no", "nos", "number") else "registered"
+            cue = "" if nxt in ("no", "nos", "number") else "registered"
         if cue in PROPERTY_CUES:
             p += weight
         elif cue in OFFICE_CUES:
-            o += weight
+            # "residing at" / "Advocate" outweigh the "Flat No." that follows them in an address
+            o += weight * (3 if cue in STRONG_OFFICE_CUES else 1)
     if p > o * 1.5:
         return "property"
     if o > p * 1.5:
