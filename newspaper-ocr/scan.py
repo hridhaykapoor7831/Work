@@ -72,6 +72,13 @@ class Hit:
     region: tuple = None
     signatory: bool = False
     boxes: list = field(default_factory=list)  # one per word: a hit can wrap onto the next line
+    votes: list = field(default_factory=list)  # "property" / "office" / "unclear", one per reading
+
+    @property
+    def role(self):
+        """Is this place the property the notice is about, or the address of whoever placed it?"""
+        p, o = self.votes.count("property"), self.votes.count("office")
+        return "property" if p and p >= o else "office" if o > p else "unclear"
 
 
 # ---------------------------------------------------------------- text normalisation
@@ -130,6 +137,7 @@ class Targets:
         for t in self.terms:
             self.by_len.setdefault(len(t["skel"]), []).append(t)
         self.ignore = [skel(p) for p in d.get("ignore_phrases", [])]
+        self.issuer_addresses = [skel(p) for p in d.get("issuer_addresses", [])]
 
 
 # ---------------------------------------------------------------- page images
@@ -206,8 +214,12 @@ def ocr_passes(img, fast=False, text_h=None):
     base = REF_TEXT_H / text_h if text_h else 1.0
     scaled = {}
     out = []
+    done = set()
     for kind, rel, psm in (FAST_PASSES if fast else PASSES):
         scale = round(min(max(base * rel, 0.3), 2.5, MAX_OCR_SIDE / max(img.size)), 2)
+        if (kind, scale, psm) in done:  # small photos clamp several passes to the same size
+            continue
+        done.add((kind, scale, psm))
         if scale not in scaled:
             scaled[scale] = norm if scale == 1 else cv2.resize(norm, None, fx=scale, fy=scale,
                                                               interpolation=cv2.INTER_CUBIC)
@@ -266,6 +278,48 @@ def _context(words, i, j, span=25):
         t = html.escape(words[k].text)
         parts.append(f"<mark>{t}</mark>" if i <= k < j else t)
     return ("… " if lo else "") + " ".join(parts) + (" …" if hi < len(words) else "")
+
+
+# Words that sit next to the property a notice is about, and words that sit next to the address of
+# whoever placed it (bank, tribunal, lawyer, company). Compared as lower-case letters only.
+PROPERTY_CUES = set("""flat shop unit gala premises property properties situated situate lying bearing cs cts
+survey plot admeasuring sq sqft carpet builtup schedule wing chs society land hissa village apartment
+bungalow godown garage parking tenement room shares certificate""".split())
+# a person's own address ("residing at Flat No. ...") is not the property either
+OFFICE_CUES = set("""tribunal drt court bank branch zone zonal regd registered corporate add address advocate
+advocates solicitor solicitors sd authorised authorized officer ltd limited llp cin email tel phone ph mob
+mobile website ministry govt fax gstin contact residing resident resides ro""".split())
+STRONG_OFFICE_CUES = {"residing", "resident", "resides", "ro", "advocate", "advocates", "solicitor", "solicitors",
+                      "tribunal", "address"}
+
+
+def _role(words, i, j, T, term=""):
+    """Vote 'property' or 'office' for the place at words[i:j] from the cue words around it."""
+    if term.lower().endswith(" division"):  # "C.S. No. 1490 of Fort Division" is a land record
+        return "property"
+    near = " ".join(w.skel for w in words[max(0, i - 12):min(len(words), j + 12)])
+    if any(a in near for a in T.issuer_addresses):
+        return "office"
+    plain = [re.sub(r"[^a-z]", "", w.text.lower()) for w in words]
+    p = o = 0.0
+    for k in range(max(0, i - 20), min(len(plain), j + 6)):
+        if i <= k < j or not plain[k]:
+            continue
+        weight = (1.0 if k < i else 0.5) / (1 + (i - k if k < i else k - j))
+        cue = plain[k]
+        if cue == "office":  # "Regd. Office" is an address; "Office No. 606" can be either, so no vote
+            nxt = plain[k + 1] if k + 1 < len(plain) else ""
+            cue = "" if nxt in ("no", "nos", "number") else "registered"
+        if cue in PROPERTY_CUES:
+            p += weight
+        elif cue in OFFICE_CUES:
+            # "residing at" / "Advocate" outweigh the "Flat No." that follows them in an address
+            o += weight * (3 if cue in STRONG_OFFICE_CUES else 1)
+    if p > o * 1.5:
+        return "property"
+    if o > p * 1.5:
+        return "office"
+    return "unclear"
 
 
 def _is_signatory(words, i, cues):
@@ -349,7 +403,7 @@ def match_block(words, page_no, pass_name, T, page_area):
         hits.append(Hit(page_no, "name", t["name"], t["area"], tier, " ".join(w.text for w in words[i:j]),
                         _union(w.box for w in words[i:j]), d, note, {pass_name},
                         _context(words, i, j), page_area(words), _is_signatory(words, i, T.cues),
-                        [w.box for w in words[i:j]]))
+                        [w.box for w in words[i:j]], [_role(words, i, j, T, t["name"])]))
 
     # pincodes
     text, starts = "", []
@@ -370,16 +424,10 @@ def match_block(words, page_no, pass_name, T, page_area):
         elif pin in T.border_pins:
             tier, area, note = "REVIEW", "Border: " + T.border_pins[pin], (note + "; border pincode").strip("; ")
         else:
-            close = [p for p in T.target_pins if sum(a != b for a, b in zip(p, pin)) == 1]
-            # only the Mumbai city range can be a misread target; 4006xx (Thane), 4007xx (Navi
-            # Mumbai) etc. are real pincodes elsewhere
-            if close and pin[:4] == "4000" and pin not in T.known_pins:
-                tier, area = "REVIEW", f"not a known Mumbai pincode – possible misread of {'/'.join(close)}"
-            else:
-                tier, area = None, T.known_pins.get(pin, "")
+            tier, area = None, T.known_pins.get(pin, "")
         hits.append(Hit(page_no, "pincode", pin, area, tier, raw.strip(), _union(w.box for w in words[i:j]), 0,
                         note, {pass_name}, _context(words, i, j), page_area(words),
-                        _is_signatory(words, i, T.cues), [w.box for w in words[i:j]]))
+                        _is_signatory(words, i, T.cues), [w.box for w in words[i:j]], [_role(words, i, j, T)]))
     return hits
 
 
@@ -400,6 +448,7 @@ def merge(hits):
                     # Claude's hit only knows its tile; take the exact word boxes OCR found
                     m.box, m.boxes, m.region, m.seen = h.box, h.boxes, h.region, h.seen
                 m.passes |= h.passes
+                m.votes += h.votes
                 m.signatory = m.signatory or h.signatory
                 break
         else:
@@ -477,11 +526,14 @@ def write_pdf(path, pages, flagged, summary_lines):
             except Exception:
                 pass
         for hit in (x for x in flagged if x.page == pno):
+            office = hit.role == "office"
+            rgb = (0.5, 0.5, 0.5) if office else TIER_RGB[hit.tier]
             for b in hit.boxes:
                 r = fitz.Rect(*(v * scale for v in b)) + (-3, -3, 3, 3)
-                page.draw_rect(r, color=TIER_RGB[hit.tier], fill=TIER_RGB[hit.tier], fill_opacity=0.22, width=2)
+                page.draw_rect(r, color=rgb, fill=rgb, fill_opacity=0.22, width=2)
             r = fitz.Rect(*(v * scale for v in hit.boxes[0]))
-            page.insert_text((r.x0, max(r.y0 - 6, 8)), f"{hit.tier}: {hit.term}", fontsize=9, color=TIER_RGB[hit.tier])
+            label = f"office address: {hit.term}" if office else f"{hit.tier}: {hit.term}"
+            page.insert_text((r.x0, max(r.y0 - 6, 8)), label, fontsize=9, color=rgb)
     doc.save(path, garbage=3, deflate=True)
 
 
@@ -493,13 +545,24 @@ def _label(h):
     return f"{h.term} ({area})" if area else h.term
 
 
+def group_role(g):
+    """A notice is about a property in your area if any of its strong hits reads as the property."""
+    roles = {h.role for h in g if h.tier in ("HIGH", "MEDIUM")} or {h.role for h in g}
+    return "property" if "property" in roles else "unclear" if "unclear" in roles else "office"
+
+
 def plain_summary(src_name, groups, page_info):
     """Page number + what was found, nothing else. Groups arrive sorted by certainty."""
-    sure = [g for g in groups if min(TIERS.index(h.tier) for h in g) == 0]
-    check = [g for g in groups if g not in sure]
-    lines = [f"{src_name}: {len(sure)} notice(s) in your areas, {len(check)} to double-check"]
-    for title, gs, keep in (("IN YOUR AREAS", sure, ("HIGH", "MEDIUM")),
-                            ("DOUBLE-CHECK (weaker matches: read the notice to confirm)", check, TIERS)):
+    sure = [g for g in groups if min(TIERS.index(h.tier) for h in g) == 0 and group_role(g) == "property"]
+    office = [g for g in groups if group_role(g) == "office"]
+    check = [g for g in groups if g not in sure and g not in office]
+    lines = [f"{src_name}: {len(sure)} notice(s) in your areas, {len(check)} to double-check, "
+             f"{len(office)} office address(es) only"]
+    for title, gs, keep in (
+            ("IN YOUR AREAS (the property is here)", sure, ("HIGH", "MEDIUM")),
+            ("DOUBLE-CHECK (open the notice: weak match, or can't tell property from office)", check, TIERS),
+            ("OFFICE ADDRESSES ONLY (a bank, tribunal or lawyer in your area; the property is elsewhere)",
+             office, TIERS)):
         if not gs:
             continue
         lines += ["", title]
@@ -532,7 +595,7 @@ def write_html(path, src_name, groups, all_pins, page_info, ocr_text, imgs, clau
             f"<tr><td><span class=chip style='background:{TIER_HEX[h.tier]}'>{h.tier}</span></td>"
             f"<td><b>{html.escape(h.term)}</b><br><small>{html.escape(h.area)}</small></td>"
             f"<td><code>{html.escape(h.seen)}</code><br><small>{html.escape(h.note)}"
-            f"{' · near an advocate/office signature' if h.signatory else ''}"
+            f" · reads as {'the property' if h.role == 'property' else 'an office address' if h.role == 'office' else 'unclear'}"
             f" · read by {_readers(h)}</small></td></tr>"
             for h in sorted(g, key=lambda h: TIERS.index(h.tier)))
         ctx = max(g, key=lambda h: len(h.context)).context
@@ -597,14 +660,17 @@ def read_with_claude(img, pno, T, page_area, vision_notices):
     hits = []
     for tile_box, notice in vision.read_page(img):
         vision_notices.append((pno, notice))
-        texts = [(t, False) for t in notice["subject_locations"]] + \
-                [(t, True) for t in notice["signatory_locations"]] + [(p, False) for p in notice["pincodes"]]
-        for text, signatory in texts:
+        # Claude already separated the property from the signatory's address; trust that split
+        texts = [(t, "property") for t in notice["subject_locations"]] + \
+                [(t, "office") for t in notice["signatory_locations"]] + [(p, None) for p in notice["pincodes"]]
+        for text, role in texts:
             words = [Word(tok, 100.0, tile_box) for tok in text.split()]
             if not words:
                 continue
             for h in match_block(words, pno, VISION, T, page_area):
-                h.signatory = h.signatory or signatory
+                h.signatory = h.signatory or role == "office"
+                if role:
+                    h.votes = [role]
                 h.context = "Claude read: " + html.escape(text) + (" (notice cut off at photo edge)"
                                                                   if notice["cut_off"] else "")
                 h.note = (h.note + "; " if h.note else "") + "Claude vision"
@@ -726,18 +792,19 @@ def main():
     with open(out / f"{stem}_hits.csv", "w", newline="") as f:
         wr = csv.writer(f)
         wr.writerow(["notice", "page", "tier", "kind", "term", "area", "ocr_read", "note", "near_signature",
-                     "read_by", "x0", "y0", "x1", "y1"])
+                     "read_by", "role", "x0", "y0", "x1", "y1"])
         for gi, g in enumerate(groups, 1):
             for h in g:
                 wr.writerow([gi, h.page, h.tier, h.kind, h.term, h.area, h.seen, h.note, h.signatory,
-                             _readers(h), *(int(v) for v in h.box)])
+                             _readers(h), h.role, *(int(v) for v in h.box)])
     (out / f"{stem}_ocr.txt").write_text("\n\n".join(f"===== PAGE {i} =====\n{t}" for i, t in enumerate(ocr_text, 1)))
 
     summary = []
     for i, line in enumerate(plain_summary(src.name, groups, page_info)):
         heading = i == 0 or not line.startswith(" ")
         colour = TIER_RGB["HIGH"] if line.startswith("IN YOUR") else \
-            TIER_RGB["REVIEW"] if line.startswith("DOUBLE") else (0, 0, 0)
+            TIER_RGB["REVIEW"] if line.startswith("DOUBLE") else \
+            (0.45, 0.45, 0.45) if line.startswith("OFFICE") else (0, 0, 0)
         summary.append((line.strip(), 13 if i == 0 else 11 if heading else 10, colour))
     write_pdf(out / f"{stem}_highlighted.pdf", pages_for_pdf, flagged, summary)
     write_html(out / f"{stem}_report.html", src.name, groups, all_pins, page_info, ocr_text, imgs,
