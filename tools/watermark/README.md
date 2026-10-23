@@ -40,3 +40,43 @@ Results go to `<name>_clean.<ext>` next to the input, or into `--out`.
 
 - Inpainting rebuilds small and thin areas well. A large opaque logo over detailed content (faces, text) will look smeared, because that information is gone.
 - Use it on pictures you own or have the right to edit. Stock and copyrighted watermarks are there to protect someone else's licence.
+
+# batch.py: the batch system (one known watermark, many pictures)
+
+Use this when many pictures carry the same mark, for example every photo in a listing.
+
+**1. Learn the watermark once.** Draw a box around it on one picture. Adding more pictures with the mark sharpens the template, because their different backgrounds average out.
+
+```
+python batch.py learn --name templates/magicbricks --box 116,274,88,20 a.jpg b.jpg c.jpg d.jpg
+```
+
+`templates/magicbricks.png` and `.json` are already learned from four listing photos (320 px wide, mark at the centre).
+
+**2. Clean a folder or a Drive `.zip` download.**
+
+```
+python batch.py clean photos.zip --template magicbricks --out result/
+```
+
+This writes:
+
+- `result/clean/`: the cleaned pictures, same file names
+- `result/clean.zip`: the same, zipped for re-upload
+- `result/report.csv`: one row per picture, with its status, score, placement and method
+- `result/review.jpg`: a zoomed before/after strip of every watermark area, to check at a glance
+
+**How it decides.** It searches near the learned spot (±6 px, 0.7–1.3× size) and gives each picture one of three statuses:
+
+| Status | Meaning |
+|---|---|
+| **found** | The match score is at least 0.33. |
+| **assumed** | The mark is too faint to confirm, which happens on white beds, busy furniture and trees. The picture is cleaned at the place and size used by the closest-shaped picture that was found. Check these in `review.jpg`. Pass `--no-assume` to leave them untouched instead. |
+| **skipped** | Nothing in the batch was found, so it has no placement to borrow. |
+
+**Two removal methods.** `--method auto`, the default, picks one per picture:
+
+- **inpaint** rebuilds the letters from the surrounding picture. It works best on plain floors and walls, but it smears lines that cross the mark, like skirting boards, bed edges and sills.
+- **unblend** reverses the translucent white overlay using the learned letter shape, so anything underneath survives. It can leave a faint ghost of the letters. It's used when the area has lines or texture, or is near-white.
+
+To force one method, pass `--method inpaint` or `--method unblend`. Run it on the whole batch: a picture run on its own has no found pictures to borrow a placement from, so an "assumed" one would be skipped.
