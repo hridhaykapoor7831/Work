@@ -85,7 +85,30 @@ repo), and GitHub pauses schedules in public repositories after 60 days without 
 | Pincode that isn't a known Mumbai pincode, 1 digit from a target (likely misread) | `400041` | REVIEW |
 
 Typo allowance comes from the distinctive part of a name only, so `Road`/`Building` can't carry
-a match. Hits right after "Advocate"/"Sd/-" are tagged as the signatory's address.
+a match.
+
+**Property or office?** Banks, tribunals and lawyers often have offices in Fort, Colaba and Nariman
+Point, so a target address in a notice is not always the property. Each hit is judged from the words
+around it:
+- Property, when the hit is near "Flat / Shop / situated at / C.S. No. / admeasuring / Schedule".
+  A land record like "of Fort Division" always counts as the property.
+- Office, when the hit is near "Bank / Branch / Tribunal / Advocate / Regd. Office / Sd/- / Ltd",
+  or next to a known office in `issuer_addresses` (e.g. "MTNL Building", the debt recovery
+  tribunals' office in Colaba).
+
+`summary.txt` then lists the page and what was found, in three sections:
+
+```
+IN YOUR AREAS (the property is here)
+  Page 13: Colaba Division, Radio Club (Colaba), 400005 (Colaba)
+DOUBLE-CHECK (open the notice: weak match, or can't tell property from office)
+  Page 5: Bombay House (Fort)
+OFFICE ADDRESSES ONLY (a bank, tribunal or lawyer in your area; the property is elsewhere)
+  Page 24: Colaba, 400005 (Colaba)
+```
+
+Nothing is dropped: office-only notices are still listed, last. In the highlighted PDF they are
+boxed in grey.
 
 Add names by editing `targets.json` (no code changes). `exact_only` lists names that look like
 everyday words after OCR errors (`Cooperage` ≈ "co-operative").

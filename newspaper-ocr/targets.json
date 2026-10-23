@@ -406,7 +406,8 @@
     "High Court Bombay",
     "High Court Mumbai",
     "Bombay High Court",
-    "Advocate, High Court"
+    "Advocate, High Court",
+    "The Free Press Journal"
   ],
   "signatory_cues": [
     "advocate",
@@ -589,5 +590,13 @@
     "Kalbadevi",
     "Bakhtawar"
   ],
-  "_exact_only_about": "Names that look like ordinary words after OCR errors (Cooperage ~ co-operative). Matched only when read exactly."
+  "_exact_only_about": "Names that look like ordinary words after OCR errors (Cooperage ~ co-operative). Matched only when read exactly.",
+  "issuer_addresses": [
+    "MTNL Building",
+    "MTNL Bldg",
+    "Bank of India Building",
+    "Free Press House",
+    "Bombay House"
+  ],
+  "_issuer_addresses_about": "Offices that place notices (tribunals, bank head offices, the newspaper itself). A target mention next to one of these is the office's address, not a property. Add more as you spot them."
 }
