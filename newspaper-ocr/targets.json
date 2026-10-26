@@ -588,7 +588,9 @@
     "Girgaon",
     "Girgaum",
     "Kalbadevi",
-    "Bakhtawar"
+    "Bakhtawar",
+    "Free Press Journal Marg",
+    "Free Press House"
   ],
   "_exact_only_about": "Names that look like ordinary words after OCR errors (Cooperage ~ co-operative). Matched only when read exactly.",
   "issuer_addresses": [

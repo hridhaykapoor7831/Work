@@ -308,7 +308,7 @@ def _role(words, i, j, T, term=""):
     """Vote 'property' or 'office' for the place at words[i:j] from the cue words around it."""
     if term.lower().endswith(" division"):  # "C.S. No. 1490 of Fort Division" is a land record
         return "property"
-    near = " ".join(w.skel for w in words[max(0, i - 12):min(len(words), j + 12)])
+    near = "".join(w.skel for w in words[max(0, i - 12):min(len(words), j + 12)])  # skeletons have no spaces
     if any(a in near for a in T.issuer_addresses):
         return "issuer"  # a known office, seen by this reading: overrides other readings' guesses
     plain = [re.sub(r"[^a-z]", "", w.text.lower()) for w in words]
