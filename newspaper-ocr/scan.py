@@ -173,7 +173,13 @@ def _quick_score(img):
     # psm 6 = one plain block with no layout analysis; psm 3 quietly re-orients sideways text
     # itself, which makes 90° and 180° score the same and hides the true orientation
     arr = _normalise(cv2.cvtColor(np.array(img), cv2.COLOR_RGB2GRAY))
-    d = pytesseract.image_to_data(Image.fromarray(arr), config="--oem 1 --psm 6", output_type=pytesseract.Output.DICT)
+    try:
+        # a dense page read the wrong way up can keep Tesseract busy for many minutes; that
+        # orientation would lose anyway
+        d = pytesseract.image_to_data(Image.fromarray(arr), config="--oem 1 --psm 6",
+                                      output_type=pytesseract.Output.DICT, timeout=60)
+    except RuntimeError:
+        return 0, []
     good = [h for h, c, t in zip(d["height"], d["conf"], d["text"]) if len(t.strip()) >= 4 and float(c) > 80]
     return len(good), good
 
