@@ -151,7 +151,10 @@ def render_page(path, index):
     """One page as an RGB image at the photo's own resolution (PDF pages or a plain JPG/PNG)."""
     with fitz.open(path) as doc:
         page = doc[index]
-        native = max((info[2] for info in page.get_images(full=True)), default=0)
+        if doc.is_pdf:
+            native = max((info[2] for info in page.get_images(full=True)), default=0)
+        else:  # a JPG/PNG opened directly has no embedded images to measure; use its own pixels
+            native = fitz.Pixmap(path).width
         # photo pages: the photo's own pixels, no resampling; text-only pages: 300 dpi
         zoom = native / page.rect.width if native else 300 / 72
         zoom = min(zoom, MAX_SIDE / max(page.rect.width, page.rect.height))
@@ -464,6 +467,54 @@ def _notice_region(hit, blocks):
         else hit.region
 
 
+def _line_masks(gray):
+    """Long ruled lines (notice borders, column rules), widened so a slightly tilted photo still lines up."""
+    bw = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 25, 15)
+    h, w = gray.shape
+    hz = cv2.dilate(bw, np.ones((5, 1), np.uint8))
+    hz = cv2.morphologyEx(hz, cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_RECT, (max(40, w // 25), 1)))
+    hz = cv2.dilate(hz, np.ones((31, 1), np.uint8))
+    vt = cv2.dilate(bw, np.ones((1, 5), np.uint8))
+    vt = cv2.morphologyEx(vt, cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_RECT, (1, max(40, h // 25))))
+    vt = cv2.dilate(vt, np.ones((1, 31), np.uint8))
+    return hz > 0, vt > 0
+
+
+def _ruled_box(hz, vt, box, pad=20):
+    """The printed box (or column section) around a hit: its side rules, then the nearest rules above
+    and below that run across nearly the whole width, so a heading's underline doesn't cut it short."""
+    h, w = hz.shape
+    x0, y0, x1, y1 = (int(v) for v in box)
+    cy = (y0 + y1) // 2
+    above = vt[max(0, cy - 300):cy + 1, :].mean(axis=0) > 0.8
+    below = vt[cy:min(h, cy + 300), :].mean(axis=0) > 0.8  # either side: hits near a box's end still count
+    side = above | below
+    left = next((x for x in range(min(w - 1, x0 - pad), -1, -1) if side[x]), 0)
+    right = next((x for x in range(max(0, x1 + pad), w) if side[x]), w - 1)
+    full = hz[:, left + 20:max(left + 21, right - 20)].mean(axis=1) > 0.6
+    top = next((y for y in range(min(h - 1, y0 - pad), -1, -1) if full[y]), 0)
+    bot = next((y for y in range(max(0, y1 + pad), h) if full[y]), h - 1)
+    return left, top, right, bot
+
+
+def notice_regions(hits, image_path):
+    """Give each hit on one page the outline of the printed notice it sits in."""
+    gray = cv2.cvtColor(np.array(Image.open(image_path).convert("RGB")), cv2.COLOR_RGB2GRAY)
+    hz, vt = _line_masks(gray)
+    h, w = gray.shape
+    for hit in hits:
+        b = _ruled_box(hz, vt, hit.box)
+        bw, bh = b[2] - b[0], b[3] - b[1]
+        if bw * bh > 0.6 * w * h or bh < 2 * (hit.box[3] - hit.box[1]):
+            # no usable top/bottom rules: the hit's column, a few lines above and below, so that
+            # hits close together in one notice still end up grouped as one
+            line_h = hit.box[3] - hit.box[1]
+            b = (b[0], max(0, hit.box[1] - 8 * line_h), b[2], min(h, hit.box[3] + 8 * line_h))
+            if b[2] - b[0] > 0.6 * w:  # no side rules either
+                continue
+        hit.region = b
+
+
 def group_notices(hits):
     """Cluster flagged hits that sit in the same printed notice (overlapping regions)."""
     groups = []
@@ -551,18 +602,26 @@ def group_role(g):
     return "property" if "property" in roles else "unclear" if "unclear" in roles else "office"
 
 
+SECTIONS = ("IN YOUR AREAS (the property is here)",
+            "DOUBLE-CHECK (open the notice: weak match, or can't tell property from office)",
+            "OFFICE ADDRESSES ONLY (a bank, tribunal or lawyer in your area; the property is elsewhere)")
+
+
+def section_of(g):
+    if group_role(g) == "office":
+        return 2
+    return 0 if min(TIERS.index(h.tier) for h in g) == 0 and group_role(g) == "property" else 1
+
+
 def plain_summary(src_name, groups, page_info):
     """Page number + what was found, nothing else. Groups arrive sorted by certainty."""
-    sure = [g for g in groups if min(TIERS.index(h.tier) for h in g) == 0 and group_role(g) == "property"]
-    office = [g for g in groups if group_role(g) == "office"]
-    check = [g for g in groups if g not in sure and g not in office]
+    sure = [g for g in groups if section_of(g) == 0]
+    office = [g for g in groups if section_of(g) == 2]
+    check = [g for g in groups if section_of(g) == 1]
     lines = [f"{src_name}: {len(sure)} notice(s) in your areas, {len(check)} to double-check, "
              f"{len(office)} office address(es) only"]
-    for title, gs, keep in (
-            ("IN YOUR AREAS (the property is here)", sure, ("HIGH", "MEDIUM")),
-            ("DOUBLE-CHECK (open the notice: weak match, or can't tell property from office)", check, TIERS),
-            ("OFFICE ADDRESSES ONLY (a bank, tribunal or lawyer in your area; the property is elsewhere)",
-             office, TIERS)):
+    for title, gs, keep in ((SECTIONS[0], sure, ("HIGH", "MEDIUM")), (SECTIONS[1], check, TIERS),
+                            (SECTIONS[2], office, TIERS)):
         if not gs:
             continue
         lines += ["", title]
@@ -574,6 +633,8 @@ def plain_summary(src_name, groups, page_info):
     low = [i for i, info in enumerate(page_info, 1) if info[3] < 70]
     if low:
         lines += ["", f"Could not read clearly, look yourself: page(s) {', '.join(map(str, low))}"]
+    if groups:
+        lines += ["", f"A picture of each notice, in this order: {Path(src_name).stem}_NOTICES.pdf"]
     return lines
 
 
@@ -581,6 +642,52 @@ def _readers(h):
     ocr = len(h.passes - {VISION})
     parts = [f"{ocr} OCR pass{'es' if ocr > 1 else ''}"] if ocr else []
     return " + ".join(parts + (["Claude"] if VISION in h.passes else []))
+
+
+def write_notices_pdf(path, src_name, groups, imgs):
+    """One page per notice: what was found and where, then a picture of the printed notice itself."""
+    doc = fitz.open()
+    width, margin = 595, 20
+    cover = doc.new_page(width=width, height=842)
+    lines = [(f"Notices found in {src_name}", 16)] + [
+        (f"{SECTIONS[i].split(' (')[0]}: {sum(1 for g in groups if section_of(g) == i)}", 12) for i in range(3)] + [
+        ("", 8), ("One page per notice, in that order. Your matches are boxed:", 11),
+        ("red = in your areas, orange = double-check, grey = an office address only.", 11)]
+    y = 60
+    for text, size in lines:
+        cover.insert_text((margin + 10, y), text, fontsize=size)
+        y += size + 10
+    if not groups:
+        cover.insert_text((margin + 10, y + 10), "No notices mention your areas.", fontsize=12)
+    for g in sorted(groups, key=lambda g: (section_of(g), g[0].page)):
+        sec = section_of(g)
+        im = Image.open(imgs[g[0].page - 1]).convert("RGB")
+        r = _union([h.region for h in g] + [b for h in g for b in h.boxes])
+        x0, y0 = max(0, int(r[0]) - 10), max(0, int(r[1]) - 10)
+        crop = im.crop((x0, y0, min(im.width, int(r[2]) + 10), min(im.height, int(r[3]) + 10)))
+        draw = ImageDraw.Draw(crop)
+        colour = ("#d91414", "#f28000", "#808080")[sec]
+        for h in g:
+            for b in h.boxes:
+                draw.rectangle((b[0] - x0 - 5, b[1] - y0 - 5, b[2] - x0 + 5, b[3] - y0 + 5), outline=colour,
+                               width=max(4, crop.width // 300))
+        crop.thumbnail((1600, 6000))
+        buf = io.BytesIO()
+        crop.save(buf, "JPEG", quality=80)
+        img_w = width - 2 * margin
+        img_h = img_w * crop.height / crop.width
+        found = ", ".join(dict.fromkeys(_label(h) for h in sorted(g, key=lambda h: TIERS.index(h.tier))))
+        header = [(SECTIONS[sec].split(" (")[0] + f" · page {g[0].page} of the PDF", 14),
+                  (found, 11)]
+        page = doc.new_page(width=width, height=img_h + 80 + margin)
+        y = margin + 12
+        rgb = (TIER_RGB["HIGH"], TIER_RGB["MEDIUM"], (0.4, 0.4, 0.4))[sec]
+        for text, size in header:
+            for chunk in [text[k:k + 95] for k in range(0, len(text), 95)][:2]:
+                page.insert_text((margin, y), chunk, fontsize=size, color=rgb)
+                y += size + 5
+        page.insert_image(fitz.Rect(margin, 70, margin + img_w, 70 + img_h), stream=buf.getvalue())
+    doc.save(path, garbage=3, deflate=True)
 
 
 def write_html(path, src_name, groups, all_pins, page_info, ocr_text, imgs, claude_status, vision_notices):
@@ -781,6 +888,8 @@ def main():
     for h in hits:
         h.region = _notice_region(h, layouts[h.page - 1])
     flagged = [h for h in hits if h.tier]
+    for pno in sorted({h.page for h in flagged}):
+        notice_regions([h for h in flagged if h.page == pno], imgs[pno - 1])
     all_pins = {}
     for h in hits:
         if h.kind == "pincode":
@@ -807,6 +916,7 @@ def main():
             (0.45, 0.45, 0.45) if line.startswith("OFFICE") else (0, 0, 0)
         summary.append((line.strip(), 13 if i == 0 else 11 if heading else 10, colour))
     write_pdf(out / f"{stem}_highlighted.pdf", pages_for_pdf, flagged, summary)
+    write_notices_pdf(out / f"{stem}_NOTICES.pdf", src.name, groups, imgs)
     write_html(out / f"{stem}_report.html", src.name, groups, all_pins, page_info, ocr_text, imgs,
                claude_status, vision_notices)
     lines = plain_summary(src.name, groups, page_info)

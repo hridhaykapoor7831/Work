@@ -33,9 +33,10 @@ def main():
     msg = EmailMessage()
     msg["Subject"] = f"{subject}: {name}"
     msg["From"], msg["To"] = user, to
-    msg.set_content(summary + "\nFull report and highlighted PDF are in the Results folder on Drive.\n")
+    msg.set_content(summary + "\nA picture of each notice is in the attached NOTICES PDF (also in the Results "
+                    "folder on Drive).\n")
     used = 0
-    for pattern, kind in (("*_report.html", ("text", "html")), ("*_highlighted.pdf", ("application", "pdf"))):
+    for pattern, kind in (("*_NOTICES.pdf", ("application", "pdf")), ("*_highlighted.pdf", ("application", "pdf"))):
         for f in folder.glob(pattern):
             size = f.stat().st_size
             if used + size <= ATTACH_LIMIT:
