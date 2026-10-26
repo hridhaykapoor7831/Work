@@ -77,6 +77,8 @@ class Hit:
     @property
     def role(self):
         """Is this place the property the notice is about, or the address of whoever placed it?"""
+        if "issuer" in self.votes:  # one reading saw a known office address right beside it
+            return "office"
         p, o = self.votes.count("property"), self.votes.count("office")
         return "property" if p and p >= o else "office" if o > p else "unclear"
 
@@ -302,7 +304,7 @@ def _role(words, i, j, T, term=""):
         return "property"
     near = " ".join(w.skel for w in words[max(0, i - 12):min(len(words), j + 12)])
     if any(a in near for a in T.issuer_addresses):
-        return "office"
+        return "issuer"  # a known office, seen by this reading: overrides other readings' guesses
     plain = [re.sub(r"[^a-z]", "", w.text.lower()) for w in words]
     p = o = 0.0
     for k in range(max(0, i - 20), min(len(plain), j + 6)):
