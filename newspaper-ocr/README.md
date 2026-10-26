@@ -11,6 +11,7 @@ Writes `Oct_21_scan/` next to the PDF:
 
 | File | What it is |
 |---|---|
+| `Oct_21_NOTICES.pdf` | **Start here.** One page per notice found: a picture of the printed notice with your matches boxed, the page number and the section (in your areas / double-check / office address only). Opens directly in Google Drive. |
 | `Oct_21_highlighted.pdf` | Summary page, then every page turned upright with hits boxed (red HIGH, orange MEDIUM, blue REVIEW). Text is searchable (Ctrl+F). |
 | `Oct_21_report.html` | One card per notice: what matched, a cropped picture, the surrounding text. Also: every pincode read, every notice Claude read (if on), page quality. |
 | `Oct_21_hits.csv` | One row per hit, for spreadsheets. |

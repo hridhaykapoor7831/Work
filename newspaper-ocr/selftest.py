@@ -94,7 +94,14 @@ def run_scan(pdf, out, claude):
     vision.read_page = fake_claude
     sys.argv = ["scan.py", str(pdf), "-o", str(out), "--jobs", "1", "--claude", "on" if claude else "off"]
     scan.main()
-    return list(csv.DictReader(open(Path(out) / "sample_hits.csv")))
+    rows = list(csv.DictReader(open(Path(out) / "sample_hits.csv")))
+    # one picture page per notice found, after a cover page
+    pages = scan.fitz.open(Path(out) / "sample_NOTICES.pdf").page_count
+    notices = len({r["notice"] for r in rows})
+    print(f"{'ok ' if pages == notices + 1 else 'FAIL'} NOTICES.pdf has {pages - 1} notice page(s) for {notices} notice(s)")
+    if pages != notices + 1:
+        sys.exit(1)
+    return rows
 
 
 def main():
