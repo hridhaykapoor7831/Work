@@ -28,10 +28,15 @@ from disk, so file size is not a problem.
 ```
 NoticeScanner/
   Inbox/       ← drop PDFs (or JPG/PNG photos) here
-  Results/     ← "2026-10-22 Oct_22/": highlighted PDF, report, CSV, summary
+  Results/     ← one file per newspaper: "2026-10-27 <name> - NOTICES.pdf"
   Processed/   ← originals move here once scanned
   Failed/      ← only if a scan crashed
 ```
+
+The NOTICES PDF is the only thing to read: page 1 lists every notice found (page number and
+verdict: IN YOUR AREAS / DOUBLE-CHECK / NOT YOUR AREA), then each notice gets a page with the
+verdict, a picture of the notice with the matches boxed, and the newspaper page with that notice
+outlined.
 
 One-time setup (about 10 minutes):
 

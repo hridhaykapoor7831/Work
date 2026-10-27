@@ -652,49 +652,77 @@ def _readers(h):
     return " + ".join(parts + (["Claude"] if VISION in h.passes else []))
 
 
+VERDICTS = ("IN YOUR AREAS", "DOUBLE-CHECK", "NOT YOUR AREA - only an office address")
+VERDICT_RGB = ((0.8, 0.05, 0.05), (0.85, 0.45, 0.0), (0.4, 0.4, 0.4))
+VERDICT_HEX = ("#cc0d0d", "#d97300", "#666666")
+
+
 def write_notices_pdf(path, src_name, groups, imgs):
-    """One page per notice: what was found and where, then a picture of the printed notice itself."""
+    """The one file the owner reads: a list of the notices, then one page per notice with the
+    verdict, the notice itself, and the newspaper page with that notice outlined."""
     doc = fitz.open()
-    width, margin = 595, 20
-    cover = doc.new_page(width=width, height=842)
-    lines = [(f"Notices found in {src_name}", 16)] + [
-        (f"{SECTIONS[i].split(' (')[0]}: {sum(1 for g in groups if section_of(g) == i)}", 12) for i in range(3)] + [
-        ("", 8), ("One page per notice, in that order. Your matches are boxed:", 11),
-        ("red = in your areas, orange = double-check, grey = an office address only.", 11)]
-    y = 60
-    for text, size in lines:
-        cover.insert_text((margin + 10, y), text, fontsize=size)
-        y += size + 10
-    if not groups:
-        cover.insert_text((margin + 10, y + 10), "No notices mention your areas.", fontsize=12)
-    for g in sorted(groups, key=lambda g: (section_of(g), g[0].page)):
+    W, M = 595, 24
+    ordered = sorted(groups, key=lambda g: (section_of(g), g[0].page))
+    found = [", ".join(dict.fromkeys(_label(h) for h in sorted(g, key=lambda h: TIERS.index(h.tier))))
+             for g in ordered]
+
+    # list page: every notice in one place
+    page = doc.new_page(width=W, height=842)
+    y = 50
+    page.insert_text((M, y), src_name, fontsize=16)
+    y += 26
+    counts = [sum(1 for g in ordered if section_of(g) == i) for i in range(3)]
+    page.insert_text((M, y), f"In your areas: {counts[0]}    Double-check: {counts[1]}    "
+                             f"Not your area: {counts[2]}", fontsize=11)
+    y += 30
+    if not ordered:
+        page.insert_text((M, y), "No notice in this paper mentions your areas.", fontsize=13)
+    for n, (g, what) in enumerate(zip(ordered, found), 1):
+        if y > 800:
+            page = doc.new_page(width=W, height=842)
+            y = 50
+        sec = section_of(g)
+        line = f"{n}. Page {g[0].page}  {VERDICTS[sec]}  -  {what}"
+        for k, chunk in enumerate([line[i:i + 90] for i in range(0, len(line), 90)][:2]):
+            page.insert_text((M + (14 if k else 0), y), chunk, fontsize=10, color=VERDICT_RGB[sec])
+            y += 14
+        y += 4
+
+    # one page per notice
+    for n, (g, what) in enumerate(zip(ordered, found), 1):
         sec = section_of(g)
         im = Image.open(imgs[g[0].page - 1]).convert("RGB")
         r = _union([h.region for h in g] + [b for h in g for b in h.boxes])
-        x0, y0 = max(0, int(r[0]) - 10), max(0, int(r[1]) - 10)
-        crop = im.crop((x0, y0, min(im.width, int(r[2]) + 10), min(im.height, int(r[3]) + 10)))
+        box = (max(0, int(r[0]) - 10), max(0, int(r[1]) - 10), min(im.width, int(r[2]) + 10),
+               min(im.height, int(r[3]) + 10))
+        crop = im.crop(box)
         draw = ImageDraw.Draw(crop)
-        colour = ("#d91414", "#f28000", "#808080")[sec]
         for h in g:
             for b in h.boxes:
-                draw.rectangle((b[0] - x0 - 5, b[1] - y0 - 5, b[2] - x0 + 5, b[3] - y0 + 5), outline=colour,
-                               width=max(4, crop.width // 300))
-        crop.thumbnail((1600, 6000))
-        buf = io.BytesIO()
-        crop.save(buf, "JPEG", quality=80)
-        img_w = width - 2 * margin
-        img_h = img_w * crop.height / crop.width
-        found = ", ".join(dict.fromkeys(_label(h) for h in sorted(g, key=lambda h: TIERS.index(h.tier))))
-        header = [(SECTIONS[sec].split(" (")[0] + f" · page {g[0].page} of the PDF", 14),
-                  (found, 11)]
-        page = doc.new_page(width=width, height=img_h + 80 + margin)
-        y = margin + 12
-        rgb = (TIER_RGB["HIGH"], TIER_RGB["MEDIUM"], (0.4, 0.4, 0.4))[sec]
-        for text, size in header:
-            for chunk in [text[k:k + 95] for k in range(0, len(text), 95)][:2]:
-                page.insert_text((margin, y), chunk, fontsize=size, color=rgb)
-                y += size + 5
-        page.insert_image(fitz.Rect(margin, 70, margin + img_w, 70 + img_h), stream=buf.getvalue())
+                draw.rectangle((b[0] - box[0] - 5, b[1] - box[1] - 5, b[2] - box[0] + 5, b[3] - box[1] + 5),
+                               outline=VERDICT_HEX[sec], width=max(4, crop.width // 250))
+        crop.thumbnail((1600, 5000))
+        # the whole newspaper page, the notice outlined, so you can see where it came from
+        whole = im.copy()
+        ImageDraw.Draw(whole).rectangle(box, outline=VERDICT_HEX[sec], width=max(8, im.width // 150))
+        whole.thumbnail((900, 1200))
+
+        crop_w = W - 2 * M
+        crop_h = crop_w * crop.height / crop.width
+        whole_w = 250
+        whole_h = whole_w * whole.height / whole.width
+        page = doc.new_page(width=W, height=110 + crop_h + 40 + whole_h + M)
+        page.insert_text((M, 36), f"{n}. {VERDICTS[sec]}", fontsize=18, color=VERDICT_RGB[sec])
+        page.insert_text((M, 60), f"Page {g[0].page} of {src_name}", fontsize=12)
+        page.insert_text((M, 80), what[:95], fontsize=10)
+        if len(what) > 95:
+            page.insert_text((M, 94), what[95:190], fontsize=10)
+        for pic, rect in ((crop, fitz.Rect(M, 110, M + crop_w, 110 + crop_h)),
+                          (whole, fitz.Rect(M, 110 + crop_h + 40, M + whole_w, 110 + crop_h + 40 + whole_h))):
+            buf = io.BytesIO()
+            pic.save(buf, "JPEG", quality=80)
+            page.insert_image(rect, stream=buf.getvalue())
+        page.insert_text((M, 110 + crop_h + 28), f"Where it is on page {g[0].page}:", fontsize=11)
     doc.save(path, garbage=3, deflate=True)
 
 
@@ -924,7 +952,7 @@ def main():
             (0.45, 0.45, 0.45) if line.startswith("OFFICE") else (0, 0, 0)
         summary.append((line.strip(), 13 if i == 0 else 11 if heading else 10, colour))
     write_pdf(out / f"{stem}_highlighted.pdf", pages_for_pdf, flagged, summary)
-    write_notices_pdf(out / f"{stem}_NOTICES.pdf", src.name, groups, imgs)
+    write_notices_pdf(out / f"{stem}_NOTICES.pdf", src.name, groups, imgs)  # the file the owner reads
     write_html(out / f"{stem}_report.html", src.name, groups, all_pins, page_info, ocr_text, imgs,
                claude_status, vision_notices)
     lines = plain_summary(src.name, groups, page_info)
