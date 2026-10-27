@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Scan every PDF/photo waiting in $NOTICE_REMOTE/Inbox (any rclone remote, e.g. gdrive:NoticeScanner).
-#   results   -> $NOTICE_REMOTE/Results/<date> <name>/
+#   results   -> $NOTICE_REMOTE/Results/<date> <name> - NOTICES.pdf
 #   originals -> $NOTICE_REMOTE/Processed/  (or Failed/ if the scan crashed)
 # Hit details stay out of stdout on purpose: CI logs of a public repo are public.
 set -euo pipefail
@@ -26,10 +26,11 @@ for f in "${FILES[@]}"; do
   rclone copy "$REMOTE/Inbox/$f" "$WORK/in/"
   if python3 "$HERE/scan.py" "$WORK/in/$f" -o "$WORK/out/$name" > "$WORK/scan.log"; then
     # scan.py names its outputs after the input file; prefix the date so daily uploads never collide
-    rclone copy "$WORK/out/$name" "$REMOTE/Results/$name"
+    # one file per newspaper: the notices with their verdicts, pictures and page locations
+    rclone copyto "$WORK/out/$name/${stem}_NOTICES.pdf" "$REMOTE/Results/$name - NOTICES.pdf"
     rclone moveto "$REMOTE/Inbox/$f" "$REMOTE/Processed/$stamp $f"
     python3 "$HERE/notify.py" "$WORK/out/$name" "$stem" || echo "email not sent"
-    echo "done: results in Results/$name"
+    echo "done: Results/$name - NOTICES.pdf"
   else
     rclone moveto "$REMOTE/Inbox/$f" "$REMOTE/Failed/$stamp $f"
     echo "::error::scan failed for $f (moved to Failed/)"
