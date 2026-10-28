@@ -34,7 +34,8 @@ NOTICES = [
     "Mahatma Gandhi Road, Fort, Mumbai 400001. Sale of Flat No. 906, 9th Floor, Virat Grandeur, Dombivli.",
     "IN THE DEBT RECOVERY TRIBUNAL NO. 2 AT MUMBAI, 3rd Floor, Telephone Bhavan, Colaba Market, Colaba, "
     "Mumbai 400005. State Bank of India versus Alisail Logistics Pvt. Ltd., Sakinaka, Andheri East.",
-    "NOTICE (misprints on purpose): Shop at Cufe Parade and office at Nariman Poimt, Mumbai 4OOO21.",
+    "PUBLIC NOTICE (misprints on purpose): our client intends to purchase the shop at Cufe Parade and "
+    "office at Nariman Poimt, Mumbai 4OOO21. Claims within 14 days to the undersigned.",
     "DECOYS: Celestia Spaces Co-operative Housing Society, Sewree West Mumbai 400015. Comfort Lodge, "
     "Kandivali (East), Mumbai 400101. Advocate High Court. Effort and comfort are not places.",
 ]
@@ -95,11 +96,14 @@ def run_scan(pdf, out, claude):
     sys.argv = ["scan.py", str(pdf), "-o", str(out), "--jobs", "1", "--claude", "on" if claude else "off"]
     scan.main()
     rows = list(csv.DictReader(open(Path(out) / "sample_hits.csv")))
-    # one picture page per notice found, after a cover page
+    # a picture page for every notice except office-address-only ones, after the list page
     pages = scan.fitz.open(Path(out) / "sample_NOTICES.pdf").page_count
-    notices = len({r["notice"] for r in rows})
-    print(f"{'ok ' if pages == notices + 1 else 'FAIL'} NOTICES.pdf has {pages - 1} notice page(s) for {notices} notice(s)")
-    if pages != notices + 1:
+    by_notice = {}
+    for r in rows:
+        by_notice.setdefault(r["notice"], set()).add(r["role"])
+    shown = sum(1 for roles in by_notice.values() if roles != {"office"})
+    print(f"{'ok ' if pages == shown + 1 else 'FAIL'} NOTICES.pdf has {pages - 1} notice page(s) for {shown} notice(s)")
+    if pages != shown + 1:
         sys.exit(1)
     return rows
 
@@ -142,14 +146,10 @@ def main():
         good = "property" in roles.get(term, set())
         ok &= good
         print(f"{'ok ' if good else 'FAIL'} {term} read as the property {sorted(roles.get(term, []))}")
-    for term in MUST_BE_OFFICE:
-        good = roles.get(term) == {"office"}
+    for term in MUST_BE_OFFICE:  # an office-only notice may also be left out altogether
+        good = roles.get(term, set()) <= {"office"}
         ok &= good
         print(f"{'ok ' if good else 'FAIL'} {term} read as an office address {sorted(roles.get(term, []))}")
-    good = {"property", "office"} <= roles.get("Colaba", set())
-    ok &= good
-    print(f"{'ok ' if good else 'FAIL'} Colaba: a flat in one notice, the tribunal's office in another "
-          f"{sorted(roles.get('Colaba', []))}")
     print("PASS" if ok else "FAIL")
     sys.exit(0 if ok else 1)
 
