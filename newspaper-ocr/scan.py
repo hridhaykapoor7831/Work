@@ -241,9 +241,16 @@ def ocr_passes(img, fast=False, text_h=None):
     return out
 
 
+PASS_TIMEOUT = 600  # s; a normal pass takes under a minute, one hung pass stalled a whole edition
+
+
 def _ocr(arr, psm, scale=1.0):
-    d = pytesseract.image_to_data(Image.fromarray(arr), config=f"--oem 1 --psm {psm} -c preserve_interword_spaces=1",
-                                  output_type=pytesseract.Output.DICT)
+    try:
+        d = pytesseract.image_to_data(Image.fromarray(arr), config=f"--oem 1 --psm {psm} -c preserve_interword_spaces=1",
+                                      output_type=pytesseract.Output.DICT, timeout=PASS_TIMEOUT)
+    except RuntimeError:  # the other passes still read the page
+        print(f"an OCR pass (psm {psm}) timed out after {PASS_TIMEOUT}s; skipped", file=sys.stderr)
+        return []
     blocks = {}
     for i, text in enumerate(d["text"]):
         text = text.strip()
