@@ -131,7 +131,7 @@ class Targets:
                     allowed = 2
                 else:
                     allowed = 3
-                loose = allowed + 1 if allowed and len(core) >= 9 else allowed
+                loose = allowed  # looser matching flagged "maintained" as Marine Lines; not worth the noise
                 self.terms.append(dict(name=name, area=group["area"], tier=group["tier"], skel=sk,
                                        ntok=len(toks), allowed=allowed, loose=loose,
                                        generic=name.lower() in generic))
@@ -312,6 +312,13 @@ def _role(words, i, j, T, term=""):
     if any(a in near for a in T.issuer_addresses):
         return "issuer"  # a known office, seen by this reading: overrides other readings' guesses
     plain = [re.sub(r"[^a-z]", "", w.text.lower()) for w in words]
+    # "Advocates & Solicitors, 410 Gundecha Chambers, Nagindas Master Road, Fort" / "residing at ...":
+    # a strong office word shortly before, with no property wording in between, settles it
+    for k in range(i - 1, max(-1, i - 13), -1):
+        if plain[k] in ("schedule", "situated", "situate", "bearing", "property", "premises", "land"):
+            break
+        if plain[k] in STRONG_OFFICE_CUES:
+            return "issuer"
     p = o = 0.0
     for k in range(max(0, i - 20), min(len(plain), j + 6)):
         if i <= k < j or not plain[k]:
@@ -371,6 +378,8 @@ def match_block(words, page_no, pass_name, T, page_area):
                         continue
                     if abs(L - tl) > t["loose"]:
                         continue
+                    if t["ntok"] == 1 and len(t["skel"]) <= 6 and j > i:
+                        continue  # short one-word names must be one whole word: "for t" is not Fort
                     d = Levenshtein.distance(acc, t["skel"], score_cutoff=t["loose"])
                     if d <= t["loose"]:
                         cands.append((d, i, j + 1, t))
@@ -410,7 +419,7 @@ def match_block(words, page_no, pass_name, T, page_area):
             after = " ".join(w.skel for w in words[j:j + 8])
             pins_after = re.sub(r"\D", "", " ".join(w.text for w in words[j:j + 8]).translate(_DIGITISE))
             if not ("mumbal" in after or "bombay" in after or any(p in pins_after for p in T.target_pins)):
-                tier, note = "MEDIUM", "exact, but a common word – no Mumbai/pincode right after"
+                continue  # a common word ("Fort", "Esplanade") with no Mumbai/pincode after it
         hits.append(Hit(page_no, "name", t["name"], t["area"], tier, " ".join(w.text for w in words[i:j]),
                         _union(w.box for w in words[i:j]), d, note, {pass_name},
                         _context(words, i, j), page_area(words), _is_signatory(words, i, T.cues),
@@ -521,6 +530,23 @@ def notice_regions(hits, image_path):
             if b[2] - b[0] > 0.6 * w:  # no side rules either
                 continue
         hit.region = b
+
+
+NOTICE_WORDS = set("""notice notices hereby schedule auction possession summons tribunal court claim claims
+objection objections advocate advocates solicitor solicitors petition sale mortgage borrower borrowers society
+flat property heirs deceased lost certificate owner owners purchase title objector demand land undersigned
+bearing situated situate admeasuring cts survey eauction""".split())
+
+
+def is_notice(g, page_words):
+    """Is this group's printed block a notice (not news, a results table or an ad)? At least
+    four different notice words inside the block."""
+    if any(h.passes == {VISION} for h in g):
+        return True  # Claude read it as a notice already
+    r = _union([h.region for h in g] + [b for h in g for b in h.boxes])
+    inside = {re.sub(r"[^a-z]", "", w.text.lower()) for w in page_words
+              if r[0] <= (w.box[0] + w.box[2]) / 2 <= r[2] and r[1] <= (w.box[1] + w.box[3]) / 2 <= r[3]}
+    return len(inside & NOTICE_WORDS) >= 4
 
 
 def group_notices(hits):
@@ -662,7 +688,8 @@ def write_notices_pdf(path, src_name, groups, imgs):
     verdict, the notice itself, and the newspaper page with that notice outlined."""
     doc = fitz.open()
     W, M = 595, 24
-    ordered = sorted(groups, key=lambda g: (section_of(g), g[0].page))
+    offices = sorted((g for g in groups if section_of(g) == 2), key=lambda g: g[0].page)
+    ordered = sorted((g for g in groups if section_of(g) < 2), key=lambda g: (section_of(g), g[0].page))
     found = [", ".join(dict.fromkeys(_label(h) for h in sorted(g, key=lambda h: TIERS.index(h.tier))))
              for g in ordered]
 
@@ -671,12 +698,12 @@ def write_notices_pdf(path, src_name, groups, imgs):
     y = 50
     page.insert_text((M, y), src_name, fontsize=16)
     y += 26
-    counts = [sum(1 for g in ordered if section_of(g) == i) for i in range(3)]
-    page.insert_text((M, y), f"In your areas: {counts[0]}    Double-check: {counts[1]}    "
-                             f"Not your area: {counts[2]}", fontsize=11)
+    counts = [sum(1 for g in ordered if section_of(g) == i) for i in range(2)]
+    page.insert_text((M, y), f"In your areas: {counts[0]}    Double-check: {counts[1]}", fontsize=12)
     y += 30
     if not ordered:
-        page.insert_text((M, y), "No notice in this paper mentions your areas.", fontsize=13)
+        page.insert_text((M, y), "No notice in this paper is about a property in your areas.", fontsize=13)
+        y += 24
     for n, (g, what) in enumerate(zip(ordered, found), 1):
         if y > 800:
             page = doc.new_page(width=W, height=842)
@@ -688,11 +715,25 @@ def write_notices_pdf(path, src_name, groups, imgs):
             y += 14
         y += 4
 
+    if offices:  # seen, but only a bank/tribunal/lawyer office is in your area: one line, no pages
+        line = ("Not your area (only an office address in your area): page " +
+                ", ".join(str(g[0].page) for g in offices))
+        y += 10
+        for chunk in [line[i:i + 95] for i in range(0, len(line), 95)]:
+            page.insert_text((M, y), chunk, fontsize=9, color=VERDICT_RGB[2])
+            y += 13
+
     # one page per notice
     for n, (g, what) in enumerate(zip(ordered, found), 1):
         sec = section_of(g)
         im = Image.open(imgs[g[0].page - 1]).convert("RGB")
         r = _union([h.region for h in g] + [b for h in g for b in h.boxes])
+        if (r[2] - r[0]) * (r[3] - r[1]) > 0.3 * im.width * im.height:
+            # no notice border found: show the area around the matches, not the whole page
+            hb = _union(b for h in g for b in h.boxes)
+            cx, cy = (hb[0] + hb[2]) / 2, (hb[1] + hb[3]) / 2
+            r = (cx - 0.22 * im.width, min(hb[1], cy - 0.18 * im.height),
+                 cx + 0.22 * im.width, max(hb[3], cy + 0.18 * im.height))
         box = (max(0, int(r[0]) - 10), max(0, int(r[1]) - 10), min(im.width, int(r[2]) + 10),
                min(im.height, int(r[3]) + 10))
         crop = im.crop(box)
@@ -932,6 +973,9 @@ def main():
             key = (h.term, h.page)
             all_pins[key] = (h.area, all_pins.get(key, ("", False))[1] or bool(h.tier))
     groups = group_notices(flagged)
+    # judge each notice as a whole: drop neighbour-only hits and anything that isn't a notice
+    groups = [[h for h in g if h.tier != "REVIEW"] for g in groups]
+    groups = [g for g in groups if g and is_notice(g, pages_for_pdf[g[0].page - 1][1])]
 
     stem = src.stem
     with open(out / f"{stem}_hits.csv", "w", newline="") as f:
