@@ -51,7 +51,7 @@ jobs:
             echo "::error::$msg"; exit 1
           fi
           printf '%s\n' "$RCLONE_CONF" > "$RCLONE_CONFIG"
-          sudo apt-get install -y -qq rclone > /dev/null
+          curl -fsSL --retry 3 -o /tmp/rclone.zip https://downloads.rclone.org/rclone-current-linux-amd64.zip && unzip -qj /tmp/rclone.zip "*/rclone" -d /tmp/rc && sudo install /tmp/rc/rclone /usr/local/bin/ || sudo apt-get install -y -qq rclone > /dev/null
           echo "ready=true" >> "$GITHUB_OUTPUT"
 
       - name: Pick the newspaper
@@ -120,7 +120,7 @@ jobs:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         run: |
           printf '%s\n' "$RCLONE_CONF" > "$RCLONE_CONFIG"
-          sudo apt-get install -y -qq rclone > /dev/null
+          curl -fsSL --retry 3 -o /tmp/rclone.zip https://downloads.rclone.org/rclone-current-linux-amd64.zip && unzip -qj /tmp/rclone.zip "*/rclone" -d /tmp/rc && sudo install /tmp/rc/rclone /usr/local/bin/ || sudo apt-get install -y -qq rclone > /dev/null
 
       - name: A scanner failed
         if: needs.work.result != 'success'

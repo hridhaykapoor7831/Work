@@ -641,14 +641,17 @@ def write_pdf(path, pages, flagged, summary_lines):
         buf = io.BytesIO()
         small.save(buf, "JPEG", quality=78)
         page.insert_image(page.rect, stream=buf.getvalue())
-        # invisible OCR text so the PDF is searchable
+        # invisible OCR text so the PDF is searchable; one TextWriter per page (inserting word by
+        # word re-scans the page's growing content each time: 5+ minutes on a full newspaper)
+        tw = fitz.TextWriter(page.rect)
         for wd in words:
             x0, y0, x1, y1 = (v * scale for v in wd.box)
             fs = max(3, (y1 - y0) * 0.85)
             try:
-                page.insert_text((x0, y1 - (y1 - y0) * 0.15), wd.text, fontsize=fs, render_mode=3)
+                tw.append((x0, y1 - (y1 - y0) * 0.15), wd.text, fontsize=fs)
             except Exception:
                 pass
+        tw.write_text(page, render_mode=3)
         for hit in (x for x in flagged if x.page == pno):
             office = hit.role == "office"
             rgb = (0.5, 0.5, 0.5) if office else TIER_RGB[hit.tier]
@@ -985,9 +988,11 @@ EXTRAS = "extras"
 
 def all_units(n_pages, fast):
     passes = FAST_PASSES if fast else PASSES
-    # weight ~ pixels OCR'd (scale squared), so heavy passes are spread evenly
+    # weight ~ time: pixels OCR'd (scale squared), and the sparse-text pass (psm 11) takes about 2.5x
+    # as long as the others; heavy units start first and their machines get less else to do
     return [unit for i in range(n_pages)
-            for unit in [((i, EXTRAS), 0.5)] + [((i, j), rel * rel) for j, (_, rel, _) in enumerate(passes)]]
+            for unit in [((i, EXTRAS), 0.5)] + [((i, j), rel * rel * (2.5 if psm == 11 else 1))
+                                                for j, (_, rel, psm) in enumerate(passes)]]
 
 
 def shard_units(n_pages, fast, k, n):
