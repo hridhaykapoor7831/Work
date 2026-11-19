@@ -18,17 +18,27 @@ Writes `Oct_21_scan/` next to the PDF:
 | `Oct_21_ocr.txt` | Raw OCR text. |
 | `Oct_21_summary.txt` | A few lines: notices hit and their terms (the email body). |
 
-## Daily automatic scans (no Claude usage, any PDF size)
+## Daily use: about 10 minutes from photo to result
 
-You drop the PDF into a Google Drive folder from your phone or computer. Within the hour, a
-GitHub Actions job (free compute, not Claude) scans it and puts the results next to it in Drive.
-It can also email you. Drive has no 30 MB upload limit, and pages are scanned one at a time
-from disk, so file size is not a problem.
+1. **Scan the paper with your phone straight into Drive.** Google Drive app → **+** → **Scan**
+   (on iPhone: the camera icon). Shoot every page, tap Save, choose folder
+   `NoticeScanner/Inbox`. That's it: no computer, no PDF step, no GitHub.
+   (Sending photos to `Inbox` from the gallery also works: all photos there become one newspaper,
+   in camera order, once none has arrived for 2 minutes.)
+2. **Wait for the result.** Within a minute the Drive trigger (`drive_trigger.gs`) starts the scan
+   on GitHub. Up to 20 machines each read a share of the pages, then one combines them:
+   `Results/<date> <name> - NOTICES.pdf` appears, the email arrives, and the original moves to
+   `Processed/`.
+
+The reading is exactly the same as the old one-machine scan (same 7 OCR passes per page, same
+matching); only the work is spread out. `scan.py --merge` refuses to write a result if any machine's
+share is missing, so a page can't be silently skipped.
 
 ```
 NoticeScanner/
-  Inbox/       ← drop PDFs (or JPG/PNG photos) here
+  Inbox/       ← newspapers land here (Drive scan PDF, or photos)
   Results/     ← one file per newspaper: "2026-10-27 <name> - NOTICES.pdf"
+  Results/test ← test re-runs (Actions → Notice scan → Run workflow, with a file path)
   Processed/   ← originals move here once scanned
   Failed/      ← only if a scan crashed
 ```
@@ -38,37 +48,48 @@ verdict: IN YOUR AREAS / DOUBLE-CHECK / NOT YOUR AREA), then each notice gets a 
 verdict, a picture of the notice with the matches boxed, and the newspaper page with that notice
 outlined.
 
-One-time setup (about 10 minutes):
+### One-time setup
 
 1. **Drive folder.** In Google Drive create `NoticeScanner`, and inside it `Inbox`.
-2. **Connect Drive (one command).** On your Mac open Terminal (Cmd+Space, type Terminal, Enter),
-   paste this line and press Enter:
+2. **Connect Drive to GitHub (one command).** On your Mac open Terminal and run:
 
    ```
    curl -fsSL https://raw.githubusercontent.com/hridhaykapoor7831/Work/HEAD/newspaper-ocr/setup_drive.sh | bash
    ```
 
-   A browser tab opens: sign in to the Google account that has `NoticeScanner`, click Allow.
-   The script checks it can see `NoticeScanner/Inbox`, copies the Drive key to your clipboard and
-   opens the GitHub page for step 3. (It downloads rclone into `~/.notice-scanner`; nothing is
-   installed system-wide and no password is asked.)
-3. **Give the key to GitHub.** On the page that opened: Name `RCLONE_CONF`, Secret: Cmd+V,
-   click "Add secret". Until this exists, scheduled runs skip quietly.
-4. **Email (optional).** Add secrets `SMTP_USER` (your Gmail address), `SMTP_PASSWORD` (a Gmail
-   App Password: Google Account → Security → 2-Step Verification → App passwords), `MAIL_TO`.
-5. **Test.** Put a PDF in `Inbox`, then Actions tab → "Notice scan" → Run workflow.
+   Sign in, click Allow, then on the GitHub page that opens add the secret `RCLONE_CONF` (Cmd+V).
+3. **Email (optional).** Secrets `SMTP_USER`, `SMTP_PASSWORD` (Gmail App Password), `MAIL_TO`.
+4. **Automatic start.**
+   - GitHub → Settings (your profile) → Developer settings → Personal access tokens →
+     **Fine-grained tokens** → Generate new token. Repository access: *Only select repositories* →
+     `Work`. Permissions → Repository → **Actions: Read and write**. Generate, copy it.
+   - Open https://script.google.com → New project → paste all of `drive_trigger.gs` over the
+     sample code → save (name it "Notice scanner trigger").
+   - Project Settings (gear) → Script Properties → Add: `GITHUB_TOKEN` = the token.
+   - Back in the editor, pick `setup` in the function menu → Run → allow access. The log says
+     "Ready". From then on the Inbox is checked every minute.
 
-After that it checks the inbox every 2 hours, about 6 am to 10 pm IST (or press "Run workflow"
-to scan at once). To change the hours, edit the `cron` line in `.github/workflows/notice-scan.yml`
-(times are UTC).
+The schedule in `.github/workflows/notice-scan.yml` (every 2 hours, 6 am–10 pm IST) stays as a
+safety net if the trigger ever stops. If several newspapers are waiting, each run starts the next.
 
 Optional Claude second reader: add secret `ANTHROPIC_API_KEY`. It is billed per page by the
 Claude API, so it is off unless that secret exists. Pick the model with repository variable
 `CLAUDE_MODEL` (default `claude-opus-5-5`).
 
-Keep the repository **private** if the target list or results are sensitive: logs of a public
-repository are public (the job keeps hit details out of its logs, but `targets.json` is in the
-repo), and GitHub pauses schedules in public repositories after 60 days without commits.
+The repository is public so the 20 machines are free (GitHub gives private repositories 2,000
+minutes a month; one newspaper uses about 200). Hit details are kept out of the public logs; the
+target list in `targets.json` is visible.
+
+### Running it on one computer
+
+`python3 scan.py Oct_21.pdf` still does the whole scan on one machine (same output), and
+`run_inbox.sh` still scans the inbox that way. The pieces the workflow uses:
+
+```
+python3 plan.py gdrive:NoticeScanner work            # pick the next newspaper -> work/edition.pdf
+python3 scan.py work/edition.pdf --shard 3/20 --parts parts/3   # one machine's share
+python3 scan.py --merge parts --name "Nov 19th" -o out          # combine (refuses if incomplete)
+```
 
 ## How it reads
 
