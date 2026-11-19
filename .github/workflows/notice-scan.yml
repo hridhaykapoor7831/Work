@@ -1,12 +1,18 @@
 name: Notice scan
 
-# Every 2 hours from about 6 am to 10 pm IST: look in the Drive inbox; scan anything new.
-# An empty inbox ends the run in under a minute, before any OCR is installed.
-# "Run workflow" on the Actions tab scans straight away.
+# Normally started within a minute of a file landing in Drive NoticeScanner/Inbox, by the Apps
+# Script in newspaper-ocr/drive_trigger.gs. The schedule below is only a safety net.
+# One newspaper is spread over up to 20 machines (plan -> work x20 -> merge); each reads the
+# same 7 OCR passes as before, so the result is identical to a single-machine scan, just faster.
 on:
   schedule:
-    - cron: "37 0-16/2 * * *"
+    - cron: "37 0-16/2 * * *"   # every 2 hours, about 6 am to 10 pm IST
   workflow_dispatch:
+    inputs:
+      file:
+        description: "Test re-run: path under NoticeScanner, e.g. Processed/2026-11-17 Nov 17th.pdf (leave empty for the inbox)"
+        required: false
+        default: ""
 
 concurrency:
   group: notice-scan
@@ -14,14 +20,24 @@ concurrency:
 
 permissions:
   contents: read
+  actions: write   # the merge job starts the next run itself if more files are waiting
+
+env:
+  NOTICE_REMOTE: ${{ vars.NOTICE_REMOTE || 'gdrive:NoticeScanner' }}
+  RCLONE_CONFIG: ${{ github.workspace }}/../rclone.conf
+  TEST_FILE: ${{ inputs.file }}
 
 jobs:
-  scan:
+  plan:
     runs-on: ubuntu-latest
-    timeout-minutes: 240
-    env:
-      NOTICE_REMOTE: ${{ vars.NOTICE_REMOTE || 'gdrive:NoticeScanner' }}
-      RCLONE_CONFIG: ${{ github.workspace }}/../rclone.conf
+    timeout-minutes: 15
+    outputs:
+      n: ${{ steps.plan.outputs.n }}
+      shards: ${{ steps.plan.outputs.shards }}
+      stem: ${{ steps.plan.outputs.stem }}
+      stamp: ${{ steps.plan.outputs.stamp }}
+      originals: ${{ steps.plan.outputs.originals }}
+      pkgs: ${{ steps.img.outputs.key }}
     steps:
       - uses: actions/checkout@v4
 
@@ -31,36 +47,179 @@ jobs:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         run: |
           if [ -z "$RCLONE_CONF" ]; then
-            # not set up yet: scheduled runs stay quiet (no failure emails); a manual run says why
             msg="Drive not connected yet: run newspaper-ocr/setup_drive.sh (README, 'Daily automatic scans')"
             if [ "$GITHUB_EVENT_NAME" = "schedule" ]; then echo "::notice::$msg"; exit 0; fi
             echo "::error::$msg"; exit 1
           fi
           printf '%s\n' "$RCLONE_CONF" > "$RCLONE_CONFIG"
-          sudo apt-get install -y -qq rclone > /dev/null
+          curl -fsSL --retry 3 -o /tmp/rclone.zip https://downloads.rclone.org/rclone-current-linux-amd64.zip && unzip -qj /tmp/rclone.zip "*/rclone" -d /tmp/rc && sudo install /tmp/rc/rclone /usr/local/bin/ || sudo apt-get install -y -qq rclone > /dev/null
           echo "ready=true" >> "$GITHUB_OUTPUT"
 
-      - name: Check inbox
-        id: inbox
-        if: steps.drive.outputs.ready == 'true'
-        run: |
-          n=$(rclone lsf "$NOTICE_REMOTE/Inbox" --files-only --include '*.{pdf,PDF,jpg,JPG,jpeg,JPEG,png,PNG}' | wc -l)
-          echo "files=$n" >> "$GITHUB_OUTPUT"
-          echo "$n file(s) waiting"
+      # The OCR software, downloaded once and kept in GitHub's cache: 20 machines installing it from
+      # Ubuntu's servers at the same moment took up to 5 minutes each.
+      - name: Runner image
+        id: img
+        run: echo "key=ocr-$ImageOS-$ImageVersion-${{ hashFiles('newspaper-ocr/requirements.txt') }}" >> "$GITHUB_OUTPUT"
 
-      - name: Install OCR
-        if: steps.drive.outputs.ready == 'true' && steps.inbox.outputs.files != '0'
+      - uses: actions/cache@v4
+        id: pkgs
+        if: steps.drive.outputs.ready == 'true'
+        with:
+          path: ~/ocr-pkgs
+          key: ${{ steps.img.outputs.key }}
+
+      - name: Download the OCR software (first run on a new runner image only)
+        if: steps.drive.outputs.ready == 'true' && steps.pkgs.outputs.cache-hit != 'true'
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-eng > /dev/null
-          pip install -q -r newspaper-ocr/requirements.txt
+          sudo apt-get install -y -qq --download-only tesseract-ocr tesseract-ocr-eng > /dev/null
+          mkdir -p ~/ocr-pkgs/debs ~/ocr-pkgs/wheels
+          cp /var/cache/apt/archives/*.deb ~/ocr-pkgs/debs/
+          pip download -q -r newspaper-ocr/requirements.txt -d ~/ocr-pkgs/wheels
 
-      - name: Scan
-        if: steps.drive.outputs.ready == 'true' && steps.inbox.outputs.files != '0'
+      - name: Pick the newspaper
+        id: plan
+        if: steps.drive.outputs.ready == 'true'
+        run: |
+          pip install -q pymupdf
+          python3 newspaper-ocr/plan.py "$NOTICE_REMOTE" work "$TEST_FILE"
+
+      - name: Hand it to the scanners
+        if: steps.plan.outputs.n != '' && steps.plan.outputs.n != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: edition
+          path: work/edition.pdf
+          compression-level: 0
+          retention-days: 1
+
+  work:
+    needs: plan
+    if: needs.plan.outputs.n != '' && needs.plan.outputs.n != '0'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: true
+      matrix:
+        shard: ${{ fromJSON(needs.plan.outputs.shards) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: edition
+          path: work
+
+      - uses: actions/cache/restore@v4
+        id: pkgs
+        with:
+          path: ~/ocr-pkgs
+          key: ${{ needs.plan.outputs.pkgs }}
+
+      - name: Install OCR
+        run: |
+          if [ "${{ steps.pkgs.outputs.cache-hit }}" = "true" ] && sudo dpkg -i ~/ocr-pkgs/debs/*.deb > /dev/null 2>&1 \
+             && pip install -q --no-index --find-links ~/ocr-pkgs/wheels -r newspaper-ocr/requirements.txt; then
+            echo "installed from cache"
+          else
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-eng > /dev/null
+            pip install -q -r newspaper-ocr/requirements.txt
+          fi
+          tesseract --version | head -1
+
+      - name: Scan this machine's share
         env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
+        run: |
+          n=$(python3 -c 'import json,sys; print(len(json.loads(sys.argv[1])))' '${{ needs.plan.outputs.shards }}')
+          python3 newspaper-ocr/scan.py work/edition.pdf --shard ${{ matrix.shard }}/$n --parts parts
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: part-${{ matrix.shard }}
+          path: parts
+          retention-days: 1
+
+  merge:
+    needs: [plan, work]
+    if: always() && needs.plan.outputs.n != '' && needs.plan.outputs.n != '0'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Connect to Drive
+        env:
+          RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
+        run: |
+          printf '%s\n' "$RCLONE_CONF" > "$RCLONE_CONFIG"
+          curl -fsSL --retry 3 -o /tmp/rclone.zip https://downloads.rclone.org/rclone-current-linux-amd64.zip && unzip -qj /tmp/rclone.zip "*/rclone" -d /tmp/rc && sudo install /tmp/rc/rclone /usr/local/bin/ || sudo apt-get install -y -qq rclone > /dev/null
+
+      - name: A scanner failed
+        if: needs.work.result != 'success'
+        env:
+          ORIGINALS: ${{ needs.plan.outputs.originals }}
+          STAMP: ${{ needs.plan.outputs.stamp }}
+        run: |
+          if [ -z "$TEST_FILE" ]; then
+            python3 -c 'import json,os; print("\n".join(json.loads(os.environ["ORIGINALS"])))' | while IFS= read -r f; do
+              [ -n "$f" ] && rclone moveto "$NOTICE_REMOTE/Inbox/$f" "$NOTICE_REMOTE/Failed/$STAMP $f"
+            done
+          fi
+          echo "::error::a scanning machine failed; the newspaper was moved to Failed/ (press Re-run failed jobs, or put it back in Inbox)"
+          exit 1
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: part-*
+          path: parts
+          merge-multiple: true
+
+      - uses: actions/cache/restore@v4
+        id: pkgs
+        with:
+          path: ~/ocr-pkgs
+          key: ${{ needs.plan.outputs.pkgs }}
+
+      - name: Combine
+        id: combine
+        env:
+          STEM: ${{ needs.plan.outputs.stem }}
+        run: |
+          pip install -q --no-index --find-links ~/ocr-pkgs/wheels -r newspaper-ocr/requirements.txt 2>/dev/null \
+            || pip install -q -r newspaper-ocr/requirements.txt
+          python3 newspaper-ocr/scan.py --merge parts --name "$STEM" -o out > merge.log
+
+      - name: Deliver
+        env:
+          STEM: ${{ needs.plan.outputs.stem }}
+          STAMP: ${{ needs.plan.outputs.stamp }}
+          ORIGINALS: ${{ needs.plan.outputs.originals }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           MAIL_TO: ${{ secrets.MAIL_TO }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
-        run: bash newspaper-ocr/run_inbox.sh
+        run: |
+          if [ -n "$TEST_FILE" ]; then
+            rclone copyto "out/${STEM}_NOTICES.pdf" "$NOTICE_REMOTE/Results/test/$STAMP $STEM - NOTICES.pdf"
+            echo "test result: Results/test/$STAMP $STEM - NOTICES.pdf"
+            exit 0
+          fi
+          rclone copyto "out/${STEM}_NOTICES.pdf" "$NOTICE_REMOTE/Results/$STAMP $STEM - NOTICES.pdf"
+          python3 -c 'import json,os; print("\n".join(json.loads(os.environ["ORIGINALS"])))' | while IFS= read -r f; do
+            [ -n "$f" ] && rclone moveto "$NOTICE_REMOTE/Inbox/$f" "$NOTICE_REMOTE/Processed/$STAMP $f"
+          done
+          python3 newspaper-ocr/notify.py out "$STEM" || echo "email not sent"
+          echo "done: Results/$STAMP $STEM - NOTICES.pdf"
+
+      - name: Start the next one if more are waiting
+        if: success() && env.TEST_FILE == ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          left=$(rclone lsf "$NOTICE_REMOTE/Inbox" --files-only --include '*.{pdf,PDF,jpg,JPG,jpeg,JPEG,png,PNG}' | wc -l)
+          if [ "$left" -gt 0 ]; then
+            gh workflow run notice-scan.yml --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME"
+            echo "$left more file(s) waiting: started another run"
+          fi

@@ -4,6 +4,8 @@
     python3 scan.py Oct_21.pdf            # writes Oct_21_scan/ next to the PDF
     python3 scan.py Oct_21.pdf -o out/    # choose the output folder
     python3 scan.py Oct_21.pdf --fast     # fewer OCR passes (quicker, lower recall)
+    python3 scan.py X.pdf --shard 3/20 --parts p/3   # one machine's share of the same work
+    python3 scan.py --merge p --name X -o out        # combine all shares (same outputs as above)
 
 Outputs:
     <name>_highlighted.pdf  pages turned upright, every hit boxed, searchable text layer
@@ -190,14 +192,32 @@ def upright(img):
     Tesseract's orientation detector got a sideways test page wrong, so every page is read at all
     four rotations and the one producing the most confident words wins.
     """
+    small = _small(img)
+    reads = {r: _quick_score(small.rotate(-r, expand=True)) for r in ROTATIONS}
+    return choose_rotation(img, small.width, reads)
+
+
+ROTATIONS = (0, 90, 180, 270)
+
+
+def _small(img):
     small = img.copy()
     small.thumbnail((2000, 2000))
-    reads = {r: _quick_score(small.rotate(-r, expand=True)) for r in (0, 90, 180, 270)}
+    return small
+
+
+def rotation_read(path, index, r):
+    """One of upright()'s four trial reads, on its own (so the four can run on different cores)."""
+    return _quick_score(_small(render_page(path, index)).rotate(-r, expand=True))
+
+
+def choose_rotation(img, small_width, reads):
+    """upright()'s decision from its four trial reads {rotation: (confident words, heights)}."""
     rot = max(reads, key=lambda r: reads[r][0])
     runner_up = sorted(n for n, _ in reads.values())[-2]
     method = f"best of 4 rotations ({reads[rot][0]} confident words vs {runner_up})"
     heights = reads[rot][1]
-    text_h = float(np.median(heights)) * img.width / small.width if heights else None
+    text_h = float(np.median(heights)) * img.width / small_width if heights else None
     return img.rotate(-rot, expand=True), rot, method, text_h
 
 
@@ -220,25 +240,37 @@ def ocr_passes(img, fast=False, text_h=None):
 
     Boxes are always mapped back to the coordinates of `img` so passes can be merged.
     """
-    gray = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2GRAY)
-    norm = _normalise(gray)
-    base = REF_TEXT_H / text_h if text_h else 1.0
+    norm = _normalise(cv2.cvtColor(np.array(img), cv2.COLOR_RGB2GRAY))
     scaled = {}
-    out = []
-    done = set()
+    return [(name, run_pass(norm, spec, scaled)) for name, spec in pass_plan(img.size, fast, text_h) if spec]
+
+
+def pass_plan(size, fast=False, text_h=None):
+    """The passes ocr_passes() runs, in order: [(name, (kind, scale, psm)) or (name, None)].
+
+    None marks a pass skipped because an earlier one already covers it (small photos clamp several
+    passes to the same size). Indexes match PASSES / FAST_PASSES, so a pass can run on its own.
+    """
+    base = REF_TEXT_H / text_h if text_h else 1.0
+    plan, done = [], set()
     for kind, rel, psm in (FAST_PASSES if fast else PASSES):
-        scale = round(min(max(base * rel, 0.3), 2.5, MAX_OCR_SIDE / max(img.size)), 2)
-        if (kind, scale, psm) in done:  # small photos clamp several passes to the same size
-            continue
+        scale = round(min(max(base * rel, 0.3), 2.5, MAX_OCR_SIDE / max(size)), 2)
+        spec = None if (kind, scale, psm) in done else (kind, scale, psm)
         done.add((kind, scale, psm))
-        if scale not in scaled:
-            scaled[scale] = norm if scale == 1 else cv2.resize(norm, None, fx=scale, fy=scale,
-                                                              interpolation=cv2.INTER_CUBIC)
-        arr = scaled[scale]
-        if kind == "otsu":
-            arr = cv2.threshold(arr, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-        out.append((f"{kind}x{rel:g}/psm{psm}", _ocr(arr, psm, scale=scale)))
-    return out
+        plan.append((f"{kind}x{rel:g}/psm{psm}", spec))
+    return plan
+
+
+def run_pass(norm, spec, scaled=None):
+    kind, scale, psm = spec
+    scaled = {} if scaled is None else scaled
+    if scale not in scaled:
+        scaled[scale] = norm if scale == 1 else cv2.resize(norm, None, fx=scale, fy=scale,
+                                                          interpolation=cv2.INTER_CUBIC)
+    arr = scaled[scale]
+    if kind == "otsu":
+        arr = cv2.threshold(arr, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    return _ocr(arr, psm, scale=scale)
 
 
 PASS_TIMEOUT = 600  # s; a normal pass takes under a minute, one hung pass stalled a whole edition
@@ -609,14 +641,17 @@ def write_pdf(path, pages, flagged, summary_lines):
         buf = io.BytesIO()
         small.save(buf, "JPEG", quality=78)
         page.insert_image(page.rect, stream=buf.getvalue())
-        # invisible OCR text so the PDF is searchable
+        # invisible OCR text so the PDF is searchable; one TextWriter per page (inserting word by
+        # word re-scans the page's growing content each time: 5+ minutes on a full newspaper)
+        tw = fitz.TextWriter(page.rect)
         for wd in words:
             x0, y0, x1, y1 = (v * scale for v in wd.box)
             fs = max(3, (y1 - y0) * 0.85)
             try:
-                page.insert_text((x0, y1 - (y1 - y0) * 0.15), wd.text, fontsize=fs, render_mode=3)
+                tw.append((x0, y1 - (y1 - y0) * 0.15), wd.text, fontsize=fs)
             except Exception:
                 pass
+        tw.write_text(page, render_mode=3)
         for hit in (x for x in flagged if x.page == pno):
             office = hit.role == "office"
             rgb = (0.5, 0.5, 0.5) if office else TIER_RGB[hit.tier]
@@ -880,36 +915,187 @@ def _default_jobs():
     return max(1, min(os.cpu_count() or 1, int(free_gb // 1.2)))
 
 
+def page_pass(norm, pno, T, region, name, spec, scaled=None):
+    """One OCR pass of one upright page, matched: (name, blocks, hits)."""
+    blocks = run_pass(norm, spec, scaled)
+    return name, blocks, [h for words in blocks for h in match_block(words, pno, name, T, region)]
+
+
+def page_extras(img, pno, T, region, use_claude, work):
+    """The page picture for the PDFs, and the optional Claude read."""
+    vision_notices, claude_error, hits = [], "", []
+    if use_claude:
+        try:
+            hits = read_with_claude(img, pno, T, region, vision_notices)
+        except Exception as e:  # keep the OCR result even if the API is unreachable
+            claude_error = f"failed on page {pno}: {type(e).__name__}: {e}"
+            print(f"Claude second reader {claude_error} – OCR result kept", file=sys.stderr)
+    image = str(Path(work) / f"page{pno:04d}.jpg")
+    img.save(image, "JPEG", quality=90)
+    return dict(hits=hits, image=image, vision_notices=vision_notices, claude_error=claude_error)
+
+
+def assemble_page(rot, how, passes, extras):
+    """One page's result from its passes [(name, blocks, hits)] (in pass order) and its extras."""
+    hits = [h for _, _, pass_hits in passes for h in pass_hits] + extras["hits"]
+    # one pass can read nothing on an odd page while others read it fine; report the fullest one
+    best = max(passes, key=lambda p: sum(len(words) for words in p[1]))[1]
+    base_words = [w for words in best for w in words]
+    confs = [w.conf for w in base_words if w.conf >= 0]
+    return dict(hits=hits, image=extras["image"], words=base_words, vision_notices=extras["vision_notices"],
+                claude_error=extras["claude_error"],
+                # notice outlines for grouping/cropping: paragraph blocks from the plain layout pass
+                layout=None, best=best,
+                info=(rot, how, len(base_words), sum(confs) / len(confs) if confs else 0),
+                text="\n\n".join(" ".join(w.text for w in words) for words in best))
+
+
+def _finish_layout(result, img_size):
+    region = page_area_fn(*img_size)
+    result["layout"] = [region(words) for words in result.pop("best")]
+    return result
+
+
 def process_page(task):
-    """OCR + match one page. Runs in a worker process; the upright image goes to disk, not memory."""
+    """OCR + match one page on one machine. Runs in a worker process; the picture goes to disk."""
     path, index, targets_path, fast, use_claude, work = task
     t0 = time.time()
     pno = index + 1
     T = Targets(targets_path)
     img, rot, how, text_h = upright(render_page(path, index))
     region = page_area_fn(img.width, img.height)
-    passes = ocr_passes(img, fast=fast, text_h=text_h)
-    hits = [h for name, blocks in passes for words in blocks for h in match_block(words, pno, name, T, region)]
-    # one pass can read nothing on an odd page while others read it fine; report the fullest one
-    best = max(passes, key=lambda p: sum(len(words) for words in p[1]))[1]
-    base_words = [w for words in best for w in words]
-    confs = [w.conf for w in base_words if w.conf >= 0]
-    vision_notices, claude_error = [], ""
-    if use_claude:
-        try:
-            hits += read_with_claude(img, pno, T, region, vision_notices)
-        except Exception as e:  # keep the OCR result even if the API is unreachable
-            claude_error = f"failed on page {pno}: {type(e).__name__}: {e}"
-            print(f"Claude second reader {claude_error} – OCR result kept", file=sys.stderr)
-    image = str(Path(work) / f"page{pno:04d}.jpg")
-    img.save(image, "JPEG", quality=90)
-    print(f"page {pno}: turned {rot}°, {len(base_words)} words, {time.time() - t0:.0f}s", file=sys.stderr)
-    return dict(hits=hits, image=image, words=base_words, vision_notices=vision_notices, claude_error=claude_error,
-                # notice outlines for grouping/cropping: paragraph blocks from the plain layout pass
-                layout=[region(words) for words in best],
-                info=(rot, how, len(base_words), sum(confs) / len(confs) if confs else 0),
-                text="\n\n".join(" ".join(w.text for w in words) for words in best))
+    norm = _normalise(cv2.cvtColor(np.array(img), cv2.COLOR_RGB2GRAY))
+    scaled = {}
+    passes = [page_pass(norm, pno, T, region, name, spec, scaled)
+              for name, spec in pass_plan(img.size, fast, text_h) if spec]
+    extras = page_extras(img, pno, T, region, use_claude, work)
+    result = _finish_layout(assemble_page(rot, how, passes, extras), img.size)
+    print(f"page {pno}: turned {rot}°, {len(result['words'])} words, {time.time() - t0:.0f}s", file=sys.stderr)
+    return result
 
+
+# ---------------------------------------------------------------- spread over several machines
+#
+# The same work as process_page, cut into units that can run on different machines:
+#   scan.py --shard K/N --parts DIR PAGES.pdf   (on each of N machines; writes DIR/shard-K.pkl)
+#   scan.py --merge DIR --name STEM -o OUT      (once, after all shards; writes the usual outputs)
+# A unit is one OCR pass of one page, or a page's picture/Claude read ("extras"). Every unit
+# re-derives the page's rotation with the same four trial reads, so units need nothing from each
+# other; merge refuses to write anything if a unit is missing or two shards turned a page differently.
+
+EXTRAS = "extras"
+
+
+def all_units(n_pages, fast):
+    passes = FAST_PASSES if fast else PASSES
+    # weight ~ time: pixels OCR'd (scale squared), and the sparse-text pass (psm 11) takes about 2.5x
+    # as long as the others; heavy units start first and their machines get less else to do
+    return [unit for i in range(n_pages)
+            for unit in [((i, EXTRAS), 0.5)] + [((i, j), rel * rel * (2.5 if psm == 11 else 1))
+                                                for j, (_, rel, psm) in enumerate(passes)]]
+
+
+def shard_units(n_pages, fast, k, n):
+    """Units for shard k of n: contiguous runs page by page, so each shard touches few pages."""
+    units = all_units(n_pages, fast)
+    total = sum(w for _, w in units)
+    out, cum = [], 0.0
+    for unit, w in units:
+        if min(n - 1, int((cum + w / 2) / total * n)) == k:
+            out.append((unit, w))
+        cum += w
+    return out
+
+
+def _page_for_unit(path, index, reads):
+    img = render_page(path, index)
+    return choose_rotation(img, _small(img).width, reads)
+
+
+def _run_unit(task):
+    path, index, reads, which, targets_path, fast, use_claude, work = task
+    t0 = time.time()
+    pno = index + 1
+    T = Targets(targets_path)
+    img, rot, how, text_h = _page_for_unit(path, index, reads)
+    region = page_area_fn(img.width, img.height)
+    if which == EXTRAS:
+        result = page_extras(img, pno, T, region, use_claude, work)
+        result["size"] = img.size
+    else:
+        name, spec = pass_plan(img.size, fast, text_h)[which]
+        if spec is None:
+            result = None  # same pass as an earlier one at this page size; process_page skips it too
+        else:
+            norm = _normalise(cv2.cvtColor(np.array(img), cv2.COLOR_RGB2GRAY))
+            result = page_pass(norm, pno, T, region, name, spec)
+    print(f"page {pno} {which if which == EXTRAS else (FAST_PASSES if fast else PASSES)[which]}: "
+          f"{time.time() - t0:.0f}s", file=sys.stderr)
+    return (index, which), (rot, how), result
+
+
+def run_shard(path, k, n, targets_path, fast, use_claude, parts, jobs):
+    import pickle
+    parts = Path(parts)
+    parts.mkdir(parents=True, exist_ok=True)
+    n_pages = page_count(path)
+    mine = shard_units(n_pages, fast, k, n)
+    pages = sorted({i for (i, _), _ in mine})
+    t0 = time.time()
+    print(f"shard {k + 1}/{n}: {len(mine)} unit(s) on page(s) {[i + 1 for i in pages]}, {jobs} at a time",
+          file=sys.stderr)
+    os.environ.setdefault("OMP_THREAD_LIMIT", "1")  # one Tesseract thread per worker
+    ctx = multiprocessing.get_context("fork")
+    with ProcessPoolExecutor(jobs, mp_context=ctx) as pool:
+        trial = [(path, i, r) for i in pages for r in ROTATIONS]
+        got = list(pool.map(rotation_read, *zip(*trial)))
+        reads = {i: {} for i in pages}
+        for (_, i, r), g in zip(trial, got):
+            reads[i][r] = g
+        print(f"shard {k + 1}/{n}: rotations read in {time.time() - t0:.0f}s", file=sys.stderr)
+        # heaviest first, so the last wave isn't one big pass on its own
+        tasks = [(path, i, reads[i], which, targets_path, fast, use_claude, str(parts))
+                 for (i, which), _ in sorted(mine, key=lambda u: -u[1])]
+        done = list(pool.map(_run_unit, tasks))
+    units = {key: (turn, result) for key, turn, result in done}
+    with open(parts / f"shard-{k:03d}.pkl", "wb") as f:
+        pickle.dump(dict(n_pages=n_pages, fast=fast, use_claude=use_claude, shards=n, shard=k, units=units), f)
+    print(f"shard {k + 1}/{n}: done in {time.time() - t0:.0f}s", file=sys.stderr)
+
+
+def merge_shards(parts):
+    """Rebuild process_page's per-page results from every shard's units; refuse if anything is missing."""
+    import pickle
+    parts = Path(parts)
+    loaded = [pickle.loads(p.read_bytes()) for p in sorted(parts.rglob("shard-*.pkl"))]
+    if not loaded:
+        sys.exit(f"merge: no shard results in {parts}")
+    n_pages, fast, use_claude, n = (loaded[0][k] for k in ("n_pages", "fast", "use_claude", "shards"))
+    seen = sorted(d["shard"] for d in loaded)
+    if seen != list(range(n)):
+        sys.exit(f"merge: expected shards 0..{n - 1}, got {seen} – not writing a partial result")
+    units = {}
+    for d in loaded:
+        units.update(d["units"])
+    expected = [u for u, _ in all_units(n_pages, fast)]
+    missing = [u for u in expected if u not in units]
+    if missing:
+        sys.exit(f"merge: {len(missing)} unit(s) missing, e.g. page {missing[0][0] + 1} {missing[0][1]}"
+                 " – not writing a partial result")
+    images = {p.name: str(p) for p in parts.rglob("page*.jpg")}
+    results = []
+    for i in range(n_pages):
+        page_units = [u for u in expected if u[0] == i]
+        turns = {units[u][0][0] for u in page_units}
+        if len(turns) != 1:
+            sys.exit(f"merge: page {i + 1} was turned differently on different machines {sorted(turns)}"
+                     " – not writing a result that mixes them")
+        rot, how = units[(i, EXTRAS)][0]
+        extras = dict(units[(i, EXTRAS)][1])
+        extras["image"] = images[Path(extras["image"]).name]
+        passes = [units[u][1] for u in page_units if u[1] != EXTRAS and units[u][1] is not None]
+        results.append(_finish_layout(assemble_page(rot, how, passes, extras), extras["size"]))
+    return results, use_claude
 
 
 def page_area_fn(img_w, img_h):
@@ -927,35 +1113,58 @@ def page_area_fn(img_w, img_h):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("pdf")
+    ap.add_argument("pdf", nargs="?")
     ap.add_argument("-o", "--out", help="output folder (default: <pdf name>_scan next to the PDF)")
     ap.add_argument("--targets", default=str(HERE / "targets.json"))
     ap.add_argument("--fast", action="store_true", help="2 OCR passes instead of 7")
     ap.add_argument("--jobs", type=int, default=0, help="pages processed at once (default: one per CPU)")
     ap.add_argument("--claude", choices=["auto", "on", "off"], default="auto",
                     help="second reader via the Claude API (auto = on when ANTHROPIC_API_KEY is set)")
+    ap.add_argument("--shard", help="K/N: run only this machine's share of the work (1-based K), see --parts")
+    ap.add_argument("--parts", help="with --shard: folder for this shard's results")
+    ap.add_argument("--merge", metavar="PARTS", help="combine every shard's results from this folder")
+    ap.add_argument("--name", help="with --merge: name of the newspaper (output file names)")
     args = ap.parse_args()
     use_claude = args.claude == "on" or (args.claude == "auto" and (
         os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")))
+
+    if args.shard:
+        k, n = (int(x) for x in args.shard.split("/"))
+        if not (args.pdf and args.parts and 1 <= k <= n):
+            ap.error("--shard K/N needs a PDF, --parts DIR and 1 <= K <= N")
+        run_shard(args.pdf, k - 1, n, args.targets, args.fast, bool(use_claude), args.parts,
+                  max(1, args.jobs or _default_jobs()))
+        return
+
+    work = None
+    if args.merge:
+        if not (args.name and args.out):
+            ap.error("--merge needs --name and -o")
+        results, use_claude = merge_shards(args.merge)
+        src_name, out = args.name + ".pdf", Path(args.out)
+        out.mkdir(parents=True, exist_ok=True)
+    else:
+        if not args.pdf:
+            ap.error("give the PDF to scan")
+        src = Path(args.pdf)
+        src_name = src.name
+        out = Path(args.out) if args.out else src.with_name(src.stem + "_scan")
+        out.mkdir(parents=True, exist_ok=True)
+        work = Path(tempfile.mkdtemp(prefix="pages_", dir=out))
+        n_pages = page_count(src)
+        jobs = max(1, min(args.jobs or _default_jobs(), n_pages))
+        if jobs > 1:
+            os.environ.setdefault("OMP_THREAD_LIMIT", "1")  # one Tesseract thread per page worker
+        tasks = [(str(src), i, args.targets, args.fast, bool(use_claude), str(work)) for i in range(n_pages)]
+        print(f"{src.name}: {n_pages} page(s), {jobs} at a time", file=sys.stderr)
+        if jobs == 1:
+            results = [process_page(t) for t in tasks]
+        else:
+            with ProcessPoolExecutor(jobs, mp_context=multiprocessing.get_context("fork")) as pool:
+                results = list(pool.map(process_page, tasks))
+
     claude_status = "not run (no ANTHROPIC_API_KEY; run with --claude on to force)" if not use_claude else "ran"
     vision_notices = []
-
-    src = Path(args.pdf)
-    out = Path(args.out) if args.out else src.with_name(src.stem + "_scan")
-    out.mkdir(parents=True, exist_ok=True)
-    work = Path(tempfile.mkdtemp(prefix="pages_", dir=out))
-    n_pages = page_count(src)
-    jobs = max(1, min(args.jobs or _default_jobs(), n_pages))
-    if jobs > 1:
-        os.environ.setdefault("OMP_THREAD_LIMIT", "1")  # one Tesseract thread per page worker
-    tasks = [(str(src), i, args.targets, args.fast, bool(use_claude), str(work)) for i in range(n_pages)]
-    print(f"{src.name}: {n_pages} page(s), {jobs} at a time", file=sys.stderr)
-    if jobs == 1:
-        results = [process_page(t) for t in tasks]
-    else:
-        with ProcessPoolExecutor(jobs, mp_context=multiprocessing.get_context("fork")) as pool:
-            results = list(pool.map(process_page, tasks))
-
     all_hits, pages_for_pdf, page_info, ocr_text, imgs, layouts = [], [], [], [], [], []
     for r in results:
         all_hits += r["hits"]
@@ -984,7 +1193,7 @@ def main():
     groups = [[h for h in g if h.tier != "REVIEW"] for g in groups]
     groups = [g for g in groups if g and is_notice(g, pages_for_pdf[g[0].page - 1][1])]
 
-    stem = src.stem
+    stem = Path(src_name).stem
     with open(out / f"{stem}_hits.csv", "w", newline="") as f:
         wr = csv.writer(f)
         wr.writerow(["notice", "page", "tier", "kind", "term", "area", "ocr_read", "note", "near_signature",
@@ -996,19 +1205,20 @@ def main():
     (out / f"{stem}_ocr.txt").write_text("\n\n".join(f"===== PAGE {i} =====\n{t}" for i, t in enumerate(ocr_text, 1)))
 
     summary = []
-    for i, line in enumerate(plain_summary(src.name, groups, page_info)):
+    for i, line in enumerate(plain_summary(src_name, groups, page_info)):
         heading = i == 0 or not line.startswith(" ")
         colour = TIER_RGB["HIGH"] if line.startswith("IN YOUR") else \
             TIER_RGB["REVIEW"] if line.startswith("DOUBLE") else \
             (0.45, 0.45, 0.45) if line.startswith("OFFICE") else (0, 0, 0)
         summary.append((line.strip(), 13 if i == 0 else 11 if heading else 10, colour))
     write_pdf(out / f"{stem}_highlighted.pdf", pages_for_pdf, flagged, summary)
-    write_notices_pdf(out / f"{stem}_NOTICES.pdf", src.name, groups, imgs)  # the file the owner reads
-    write_html(out / f"{stem}_report.html", src.name, groups, all_pins, page_info, ocr_text, imgs,
+    write_notices_pdf(out / f"{stem}_NOTICES.pdf", src_name, groups, imgs)  # the file the owner reads
+    write_html(out / f"{stem}_report.html", src_name, groups, all_pins, page_info, ocr_text, imgs,
                claude_status, vision_notices)
-    lines = plain_summary(src.name, groups, page_info)
+    lines = plain_summary(src_name, groups, page_info)
     (out / f"{stem}_summary.txt").write_text("\n".join(lines) + "\n")
-    shutil.rmtree(work, ignore_errors=True)
+    if work:
+        shutil.rmtree(work, ignore_errors=True)
 
     print(f"\n{len(groups)} notice(s) with a hit → {out}/")
     for gi, g in enumerate(groups, 1):
@@ -1017,4 +1227,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # run as the module "scan", so shard results (pickles) name their classes scan.Word / scan.Hit
+    # wherever they are loaded
+    import scan
+    scan.main()
