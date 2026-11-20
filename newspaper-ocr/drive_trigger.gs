@@ -9,9 +9,14 @@
  *      (repository: Work only; permission: Actions = Read and write).
  *   2. Choose the function "setup" at the top and press Run. Allow the permissions it asks for.
  *      It checks the token and the Inbox, then switches on the every-minute check.
+ *
+ * Laptop notification when a result is ready (optional): Script Properties -> NTFY_TOPIC = a private
+ * channel name, then open https://ntfy.sh/<that name> in Chrome, Subscribe and allow notifications.
+ * Clicking the notification opens the NOTICES PDF in Drive.
  */
 
 const INBOX_ID = '17wOA1TY3c5vjGwRAJFOw_FEC7Caqb2mg';   // NoticeScanner/Inbox
+const RESULTS_ID = '1AMGV1bhsNeeZNRtTNKYMo2RBA3w5kaGE'; // NoticeScanner/Results
 const REPO = 'hridhaykapoor7831/Work';
 const WORKFLOW = 'notice-scan.yml';
 const PHOTO_SETTLE_MS = 2 * 60 * 1000;   // loose photos: wait until none arrived for 2 minutes
@@ -29,6 +34,11 @@ function setup() {
 }
 
 function checkInbox() {
+  try {
+    notifyResults_();
+  } catch (e) {
+    console.error('notification failed: ' + e);  // never let this stop scans from starting
+  }
   const props = PropertiesService.getScriptProperties();
   const started = JSON.parse(props.getProperty('STARTED') || '[]');
   const files = inboxFiles_();
@@ -86,4 +96,44 @@ function github_(method, path, body) {
   };
   if (body) { opts.contentType = 'application/json'; opts.payload = JSON.stringify(body); }
   return UrlFetchApp.fetch('https://api.github.com/repos/' + REPO + path, opts);
+}
+
+// A new "... - NOTICES.pdf" in Results -> one notification on the laptop (via ntfy.sh).
+function notifyResults_() {
+  const props = PropertiesService.getScriptProperties();
+  const topic = props.getProperty('NTFY_TOPIC');
+  if (!topic) return;
+  const since = Number(props.getProperty('NOTIFIED_UNTIL') || Date.now());
+  let newest = since;
+  const it = DriveApp.getFolderById(RESULTS_ID).getFiles();
+  while (it.hasNext()) {
+    const f = it.next();
+    const t = f.getDateCreated().getTime();
+    if (t <= since || !/ - NOTICES\.pdf$/.test(f.getName())) continue;
+    newest = Math.max(newest, t);
+    const name = f.getName().replace(/^\d{4}-\d{2}-\d{2} /, '').replace(/ - NOTICES\.pdf$/, '');
+    const counts = f.getDescription() || '';
+    const urgent = /^[1-9]\d* in your areas/.test(counts);
+    sendNotification_(topic, 'Notices ready: ' + name, counts || 'Open the PDF to see what was found.',
+                      f.getUrl(), urgent);
+  }
+  props.setProperty('NOTIFIED_UNTIL', String(newest));
+}
+
+function sendNotification_(topic, title, message, link, urgent) {
+  UrlFetchApp.fetch('https://ntfy.sh/' + encodeURIComponent(topic), {
+    method: 'post',
+    payload: message,
+    headers: { Title: title, Click: link, Priority: urgent ? 'high' : 'default',
+               Tags: urgent ? 'warning' : 'newspaper' },
+    muteHttpExceptions: true,
+  });
+}
+
+// Run this once from the editor to see a sample notification.
+function testNotification() {
+  const topic = PropertiesService.getScriptProperties().getProperty('NTFY_TOPIC');
+  if (!topic) throw new Error('Add NTFY_TOPIC under Project Settings -> Script Properties first.');
+  sendNotification_(topic, 'Notices ready: test', 'This is how a finished scan will look.',
+                    'https://drive.google.com/drive/folders/' + RESULTS_ID, false);
 }
