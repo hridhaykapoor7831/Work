@@ -206,7 +206,11 @@ jobs:
             echo "test result: Results/test/$STAMP $STEM - NOTICES.pdf"
             exit 0
           fi
-          rclone copyto "out/${STEM}_NOTICES.pdf" "$NOTICE_REMOTE/Results/$STAMP $STEM - NOTICES.pdf"
+          # the counts ride along as the Drive file's description; the Drive script puts them in the
+          # laptop notification
+          counts=$(python3 -c 'import re,glob; s=open(glob.glob("out/*_summary.txt")[0]).read(); h,c=re.search(r"(\d+) notice\(s\) in your areas, (\d+) to double-check",s).groups(); print(f"{h} in your areas, {c} to double-check")' || echo "")
+          rclone copyto "out/${STEM}_NOTICES.pdf" "$NOTICE_REMOTE/Results/$STAMP $STEM - NOTICES.pdf" \
+            ${counts:+-M --metadata-set "description=$counts"}
           python3 -c 'import json,os; print("\n".join(json.loads(os.environ["ORIGINALS"])))' | while IFS= read -r f; do
             [ -n "$f" ] && rclone moveto "$NOTICE_REMOTE/Inbox/$f" "$NOTICE_REMOTE/Processed/$STAMP $f"
           done
